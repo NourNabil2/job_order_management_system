@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:ticr_notifications/Core/Widgets/Custom_Button_widget.dart';
-
+import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
 import '../Utilts/Constants.dart';
 
 typedef ButtonFunction = void Function(BuildContext context, String? data);
 
-class AddedToCartMessageScreen extends StatelessWidget {
+class AddedMessageScreen extends StatelessWidget {
   final String imageLight;
   final String title;
   final String body;
@@ -15,7 +14,7 @@ class AddedToCartMessageScreen extends StatelessWidget {
   final ButtonFunction? function1;
   final ButtonFunction? function2;
 
-  const AddedToCartMessageScreen({
+  const AddedMessageScreen({
     Key? key,
     required this.imageLight,
     required this.title,

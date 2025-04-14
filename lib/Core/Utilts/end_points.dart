@@ -1,4 +1,4 @@
-class EndPoints {
+class AssetsManager {
   //icon
   static const logo = 'assets/images/Logo.png';
   static const loading = 'assets/images/inticator.gif';
@@ -33,10 +33,6 @@ class EndPoints {
   static const orderListIcon = 'assets/images/ordersList.png';
   static const productsIcon = 'assets/images/products.png';
   static const addItemIcon = 'assets/images/addProduct.png';
-
-
-
-
   //image
   static const scanQr = 'assets/images/scanQR.svg';
   static const qrCodeIcon = 'assets/images/qr_code.svg';
@@ -51,42 +47,5 @@ class EndPoints {
   static const addedSuccess = 'assets/icons/success.json';
   static const verificationEmail = 'assets/icons/Verification_email.json';
   static const connectionIcon = 'assets/icons/connection_error.png';
-
-  //endpoints
-  static const login = 'Auth/login.php';
-  static const signUp = 'Auth/signUp.php';
-  static const addcar = 'add_car.php';
-  static const getcars = 'get_cars.php';
-  static const getmsgscar = 'get_Car_notifications.php';
-  static const getAllmsgs = 'get_all_Notifications.php';
-  static const deletescar = 'delete_car.php';
-  static const updatecar = 'update_info.php';
-  static const manageMethode = 'manage_message.php';
-  static const sentToken = 'update_Token.php';
-  static const getAllProducts = 'get_all_product.php';
-  static const getAllTypes = 'get_type_list.php';
-  static const getProductImages = 'get_product_image.php';
-  static const getCartItems = 'get_cart_user.php';
-  static const addToCart = 'add_to_cart.php';
-  static const sendComplain = 'add_complains.php';
-  static const deleteProductFromCart = 'delete_product_cart.php';
-  static const decreaseQuantity = 'Functions/decrease_quantity.php';
-  static const increaseQuantity = 'Functions/increase_quantity.php';
-  static const addOrder = 'add_Order.php';
-  static const clearCart = 'Clear_cart.php';
-  static const getOrders = 'get_Orders.php';
-  static const getOrderItems = 'get_order_items.php';
-  static const cancelOrder = 'cancel_order.php';
-  static const getAdminToken = 'get_admin_token.php';
-  static const getDeliveryFee = 'get_delivery_fee.php';
-  static const toggleActive = 'toggleActiveStatus.php';
-  static const updateSocialLinks = 'update_social_link.php';
-  static const checkExistPage = 'check_profile_code.php';
-  static const generateCode = 'generate_profile_code.php';
-  static const getSocialLinks = 'getMySocialLinks.php';
-  static const getPoints = 'get_user_points.php';
-  static const uploadMedia = 'https://rova-app.online/API/update_profile_image.php';
-  static const deleteMedia = 'delete_profile_image.php';
-  static const getAd = 'get_Ad.php';
 
 }

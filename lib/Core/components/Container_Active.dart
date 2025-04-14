@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ticr_notifications/Core/Utilts/Constants.dart';
 
 Widget StatusContainer({required String status, required String title }){
   return Container(

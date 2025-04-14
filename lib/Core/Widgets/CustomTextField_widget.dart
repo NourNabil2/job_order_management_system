@@ -4,7 +4,6 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ticr_notifications/Core/Utilts/Constants.dart';
 
 // ignore: must_be_immutable
 class CustomFormTextField extends StatelessWidget {

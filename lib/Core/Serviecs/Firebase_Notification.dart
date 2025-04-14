@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:ticr_notifications/Core/Network/share_preference.dart';
+import '../Network/local_db/share_preference.dart';
 
 class NotificationHelper {
   static String pushToken = CashSaver.getData(key: 'Token') ?? '';
