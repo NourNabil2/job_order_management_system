@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:ticr_notifications/Core/Utilts/Constants.dart';
-import 'package:ticr_notifications/Core/Utilts/end_points.dart';
+import 'package:ticr_notifications/Core/Utilts/Assets_Manager.dart';
 
 class NetworkErrorWidget extends StatelessWidget {
   final String errorMessage;

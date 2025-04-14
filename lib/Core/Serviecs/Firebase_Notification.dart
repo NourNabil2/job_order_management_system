@@ -22,6 +22,7 @@ class NotificationHelper {
       CashSaver.saveData(key: 'isSubscribed', value: true);
     }
   }
+
   static Future<void> checkSubscriptionStatus_Admin() async {
     bool? subscribed = CashSaver.getData(key: 'isSubscribed');
     if (subscribed == null || !subscribed) {
@@ -30,6 +31,7 @@ class NotificationHelper {
       CashSaver.saveData(key: 'isSubscribed', value: true);
     }
   }
+
   // Method to send notifications to a topic
   static Future<void> sendNotificationToAllUsers({
     required String title,

@@ -27,13 +27,6 @@ class AssetsManager {
   static const eyeIcon = 'assets/icons/eye_icon.svg';
   static const portfolioIcon = 'assets/icons/portfolio.svg';
   static const adIcon = 'assets/icons/ad_icon.svg';
-  //icon admin
-  static const usersIcon = 'assets/icons/users.svg';
-  static const sendIcon = 'assets/icons/send_icon.svg';
-  static const orderListIcon = 'assets/images/ordersList.png';
-  static const productsIcon = 'assets/images/products.png';
-  static const addItemIcon = 'assets/images/addProduct.png';
-  //image
   static const scanQr = 'assets/images/scanQR.svg';
   static const qrCodeIcon = 'assets/images/qr_code.svg';
   static const incase = 'assets/images/incase_img.svg';
@@ -41,9 +34,14 @@ class AssetsManager {
   static const secureInfo = 'assets/images/secure_info.svg';
   static const logoImage = 'assets/images/logo.svg';
   static const designImage = 'assets/images/design.svg';
+  //icon admin
+  static const usersIcon = 'assets/icons/users.svg';
+  static const sendIcon = 'assets/icons/send_icon.svg';
+  static const orderListIcon = 'assets/images/ordersList.png';
+  static const productsIcon = 'assets/images/products.png';
+  static const addItemIcon = 'assets/images/addProduct.png';
+  //image
   static const logoPNG = 'assets/images/App_logo.png';
-
-  static const cartSuccess = 'assets/icons/addCart.json';
   static const addedSuccess = 'assets/icons/success.json';
   static const verificationEmail = 'assets/icons/Verification_email.json';
   static const connectionIcon = 'assets/icons/connection_error.png';

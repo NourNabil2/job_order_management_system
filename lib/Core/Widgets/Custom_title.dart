@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ticr_notifications/Core/Utilts/Constants.dart';
-import 'package:ticr_notifications/Core/Utilts/end_points.dart';
+import 'package:ticr_notifications/Core/Utilts/Assets_Manager.dart';
 import 'package:ticr_notifications/Features/product/view/All_Product_screen.dart';
 
 

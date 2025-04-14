@@ -37,7 +37,7 @@ class PermissionsHelper {
         return await requestPermission(Permission.storage);
       }
     } else if (Platform.isIOS) {
-      return await requestPermission(Permission.photos);
+      return await requestPermission(Permission.storage);
     }
     return false;
   }

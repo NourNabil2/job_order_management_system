@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,11 +9,15 @@ import 'package:quality_management_system/Core/theme/app_theme.dart';
 import 'package:quality_management_system/my_bloc_observer.dart';
 
 import 'Core/Network/local_db/share_preference.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CashSaver.init();
   await ScreenUtil.ensureScreenSize();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -38,7 +43,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: AppTheme.dark ,
+          theme: AppTheme.dark,
           home: const MyHomePage(title: 'Flutter Demo Home Page'),
         );
       },

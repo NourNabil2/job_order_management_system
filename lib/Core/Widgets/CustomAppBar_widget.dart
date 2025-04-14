@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ticr_notifications/Core/Utilts/Constants.dart';
-import 'package:ticr_notifications/Core/Utilts/end_points.dart';
+import 'package:ticr_notifications/Core/Utilts/Assets_Manager.dart';
 
 class customAppBar extends StatelessWidget implements PreferredSizeWidget{
   final String title;

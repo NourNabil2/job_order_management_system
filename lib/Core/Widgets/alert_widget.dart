@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ticr_notifications/Core/Utilts/Constants.dart';
+
 
 class CustomAlertDialog extends StatelessWidget {
   final String title;
