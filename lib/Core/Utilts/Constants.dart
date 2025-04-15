@@ -63,9 +63,8 @@ class SizeApp {
   static double s50 = 50.0;
   static double s70 = 70.0;
 
-  static double icons = 60.0;
-  static double smallIcons = 60.0;
+  static double iconSizeSmall = 16.0;
+  static double iconSizeMedium = 24.0;
   static double logoSize = 165.0;
-  static double loginLogoSize = 300.0;
 
 }

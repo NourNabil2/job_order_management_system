@@ -1,7 +1,11 @@
 // navbar.dart
 import 'package:flutter/material.dart';
+import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
+
+import 'Core/models/nav_Item_model.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -28,20 +32,21 @@ class _NavbarState extends State<Navbar> {
             selectedIconTheme:
                 const IconThemeData(color: ColorApp.primaryColor),
             selectedLabelTextStyle: const TextStyle(color: ColorApp.mainLight),
-            destinations: const [
-              NavigationRailDestination(
-                icon: Icon(Icons.home),
-                label: Text("OverView"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.library_books_sharp),
-                label: Text("Orders"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.description),
-                label: Text("Workers"),
-              ),
-            ],
+            destinations: List.generate(
+              navItems.length,
+                  (index) {
+                final isSelected = index == selectedIndex;
+                return NavigationRailDestination(
+                  icon: CustomIcon(
+                    assetPath: navItems[index].assetPath,
+                    color: isSelected ? ColorApp.primaryColor : ColorApp.mainLight,
+                  ),
+                  label: Text(navItems[index].label),
+                );
+              },
+            ),
+
+
             selectedIndex: selectedIndex,
             onDestinationSelected: (index) {
               setState(() {
@@ -68,12 +73,8 @@ class _NavbarState extends State<Navbar> {
                           },
                           icon: const Icon(Icons.menu),
                         ),
-                        // Image.asset(
-                        //   'assets/images/logo1.png',
-                        //   width: 200,
-                        //   height: 100,
-                        //   fit: BoxFit.cover,
-                        // ),
+                        CustomIcon(assetPath: AssetsManager.logo,size: SizeApp.logoSize ,isImage: true,)
+
                       ],
                     ),
                     if (selectedIndex == 0)

@@ -1,7 +1,13 @@
 class AssetsManager {
+
+  static const logo = 'assets/images/logo.png';
   //icon
-  static const logo = 'assets/images/Logo.png';
-  static const loading = 'assets/images/inticator.gif';
+  static const dashboard = 'assets/icons/dashboardIcon.svg';
+  static const menuIcon = 'assets/icons/Category.svg';
+  static const invoiceIcon = 'assets/icons/invoiceIcon.svg';
+
+
+
   static const poketIcon = 'assets/images/icons/pocket_icon.png';
   static const backtIcon = 'assets/icons/Arrow - Left.svg';
   static const carIcon = 'assets/icons/car-black.svg';
