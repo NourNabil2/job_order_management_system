@@ -31,12 +31,12 @@ class OrderStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius:
-          const BorderRadius.all(Radius.circular(defaultBorderRadious)),
+           BorderRadius.all(Radius.circular(SizeApp.borderRadius)),
       onTap: press,
       child: Container(
-        margin: const EdgeInsets.all(defaultBorderRadious),
+        margin:  EdgeInsets.all(SizeApp.borderRadius),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(defaultBorderRadious)),
+          borderRadius:  BorderRadius.all(Radius.circular(SizeApp.borderRadius)),
           border: Border.all(
             color: Theme.of(context).dividerColor, // Semi-transparent color
             width: 0.5, // Thin border
@@ -47,7 +47,7 @@ class OrderStatusCard extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(defaultPadding),
+              padding:  EdgeInsets.all(SizeApp.defaultPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -64,12 +64,12 @@ class OrderStatusCard extends StatelessWidget {
                         child: Row(
                           children: [
                             const Text("Order"),
-                            const SizedBox(width: defaultPadding / 2),
+                             SizedBox(width: SizeApp.defaultPadding / 2),
                             Text("#$orderId"),
                           ],
                         ),
                       ),
-                      const SizedBox(height: defaultPadding / 2),
+                       SizedBox(height: SizeApp.defaultPadding / 2),
                       Text(
                         "Placed on $placedOn",
                         style: Theme.of(context).textTheme.titleSmall,
@@ -88,7 +88,7 @@ class OrderStatusCard extends StatelessWidget {
             ),
             const Divider(height: 1),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+              padding:  EdgeInsets.symmetric(vertical: SizeApp.defaultPadding),
               child: OrderProgress(
                 orderStatus: orderStatus,
                 processingStatus: processingStatus,
@@ -99,7 +99,7 @@ class OrderStatusCard extends StatelessWidget {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding),
+                   EdgeInsets.symmetric(horizontal: SizeApp.defaultPadding),
               child: Column(
                 children: products ?? [],
               ),

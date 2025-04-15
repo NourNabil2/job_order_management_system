@@ -5,7 +5,7 @@ import '../Utilts/Constants.dart';
 class ChatActiveDot extends StatelessWidget {
   const ChatActiveDot({
     super.key,
-    this.dotColor = successColor,
+    this.dotColor = ColorApp.successColor,
   });
   final Color dotColor;
 

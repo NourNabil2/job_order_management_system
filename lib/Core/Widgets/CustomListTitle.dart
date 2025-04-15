@@ -1,21 +1,18 @@
 
 import 'package:flutter/material.dart';
-import 'package:ticr_notifications/Core/Utilts/Constants.dart';
-import 'package:ticr_notifications/Core/Widgets/alert_widget.dart';
-import 'package:ticr_notifications/Core/Widgets/bottomsheet_options.dart';
-import 'package:ticr_notifications/Features/Notifications_Screen/Model/All_Notifications_User_model.dart';
-import 'package:ticr_notifications/Features/Notifications_Screen/View_Model/notification_cubit.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Widgets/alert_widget.dart';
+import 'package:quality_management_system/Core/Widgets/bottomsheet_options.dart';
 
-class customListTitle extends StatelessWidget {
-  final  message;
+class CustomListTitle extends StatelessWidget {
+ 
+
+
+  const CustomListTitle({super.key,this.message, this.iPAddress, this.id, this.createdAt,});
+ final  message;
   final  iPAddress;
   final  id;
   final  createdAt;
-
-
-  const customListTitle({super.key,this.message, this.iPAddress, this.id, this.createdAt,});
-
   @override
   Widget build(BuildContext context) {
 
@@ -35,7 +32,7 @@ class customListTitle extends StatelessWidget {
                     confirmText: 'Report',
                     onCancel: () => Navigator.pop(context),
                     onConfirm: () {
-                      NotificationCubit.get(context).send_Report(iPAddress: iPAddress, message: message, reportID: id);
+                      // NotificationCubit.get(context).send_Report(iPAddress: iPAddress, message: message, reportID: id);
                       Navigator.pop(context);
                       Navigator.pop(context);
                     } ,

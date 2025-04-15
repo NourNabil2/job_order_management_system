@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:ticr_notifications/Core/Utilts/Constants.dart';
-import 'package:ticr_notifications/Core/Utilts/Assets_Manager.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 class NetworkErrorWidget extends StatelessWidget {
   final String errorMessage;
@@ -20,7 +19,7 @@ class NetworkErrorWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 50),
-          Image.asset(EndPoints.connectionIcon,width: SizeApp.logoSize,),
+          Image.asset("EndPoints.connectionIcon",width: SizeApp.logoSize,),
           const SizedBox(height: 20),
           Text(errorMessage,style: Theme.of(context).textTheme.bodyMedium,),
           const SizedBox(height: 20),

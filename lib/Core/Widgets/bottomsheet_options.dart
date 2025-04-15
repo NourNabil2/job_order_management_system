@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ticr_notifications/Core/Widgets/CustomSnackBar_widget.dart';
-import 'package:ticr_notifications/Features/Notifications_Screen/View_Model/notification_cubit.dart';
+import 'package:quality_management_system/Core/Widgets/CustomSnackBar_widget.dart';
 
 
 void showBottomSheetOption(BuildContext context, String message ,VoidCallback report,) {
@@ -49,7 +48,7 @@ void showBottomSheetOption(BuildContext context, String message ,VoidCallback re
             ),
             name: 'Show Location',
             onTap: () {
-              NotificationCubit.get(context).launchURL(message);
+              // NotificationCubit.get(context).launchURL(message);
             },
           ),
 

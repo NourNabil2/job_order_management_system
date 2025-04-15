@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "79320910267",
+    "project_id": "qualitysystem-74ae9",
+    "storage_bucket": "qualitysystem-74ae9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79320910267:android:485f7ce4ea86e11bd85c9e",
+        "android_client_info": {
+          "package_name": "com.example.quality_management_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjntqwITq9KqVMQy_8bq85bCl3oXPIRBY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -23,8 +23,10 @@ class _NavbarState extends State<Navbar> {
             extended: isExpanded,
             backgroundColor: ColorApp.primaryColor,
             unselectedIconTheme: const IconThemeData(color: ColorApp.mainLight),
-            unselectedLabelTextStyle: const TextStyle(color: ColorApp.mainLight),
-            selectedIconTheme: const IconThemeData(color: ColorApp.primaryColor),
+            unselectedLabelTextStyle:
+                const TextStyle(color: ColorApp.mainLight),
+            selectedIconTheme:
+                const IconThemeData(color: ColorApp.primaryColor),
             selectedLabelTextStyle: const TextStyle(color: ColorApp.mainLight),
             destinations: const [
               NavigationRailDestination(
@@ -66,12 +68,12 @@ class _NavbarState extends State<Navbar> {
                           },
                           icon: const Icon(Icons.menu),
                         ),
-                        Image.asset(
-                          'assets/images/logo1.png',
-                          width: 200,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
+                        // Image.asset(
+                        //   'assets/images/logo1.png',
+                        //   width: 200,
+                        //   height: 100,
+                        //   fit: BoxFit.cover,
+                        // ),
                       ],
                     ),
                     if (selectedIndex == 0)

@@ -27,12 +27,12 @@ class ReviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(defaultPadding),
+      padding:  EdgeInsets.all(SizeApp.defaultPadding),
       width: double.infinity,
       decoration: BoxDecoration(
         color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.035),
         borderRadius:
-            const BorderRadius.all(Radius.circular(defaultBorderRadious)),
+             BorderRadius.all(Radius.circular(SizeApp.borderRadius)),
       ),
       child: Row(
         children: [
@@ -56,12 +56,12 @@ class ReviewCard extends StatelessWidget {
                   ),
                 ),
                 Text("Based on $numOfReviews Reviews"),
-                const SizedBox(height: defaultPadding),
+                 SizedBox(height: SizeApp.defaultPadding),
 
               ],
             ),
           ),
-          const SizedBox(width: defaultPadding),
+           SizedBox(width: SizeApp.defaultPadding),
           Expanded(
             child: Column(
               children: [
@@ -92,7 +92,7 @@ class RateBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: star == 1 ? 0 : defaultPadding / 2),
+      padding: EdgeInsets.only(bottom: star == 1 ? 0 : SizeApp.defaultPadding / 2),
       child: Row(
         children: [
           SizedBox(
@@ -103,15 +103,15 @@ class RateBar extends StatelessWidget {
                   color: Theme.of(context).textTheme.bodyMedium!.color),
             ),
           ),
-          const SizedBox(width: defaultPadding / 2),
+           SizedBox(width: SizeApp.defaultPadding / 2),
           Expanded(
             child: ClipRRect(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(defaultBorderRadious),
+              borderRadius:  BorderRadius.all(
+                Radius.circular(SizeApp.borderRadius),
               ),
               child: LinearProgressIndicator(
                 minHeight: 6,
-                color: warningColor,
+                color: ColorApp.warningColor,
                 backgroundColor: Theme.of(context)
                     .textTheme
                     .bodyLarge!

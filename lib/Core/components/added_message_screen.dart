@@ -15,7 +15,7 @@ class AddedMessageScreen extends StatelessWidget {
   final ButtonFunction? function2;
 
   const AddedMessageScreen({
-    Key? key,
+    super.key,
     required this.imageLight,
     required this.title,
     this.function2,
@@ -23,7 +23,7 @@ class AddedMessageScreen extends StatelessWidget {
     this.body = "",
     required this.title1,
     this.title2,
-  }) : super(key: key);
+  });
 
   @override
   @override
@@ -50,7 +50,7 @@ class AddedMessageScreen extends StatelessWidget {
                       .titleLarge!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: defaultPadding / 2),
+                 SizedBox(height:  SizeApp.defaultPadding / 2),
                 Text(
                   body,
                   textAlign: TextAlign.center,
@@ -65,7 +65,7 @@ class AddedMessageScreen extends StatelessWidget {
                     },
                     text: title2!,
                   ),
-                const SizedBox(height: defaultPadding),
+                 SizedBox(height: SizeApp.defaultPadding),
                 GestureDetector(
                   onTap: () {
                     if (function2 != null) {
@@ -75,7 +75,7 @@ class AddedMessageScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                     decoration: BoxDecoration(
-                      color: whileColor40, // Button background color
+                      color: ColorApp.blackColor10, // Button background color
                       borderRadius: BorderRadius.circular(SizeApp.radius), // Rounded corners
                     ),
                     child: Center(

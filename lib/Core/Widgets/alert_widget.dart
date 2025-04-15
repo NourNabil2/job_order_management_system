@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 
 class CustomAlertDialog extends StatelessWidget {
@@ -10,14 +11,14 @@ class CustomAlertDialog extends StatelessWidget {
   final VoidCallback? onCancel;
 
   const CustomAlertDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.content,
     required this.confirmText,
     this.cancelText = 'Cancel',
     required this.onConfirm,
     this.onCancel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class CustomAlertDialog extends StatelessWidget {
               child: Text(
                 confirmText,
                 style: const TextStyle(
-                  color: errorColor,
+                  color: ColorApp.errorColor,
                   fontSize: 16,
                 ),
               ),

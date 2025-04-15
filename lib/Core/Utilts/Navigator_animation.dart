@@ -28,8 +28,7 @@ class CustomPageRoute<T> extends PageRouteBuilder<T> {
         case AnimationType.slideFromBottom:
           const beginBottom = Offset(0.0, 1.0);
           return _buildSlideTransition(animation, child, beginBottom);
-        default:
-          return child; // Default case
+
       }
     },
   );

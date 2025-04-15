@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ticr_notifications/Core/Utilts/Constants.dart';
-import 'package:ticr_notifications/Core/Utilts/Assets_Manager.dart';
-import 'package:ticr_notifications/Features/product/view/All_Product_screen.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 
-BuildSeeAll(context) {
+buildSeeAll(context) {
   return GestureDetector(
     onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const AllProducts_user()),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const AllProducts_user()),
+      // );
     },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -28,10 +26,10 @@ BuildSeeAll(context) {
           height: SizeApp.s20,
           width: SizeApp.s20,
           decoration: BoxDecoration(
-              color: ColorApp.bg_gray,
+              color: ColorApp.greyColor,
               borderRadius: BorderRadius.circular(SizeApp.s5)),
           child: SvgPicture.asset(
-            EndPoints.rightArrowIcon,
+           "EndPoints.rightArrowIcon",
             colorFilter: ColorFilter.mode(
               Theme.of(context).textTheme.bodySmall!.color!,
               BlendMode.srcIn,
@@ -44,7 +42,7 @@ BuildSeeAll(context) {
 }
 
 
-BuildTitleApp(context, String title) {
+buildTitleApp(context, String title) {
   return Padding(
     padding: EdgeInsets.only(
         top: SizeApp.s24,
@@ -58,7 +56,7 @@ BuildTitleApp(context, String title) {
           title,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
-        BuildSeeAll(context),
+        buildSeeAll(context),
       ],
     ),
   );

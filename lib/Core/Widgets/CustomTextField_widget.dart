@@ -4,11 +4,12 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 // ignore: must_be_immutable
 class CustomFormTextField extends StatelessWidget {
-  CustomFormTextField({
-    Key? key,
+ const CustomFormTextField({
+    super.key,
     this.color,
     this.style,
     this.minLines,
@@ -26,7 +27,7 @@ class CustomFormTextField extends StatelessWidget {
     this.nextFocusNode,
     this.onPressedObscureText,
     this.iconObscureText,
-  }) : super(key: key);
+  });
 
   final Function(String)? onChanged;
   final String? hintText;

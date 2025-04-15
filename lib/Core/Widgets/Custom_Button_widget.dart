@@ -3,9 +3,9 @@ import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 
 class CustomButon extends StatelessWidget {
-  CustomButon({this.onTap, required this.text});
-  VoidCallback? onTap;
-  String text;
+  const CustomButon({super.key, this.onTap, required this.text});
+  final VoidCallback? onTap;
+  final String text;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,9 +33,9 @@ class CustomButon extends StatelessWidget {
 
 
 class CustomCancelButon extends StatelessWidget {
-  CustomCancelButon({this.onTap, required this.text});
-  VoidCallback? onTap;
-  String text;
+ const CustomCancelButon({super.key, this.onTap, required this.text});
+ final VoidCallback? onTap;
+final  String text;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ticr_notifications/Core/Utilts/Constants.dart';
-import 'package:ticr_notifications/Core/Utilts/Assets_Manager.dart';
 
-class customAppBar extends StatelessWidget implements PreferredSizeWidget{
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   final String title;
-  const customAppBar({super.key, required this.title});
+  const CustomAppBar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +13,7 @@ class customAppBar extends StatelessWidget implements PreferredSizeWidget{
       title: Text(title,style: Theme.of(context).textTheme.titleLarge),
       leading: MaterialButton(
           onPressed: () => Navigator.pop(context),
-          child: SvgPicture.asset(EndPoints.backtIcon ,height: 24,
+          child: SvgPicture.asset("EndPoints.backtIcon" ,height: 24,
             width: 24,
             colorFilter: ColorFilter.mode(
               Theme.of(context).textTheme.titleLarge!.color!,

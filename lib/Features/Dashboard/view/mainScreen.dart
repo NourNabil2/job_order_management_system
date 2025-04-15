@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
-
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -23,20 +22,19 @@ class _TherapistaccountScreenState extends State<MainScreen> {
             children: [
               Expanded(
                 child: _buildCard(
-                      icon: Icons.pie_chart,
-                      title: "# of workers",
-                      count: "514 Therapists",
-                      color: Colors.pink,
+                  icon: Icons.pie_chart,
+                  title: "# of workers",
+                  count: "514 Therapists",
+                  color: Colors.pink,
                 ),
               ),
               Expanded(
-                child: _buildCard(
-                      icon: Icons.people_alt,
-                      title: "# of Users",
-                      count: "561 Users",
-                      color: Colors.purple,
-                    )
-              ),
+                  child: _buildCard(
+                icon: Icons.people_alt,
+                title: "# of Users",
+                count: "561 Users",
+                color: Colors.purple,
+              )),
             ],
           ),
         ),
@@ -59,9 +57,7 @@ class _TherapistaccountScreenState extends State<MainScreen> {
                   ),
                 ),
                 onChanged: (value) {
-                  setState(() {
-
-                  });
+                  setState(() {});
                 },
               ),
             ),
@@ -91,11 +87,10 @@ class _TherapistaccountScreenState extends State<MainScreen> {
                       fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:  ColorApp.mainLight,
-                    foregroundColor:  ColorApp.primaryColor,
+                    backgroundColor: ColorApp.mainLight,
+                    foregroundColor: ColorApp.primaryColor,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -111,24 +106,23 @@ class _TherapistaccountScreenState extends State<MainScreen> {
           ),
         ),
         Container(
-          width: double.infinity,
-          color: ColorApp.mainLight,
-          height: 500,
-          child: DataTable(
-                headingRowColor: MaterialStateProperty.resolveWith(
-                      (states) => ColorApp.blackColor5,
-                ),
-                columns: const [
-                  DataColumn(label: Text('Name')),
-                  DataColumn(label: Text('Experience')),
-                  DataColumn(label: Text('Subspecialties')),
-                  DataColumn(label: Text('Bio')),
-                  DataColumn(label: Text('Session')),
-                  DataColumn(label: Text('Actions')), // Actions column
-                ], rows: [],
-
-              )
-        ),
+            width: double.infinity,
+            color: ColorApp.mainLight,
+            height: 500,
+            child: DataTable(
+              headingRowColor: MaterialStateProperty.resolveWith(
+                (states) => ColorApp.blackColor5,
+              ),
+              columns: const [
+                DataColumn(label: Text('Name')),
+                DataColumn(label: Text('Experience')),
+                DataColumn(label: Text('Subspecialties')),
+                DataColumn(label: Text('Bio')),
+                DataColumn(label: Text('Session')),
+                DataColumn(label: Text('Actions')), // Actions column
+              ],
+              rows: [],
+            )),
       ],
     );
   }

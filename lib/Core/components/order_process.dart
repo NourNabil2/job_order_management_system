@@ -99,7 +99,7 @@ class ProcessDotWithLine extends StatelessWidget {
                 : Theme.of(context).textTheme.bodyMedium!.color,
           ),
         ),
-        const SizedBox(height: defaultPadding / 2),
+         SizedBox(height: SizeApp.defaultPadding / 2),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -118,7 +118,7 @@ class ProcessDotWithLine extends StatelessWidget {
                   height: 2,
                   color: nextStatus != null
                       ? lineColor(context, nextStatus!)
-                      : successColor,
+                      : ColorApp.successColor,
                 ),
               ),
             if (!isShowRightLine) const Spacer(),
@@ -136,7 +136,7 @@ Widget statusWidget(BuildContext context, OrderProcessStatus status) {
     case OrderProcessStatus.processing:
       return CircleAvatar(
         radius: 12,
-        backgroundColor: warningColor,
+        backgroundColor:ColorApp. warningColor,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CircularProgressIndicator(
@@ -159,7 +159,7 @@ Widget statusWidget(BuildContext context, OrderProcessStatus status) {
     case OrderProcessStatus.canceled:
       return CircleAvatar(
         radius: 12,
-        backgroundColor: errorColor,
+        backgroundColor:ColorApp. errorColor,
         child: Icon(
           Icons.close,
           size: 12,
@@ -169,7 +169,7 @@ Widget statusWidget(BuildContext context, OrderProcessStatus status) {
     default:
       return CircleAvatar(
         radius: 12,
-        backgroundColor: successColor,
+        backgroundColor:ColorApp. successColor,
         child: Icon(
           Icons.done,
           size: 12,
@@ -186,12 +186,12 @@ Color lineColor(BuildContext context, OrderProcessStatus status) {
       return Theme.of(context).dividerColor;
 
     case OrderProcessStatus.processing:
-      return warningColor;
+      return ColorApp. warningColor;
 
     case OrderProcessStatus.canceled:
-      return errorColor;
+      return ColorApp. errorColor;
 
     default:
-      return successColor;
+      return ColorApp. successColor;
   }
 }
