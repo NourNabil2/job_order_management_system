@@ -40,8 +40,8 @@ class InteractionChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, double> dataMap = isGenderBased
         ? {
-            "Male": maleCount.toDouble(),
-            "Female": femaleCount.toDouble(),
+            "التوريدات": maleCount.toDouble(),
+            "تحت التشغيل": femaleCount.toDouble(),
           }
         : {
             "18": age18.toDouble(),
@@ -78,7 +78,7 @@ class InteractionChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          title: isGenderBased ? 'Gender' : 'Age',
+          title: isGenderBased ? 'تم الانتهاء' : 'تحت التشغيل',
           fontWeight: FontWeight.bold,
         ),
         ResponsiveBuilder(
@@ -103,7 +103,7 @@ class InteractionChart extends StatelessWidget {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: "Total Views\n",
+                                    text: "Total\n",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
@@ -151,12 +151,12 @@ class InteractionChart extends StatelessWidget {
                                   children: [
                                     InteractionItem(
                                       color: ColorApp.purpleColor,
-                                      title: 'Male',
+                                      title: 'تم الانتهاء',
                                       count: femaleCount,
                                     ),
                                     InteractionItem(
                                       color: ColorApp.primaryColor,
-                                      title: 'Female',
+                                      title: 'تحت التشغيل',
                                       count: maleCount,
                                     ),
                                   ],
@@ -198,24 +198,7 @@ class InteractionChart extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(height: SizeApp.s12),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      InteractionItem(
-                                        radius: SizeApp.s4,
-                                        color: Color(0xff5CC8BE),
-                                        title: '33-50',
-                                        count: null,
-                                      ),
-                                      InteractionItem(
-                                        radius: SizeApp.s4,
-                                        color: Color(0xffAF52DE),
-                                        title: '+50',
-                                        count: null,
-                                      ),
-                                    ],
-                                  ),
+
                                 ],
                               ),
                             ),

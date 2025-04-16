@@ -13,7 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       surfaceTintColor: Colors.transparent,
-      title: Text(title,style: Theme.of(context).textTheme.titleLarge),
+      title: Text(title,style: Theme.of(context).textTheme.titleMedium),
       leading:  onTap == null ? Padding(
        padding: EdgeInsets.all(SizeApp.padding),
         child: SvgPicture.asset(icon ,

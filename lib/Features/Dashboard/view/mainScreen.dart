@@ -4,6 +4,7 @@ import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Widgets/CustomCardHolder.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/InteractionChart.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/card_info_Widget.dart';
+import 'package:quality_management_system/Features/Dashboard/view/widgets/sectionTitle.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -13,15 +14,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _TherapistaccountScreenState extends State<MainScreen> {
-  final TextEditingController _searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(SizeApp.defaultPadding),
-          child: const Row(
+    return Padding(
+      padding: EdgeInsets.all(SizeApp.defaultPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const SectionTitle(title: 'تيست تيست'),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               DashboardCard(
@@ -38,11 +40,8 @@ class _TherapistaccountScreenState extends State<MainScreen> {
               ) ,
              ],
           ),
-        ),
-
-        Padding(
-          padding: EdgeInsets.all(SizeApp.defaultPadding),
-          child: Row(
+           const SectionTitle(title: 'اخر المستجدات'),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CustomContainer(
@@ -74,8 +73,8 @@ class _TherapistaccountScreenState extends State<MainScreen> {
               )
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
