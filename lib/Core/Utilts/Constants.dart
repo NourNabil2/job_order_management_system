@@ -30,6 +30,7 @@ class ColorApp {
 
 class StringApp {
   static const titleApp = '';
+  static const overView = 'OverView';
   static const noAccount = 'dont\'t have an account?  ';
   static const forgetPass = 'Forget password?  ';
   static const yesAccount = 'already have an account?  ';
@@ -50,11 +51,13 @@ class SizeApp {
   static double padding = 8.0;
   static double borderRadius = 12.0;
   static double s2 = 2.0;
+  static double s4 = 4.0;
   static double s5 = 5.0;
   static double s8 = 8.0;
   static double s10 = 10.0;
   static double s12 = 12.0;
   static double s15 = 15.0;
+  static double s16 = 16.0;
   static double s20 = 20.0;
   static double s24 = 24.0;
   static double s30 = 30.0;
