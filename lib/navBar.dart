@@ -4,6 +4,7 @@ import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
+import 'package:quality_management_system/Features/auth/view/screens/signup_screen.dart';
 
 import 'Core/models/nav_Item_model.dart';
 
@@ -22,6 +23,7 @@ class _NavbarState extends State<Navbar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           NavigationRail(
             extended: isExpanded,
@@ -85,6 +87,8 @@ class _NavbarState extends State<Navbar> {
                       const MainScreen()
                     else if (selectedIndex == 2)
                       const MainScreen()
+                    else if (selectedIndex == 3)
+                      const SignupScreen()
                   ],
                 ),
               ),

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../Utilts/Constants.dart';
-
 
 class ReviewCard extends StatelessWidget {
   const ReviewCard({
@@ -27,12 +24,11 @@ class ReviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:  EdgeInsets.all(SizeApp.defaultPadding),
+      padding: EdgeInsets.all(SizeApp.defaultPadding),
       width: double.infinity,
       decoration: BoxDecoration(
         color: Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.035),
-        borderRadius:
-             BorderRadius.all(Radius.circular(SizeApp.borderRadius)),
+        borderRadius: BorderRadius.all(Radius.circular(SizeApp.borderRadius)),
       ),
       child: Row(
         children: [
@@ -56,12 +52,11 @@ class ReviewCard extends StatelessWidget {
                   ),
                 ),
                 Text("Based on $numOfReviews Reviews"),
-                 SizedBox(height: SizeApp.defaultPadding),
-
+                SizedBox(height: SizeApp.defaultPadding),
               ],
             ),
           ),
-           SizedBox(width: SizeApp.defaultPadding),
+          SizedBox(width: SizeApp.defaultPadding),
           Expanded(
             child: Column(
               children: [
@@ -92,7 +87,8 @@ class RateBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: star == 1 ? 0 : SizeApp.defaultPadding / 2),
+      padding:
+          EdgeInsets.only(bottom: star == 1 ? 0 : SizeApp.defaultPadding / 2),
       child: Row(
         children: [
           SizedBox(
@@ -103,10 +99,10 @@ class RateBar extends StatelessWidget {
                   color: Theme.of(context).textTheme.bodyMedium!.color),
             ),
           ),
-           SizedBox(width: SizeApp.defaultPadding / 2),
+          SizedBox(width: SizeApp.defaultPadding / 2),
           Expanded(
             child: ClipRRect(
-              borderRadius:  BorderRadius.all(
+              borderRadius: BorderRadius.all(
                 Radius.circular(SizeApp.borderRadius),
               ),
               child: LinearProgressIndicator(

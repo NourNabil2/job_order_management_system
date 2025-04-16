@@ -91,7 +91,8 @@ class _TherapistaccountScreenState extends State<MainScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorApp.mainLight,
                     foregroundColor: ColorApp.primaryColor,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ColorApp {
-
   static const mainLight = Color(0xffe9ecee);
   static const mainDark = Color(0xffe9ecee);
   static const primaryColor = Color(0xff3B638C);
 
-
   static const Color blackColor = Color(0xFF16161E);
+  static const Color blackColor90 = Color(0xff42474e);
   static const Color blackColor80 = Color(0xFF45454B);
   static const Color blackColor60 = Color(0xFF737378);
   static const Color blackColor40 = Color(0xFFA2A2A5);
@@ -19,13 +18,10 @@ class ColorApp {
   static const Color lightGreyColor = Color(0xFFF8F8F9);
   static const Color darkGreyColor = Color(0xFF1C1C25);
 
-
   static const Color purpleColor = Color(0xFF7B61FF);
   static const Color successColor = Color(0xFF2ED573);
   static const Color warningColor = Color(0xFFFFBE21);
   static const Color errorColor = Color(0xFFEA5B5B);
-
-
 }
 
 class StringApp {
@@ -65,6 +61,6 @@ class SizeApp {
 
   static double iconSizeSmall = 16.0;
   static double iconSizeMedium = 24.0;
+  static double iconSizeLarge = 32.0;
   static double logoSize = 165.0;
-
 }

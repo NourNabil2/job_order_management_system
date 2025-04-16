@@ -58,6 +58,7 @@ dependencies:
   cached_network_image:
   shared_preferences: ^2.5.2
   flutter_screenutil: ^5.9.3
+  dartz: ^0.10.1
 
 
 dev_dependencies:
