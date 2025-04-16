@@ -19,9 +19,9 @@ class DashboardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       child: Card(
-        elevation: 4,
+        elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(SizeApp.radius),
         ),
         child: Padding(
           padding: EdgeInsets.all(SizeApp.defaultPadding),
