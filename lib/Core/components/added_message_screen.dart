@@ -40,21 +40,17 @@ class AddedMessageScreen extends StatelessWidget {
                 const Spacer(),
                 Expanded(
                   flex: 3,
-                  child: Lottie.asset(imageLight,repeat: false,),
+                  child: Lottie.asset(imageLight, repeat: false),
                 ),
                 const Spacer(flex: 2),
                 Text(
                   title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
-                 SizedBox(height:  SizeApp.defaultPadding / 2),
-                Text(
-                  body,
-                  textAlign: TextAlign.center,
-                ),
+                SizedBox(height: SizeApp.defaultPadding / 2),
+                Text(body, textAlign: TextAlign.center),
                 const Spacer(flex: 2),
                 if (title2 != null)
                   CustomButon(
@@ -65,7 +61,7 @@ class AddedMessageScreen extends StatelessWidget {
                     },
                     text: title2!,
                   ),
-                 SizedBox(height: SizeApp.defaultPadding),
+                SizedBox(height: SizeApp.defaultPadding),
                 GestureDetector(
                   onTap: () {
                     if (function2 != null) {
@@ -73,10 +69,15 @@ class AddedMessageScreen extends StatelessWidget {
                     }
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 14,
+                    ),
                     decoration: BoxDecoration(
                       color: ColorApp.blackColor10, // Button background color
-                      borderRadius: BorderRadius.circular(SizeApp.radius), // Rounded corners
+                      borderRadius: BorderRadius.circular(
+                        SizeApp.radius,
+                      ), // Rounded corners
                     ),
                     child: Center(
                       child: Text(
@@ -87,7 +88,6 @@ class AddedMessageScreen extends StatelessWidget {
                   ),
                 ),
 
-
                 const Spacer(),
               ],
             ),
@@ -96,6 +96,4 @@ class AddedMessageScreen extends StatelessWidget {
       ),
     );
   }
-
 }
-

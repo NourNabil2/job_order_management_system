@@ -6,8 +6,8 @@ class ColorApp {
   static const mainDark = Color(0xffe9ecee);
   static const primaryColor = Color(0xff3B638C);
 
-
   static const Color blackColor = Color(0xFF16161E);
+  static const Color blackColor90 = Color(0xff42474e);
   static const Color blackColor80 = Color(0xFF45454B);
   static const Color blackColor60 = Color(0xFF737378);
   static const Color blackColor40 = Color(0xFFA2A2A5);
@@ -75,6 +75,7 @@ class SizeApp {
 
   static double iconSizeSmall = 16.0;
   static double iconSizeMedium = 24.0;
+  static double iconSizeLarge = 32.0;
   static double logoSize = 165.0;
 
 

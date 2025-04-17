@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 extension StringExtensions on String {
@@ -5,6 +6,26 @@ extension StringExtensions on String {
   String capitalize() {
     if (isEmpty) return this;
     return this[0].toUpperCase() + substring(1);
+  }
+
+  // Maps Firebase error codes to user-friendly messages
+  String mapFirebaseError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'invalid-credential':
+        return 'Wrong email or password provided.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'user-not-found':
+        return 'No account found with this email.';
+      case 'weak-password':
+        return "The password provided is too weak.";
+      case 'email-already-in-use':
+        return "An account already exists for that email. If it is yours, Login instead.";
+      case 'invalid-email':
+        return "The email provided is invalid.";
+      default:
+        return 'signin failed. Please try again.';
+    }
   }
 
   /// Capitalizes the first letter of each word in the string
