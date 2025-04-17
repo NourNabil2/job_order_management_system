@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/extensions.dart';
+import 'package:quality_management_system/Core/Widgets/CustomTextField_widget.dart';
 import 'package:quality_management_system/Core/theme/text_theme.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/drop_down_field.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/form_button.dart';
@@ -63,22 +64,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: Column(
                         children: [
                           // Name
-                          CustomTextFormField(
-                            controller: nameController,
-                            hint: "Name",
-                            icon: Icons.person,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter a name";
-                              }
-                              if (value.length < 2) {
-                                return "Name must be at least 2 characters long";
-                              }
-                              if (value.length > 50) {
-                                return "Name must be less than 50 characters long";
-                              }
-                              return null;
-                            },
+                          CustomFormTextField(
+                            textEditingController: emailController,
+                            hintText: "Name",
+                            title: 'Name',
+                            icon: Icons.email_rounded,
                           ),
                           const SizedBox(height: 10),
                           // Drop Down to Select Role
@@ -111,92 +101,30 @@ class _SignupScreenState extends State<SignupScreen> {
                             },
                           ),
                           const SizedBox(height: 10),
-                          CustomTextFormField(
-                            controller: emailController,
-                            hint: "Email",
+                          CustomFormTextField(
+                            textEditingController: emailController,
+                            hintText: "Email",
                             icon: Icons.email_rounded,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter an email";
-                              } else {
-                                if (StringExtensions(value).isValidEmail()) {
-                                  return "Please enter a valid email";
-                                }
-                              }
-                              return null;
-                            },
                           ),
                           const SizedBox(height: 10),
-                          CustomTextFormField(
-                            obsecure: passwordVisible,
-                            suffixIcon: passwordVisible
-                                ? IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        passwordVisible = !passwordVisible;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.visibility),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        passwordVisible = !passwordVisible;
-                                      });
-                                    },
-                                    icon: const Icon(
-                                        Icons.visibility_off_outlined),
-                                  ),
-                            controller: passwordController,
-                            hint: "Password",
+                          CustomFormTextField(
+                            obscureText: passwordVisible,
+
+                            textEditingController: passwordController,
+                            hintText: "Password",
                             icon: Icons.password_rounded,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter a password";
-                              }
-                              if (value.length < 8) {
-                                return "Password must be at least 8 characters long";
-                              }
-                              if (value.length > 25) {
-                                return "Password must be less than 25 characters long";
-                              }
-                              return null;
-                            },
                           ),
                           const SizedBox(height: 10),
-                          CustomTextFormField(
-                            obsecure: confirmPasswordVisible,
-                            suffixIcon: confirmPasswordVisible
-                                ? IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        confirmPasswordVisible =
-                                            !confirmPasswordVisible;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.visibility),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        confirmPasswordVisible =
-                                            !confirmPasswordVisible;
-                                      });
-                                    },
-                                    icon: const Icon(
-                                        Icons.visibility_off_outlined),
-                                  ),
-                            controller: confirmPasswordController,
-                            hint: "Confirm Password",
-                            icon: Icons.password_rounded,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please confirm your password";
-                              }
-                              if (value != passwordController.text) {
-                                return "Passwords are not matching";
-                              }
-                              return null;
+                          CustomFormTextField(
+                            obscureText: confirmPasswordVisible,
+                            textEditingController: confirmPasswordController,
+                            hintText: "Confirm Password",
+                            iconObscureText: confirmPasswordVisible ? Icons.visibility_off_outlined :  Icons.visibility,
+                            onPressedObscureText: () {
+                              setState(() {
+                                confirmPasswordVisible =
+                                !confirmPasswordVisible;
+                              });
                             },
                           ),
                           const SizedBox(height: 20),

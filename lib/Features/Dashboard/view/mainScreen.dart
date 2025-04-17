@@ -23,21 +23,21 @@ class _TherapistaccountScreenState extends State<MainScreen> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const SectionTitle(title: 'تيست تيست'),
+          const SectionTitle(title: 'معلومات سريعة'),
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               DashboardCard(
                   icon: Icons.person,
-                  title: 'عدد ',
+                  title: 'عدد الموظفين',
                   count: '12',
-                  color: Colors.white
+                  color: ColorApp.primaryColor
               ) ,
               DashboardCard(
-                  icon: Icons.person,
-                  title: 'title',
-                  count: '12',
-                  color: Colors.white
+                  icon: Icons.timelapse,
+                  title: 'أقرب موعد تسليم',
+                  count: 'امر التوريد رقم 454',
+                  color: ColorApp.primaryColor
               ) ,
              ],
           ),

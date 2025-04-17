@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/extensions.dart';
+import 'package:quality_management_system/Core/Widgets/CustomTextField_widget.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/form_button.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/text_form_field.dart';
 
@@ -56,57 +57,18 @@ class _SigninScreenScreenState extends State<SigninScreen> {
                       child: Column(
                         children: [
                           // Email
-                          CustomTextFormField(
-                            controller: emailController,
-                            hint: "Email",
+                          CustomFormTextField(
+                            textEditingController: emailController,
+                            hintText: "Email",
+                            title: 'Email',
                             icon: Icons.email_rounded,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter an email";
-                              } else {
-                                if (StringExtensions(value).isValidEmail()) {
-                                  return "Please enter a valid email";
-                                }
-                              }
-                              return null;
-                            },
                           ),
                           const SizedBox(height: 10),
-                          CustomTextFormField(
-                            obsecure: passwordVisible,
-                            suffixIcon: passwordVisible
-                                ? IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        passwordVisible = !passwordVisible;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.visibility),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        passwordVisible = !passwordVisible;
-                                      });
-                                    },
-                                    icon: const Icon(
-                                        Icons.visibility_off_outlined),
-                                  ),
-                            controller: passwordController,
-                            hint: "Password",
+                          CustomFormTextField(
+                            obscureText: passwordVisible,
+                            textEditingController: passwordController,
+                            hintText: "Password",
                             icon: Icons.password_rounded,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter a password";
-                              }
-                              if (value.length < 8) {
-                                return "Password must be at least 8 characters long";
-                              }
-                              if (value.length > 25) {
-                                return "Password must be less than 25 characters long";
-                              }
-                              return null;
-                            },
                           ),
 
                           const SizedBox(height: 20),

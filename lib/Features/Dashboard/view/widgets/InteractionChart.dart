@@ -357,7 +357,7 @@ class InteractionChart extends StatelessWidget {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: "Total Views\n",
+                                      text: "Total\n",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!

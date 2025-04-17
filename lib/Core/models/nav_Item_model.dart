@@ -25,10 +25,6 @@ final List<NavItem> navItems = [
       assetPath: AssetsManager.invoiceIcon,
       screen: const MainScreen()),
   NavItem(
-      label: '----',
-      assetPath: AssetsManager.invoiceIcon,
-      screen: const MainScreen()),
-  NavItem(
       label: 'Add Member',
       assetPath: AssetsManager.addMember,
       screen:  SignupScreen()
