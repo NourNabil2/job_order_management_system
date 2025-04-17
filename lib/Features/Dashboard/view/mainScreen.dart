@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomCardHolder.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/InteractionChart.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/card_info_Widget.dart';
@@ -28,7 +29,7 @@ class _TherapistaccountScreenState extends State<MainScreen> {
             children: [
               DashboardCard(
                   icon: Icons.person,
-                  title: 'title',
+                  title: 'عدد ',
                   count: '12',
                   color: Colors.white
               ) ,
@@ -47,14 +48,12 @@ class _TherapistaccountScreenState extends State<MainScreen> {
               CustomContainer(
                 margin: EdgeInsets.all(SizeApp.padding),
                   child: const InteractionChart(chartType: ChartType.ring,
-                    isGenderBased: true,
-                    age18: 45,
-                    age19_24: 54,
-                    age25_32: 54,
-                    age33_50: 5,
-                    maleCount: 54,
-                    age50Plus: 45,
-                    femaleCount: 41,
+                    isOrderBased: true,
+                    totalCollections: 45,
+                    returns: 54,
+                    invoices: 54,
+                    doneCount: 54,
+                    notDoneCount: 41,
                     totalViews: 4,),
 
               ),
@@ -63,12 +62,12 @@ class _TherapistaccountScreenState extends State<MainScreen> {
                   margin: EdgeInsets.all(SizeApp.padding),
                   child: const InteractionChart(
                     chartType: ChartType.disc,
-                    isGenderBased: false,
-                    age18: 45,
-                    age19_24: 54,
-                    maleCount: 54,
-                    age50Plus: 45,
-                    femaleCount: 41,
+                    isOrderBased: false,
+                    totalCollections: 45,
+                    returns: 54,
+                    doneCount: 54,
+                    invoices: 45,
+                    notDoneCount: 41,
                     totalViews: 4,),
               )
             ],

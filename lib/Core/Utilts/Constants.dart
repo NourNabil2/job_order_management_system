@@ -30,6 +30,13 @@ class ColorApp {
 
 class StringApp {
   static const titleApp = '';
+  //admin
+  static const done = 'تم الانهاء';
+  static const notDone = 'قيد العمل';
+  static const invoices = 'الفواتير';
+  static const returns = 'المرتجعات';
+  static const totalCollections = 'التحصيلات';
+
   static const overView = 'OverView';
   static const noAccount = 'dont\'t have an account?  ';
   static const forgetPass = 'Forget password?  ';
@@ -69,5 +76,6 @@ class SizeApp {
   static double iconSizeSmall = 16.0;
   static double iconSizeMedium = 24.0;
   static double logoSize = 165.0;
+
 
 }
