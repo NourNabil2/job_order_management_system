@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
-import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomCardHolder.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/InteractionChart.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/card_info_Widget.dart';

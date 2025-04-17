@@ -33,7 +33,7 @@ class CustomDropdownFormField extends StatelessWidget {
         hint: Text(
           hint,
           style:
-              appTextTheme.bodyMedium!.copyWith(color: ColorApp.blackColor90),
+              appTextTheme.bodyMedium!.copyWith(color: ColorApp.blackColor80),
         ),
         style: appTextTheme.bodyMedium!.copyWith(color: ColorApp.blackColor),
         value: value,

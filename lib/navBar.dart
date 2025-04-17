@@ -5,6 +5,7 @@ import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
+import 'package:quality_management_system/Features/AddNewOrder/view/AddNewOrder_Screen.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
 import 'package:quality_management_system/Features/auth/view/screens/signup_screen.dart';
@@ -68,11 +69,17 @@ class _NavbarState extends State<Navbar> {
                     (index) {
                   final isSelected = index == selectedIndex;
                   return NavigationRailDestination(
+
                     icon: CustomIcon(
                       assetPath: navItems[index].assetPath,
                       color: isSelected ? ColorApp.primaryColor : ColorApp.mainLight,
                     ),
-                    label: Text(navItems[index].label),
+                    label:  Row(
+                      children: [
+
+                        Text(navItems[index].label),
+                      ],
+                    )
                   );
                 },
               ),
@@ -84,34 +91,31 @@ class _NavbarState extends State<Navbar> {
               },
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isExpanded = !isExpanded;
-                              });
-                            },
-                            icon: const Icon(Icons.menu),
-                          ),
-                          CustomIcon(
-                            assetPath: AssetsManager.logo,
-                            size: SizeApp.logoSize,
-                            isImage: true,
-                          )
-                        ],
-                      ),
-                      _getSelectedScreen(),
-                    ],
-                  ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isExpanded = !isExpanded;
+                            });
+                          },
+                          icon: const Icon(Icons.menu),
+                        ),
+                        CustomIcon(
+                          assetPath: AssetsManager.logo,
+                          size: SizeApp.logoSize,
+                          isImage: true,
+                        )
+                      ],
+                    ),
+                    _getSelectedScreen(),
+                  ],
                 ),
               ),
             ),
@@ -126,7 +130,7 @@ class _NavbarState extends State<Navbar> {
       case 0:
         return const MainScreen();
       case 1:
-        return const MainScreen();
+        return const AddOrderPage();
       case 2:
         return const SignupScreen();
       default:
