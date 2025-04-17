@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
+import 'package:quality_management_system/Core/Widgets/CustomCardHolder.dart';
+import 'package:quality_management_system/Features/Dashboard/view/widgets/InteractionChart.dart';
+import 'package:quality_management_system/Features/Dashboard/view/widgets/card_info_Widget.dart';
+import 'package:quality_management_system/Features/Dashboard/view/widgets/sectionTitle.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -9,176 +15,66 @@ class MainScreen extends StatefulWidget {
 }
 
 class _TherapistaccountScreenState extends State<MainScreen> {
-  final TextEditingController _searchController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
+    return Padding(
+      padding: EdgeInsets.all(SizeApp.defaultPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const SectionTitle(title: 'تيست تيست'),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Expanded(
-                child: _buildCard(
-                  icon: Icons.pie_chart,
-                  title: "# of workers",
-                  count: "514 Therapists",
-                  color: Colors.pink,
-                ),
-              ),
-              Expanded(
-                  child: _buildCard(
-                icon: Icons.people_alt,
-                title: "# of Users",
-                count: "561 Users",
-                color: Colors.purple,
-              )),
-            ],
+              DashboardCard(
+                  icon: Icons.person,
+                  title: 'عدد ',
+                  count: '12',
+                  color: Colors.white
+              ) ,
+              DashboardCard(
+                  icon: Icons.person,
+                  title: 'title',
+                  count: '12',
+                  color: Colors.white
+              ) ,
+             ],
           ),
-        ),
-        // Search Bar
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(width: 10),
-            SizedBox(
-              width: 300.0,
-              child: TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: "Search...",
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black26,
-                    ),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Container(
-          width: double.infinity,
-          height: 50,
-          decoration: const BoxDecoration(
-            color: ColorApp.primaryColor,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Manage Therapist",
-                  style: TextStyle(
-                      color: ColorApp.mainLight,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorApp.mainLight,
-                    foregroundColor: ColorApp.primaryColor,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'Add New Therapist',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Container(
-            width: double.infinity,
-            color: ColorApp.mainLight,
-            height: 500,
-            child: DataTable(
-              headingRowColor: MaterialStateProperty.resolveWith(
-                (states) => ColorApp.blackColor5,
-              ),
-              columns: const [
-                DataColumn(label: Text('Name')),
-                DataColumn(label: Text('Experience')),
-                DataColumn(label: Text('Subspecialties')),
-                DataColumn(label: Text('Bio')),
-                DataColumn(label: Text('Session')),
-                DataColumn(label: Text('Actions')), // Actions column
-              ],
-              rows: [],
-            )),
-      ],
-    );
-  }
-
-////////////////////////////////////////////////
-
-  Widget _buildCard({
-    required IconData icon,
-    required String title,
-    required String count,
-    required Color color,
-  }) {
-    return Flexible(
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+           const SectionTitle(title: 'اخر المستجدات'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                children: [
-                  Icon(icon, size: 26.0, color: color),
-                  const SizedBox(width: 15.0),
-                  Expanded(
-                    child: Text(
-                      title,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 26.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+              CustomContainer(
+                margin: EdgeInsets.all(SizeApp.padding),
+                  child: const InteractionChart(chartType: ChartType.ring,
+                    isOrderBased: true,
+                    totalCollections: 45,
+                    returns: 54,
+                    invoices: 54,
+                    doneCount: 54,
+                    notDoneCount: 41,
+                    totalViews: 4,),
+
               ),
-              const SizedBox(height: 20.0),
-              Text(
-                count,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 20,
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+
+              CustomContainer(
+                  margin: EdgeInsets.all(SizeApp.padding),
+                  child: const InteractionChart(
+                    chartType: ChartType.disc,
+                    isOrderBased: false,
+                    totalCollections: 45,
+                    returns: 54,
+                    doneCount: 54,
+                    invoices: 45,
+                    notDoneCount: 41,
+                    totalViews: 4,),
+              )
             ],
           ),
-        ),
+        ],
       ),
     );
   }
+
 }
