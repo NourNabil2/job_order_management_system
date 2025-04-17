@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
+import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
 
 class NavItem {
   final String label;
@@ -15,8 +16,21 @@ class NavItem {
 }
 
 final List<NavItem> navItems = [
-  NavItem(label: 'Overview', assetPath: AssetsManager.menuIcon, screen: const MainScreen()),
-  NavItem(label: 'Add Orders', assetPath: AssetsManager.invoiceIcon, screen: const MainScreen()),
-  NavItem(label: '----', assetPath: AssetsManager.invoiceIcon, screen: const MainScreen()),
+  NavItem(
+      label: 'Overview',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: 'Add Orders',
+      assetPath: AssetsManager.invoiceIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: '----',
+      assetPath: AssetsManager.invoiceIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: 'Add Member',
+      assetPath: AssetsManager.addMember,
+      screen:  SignupScreen()
+      ),
 ];
-

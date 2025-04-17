@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 class NetworkErrorWidget extends StatelessWidget {
@@ -7,10 +6,10 @@ class NetworkErrorWidget extends StatelessWidget {
   final VoidCallback onRetry;
 
   const NetworkErrorWidget({
-    Key? key,
+    super.key,
     required this.errorMessage,
     required this.onRetry,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +18,15 @@ class NetworkErrorWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 50),
-          Image.asset("EndPoints.connectionIcon",width: SizeApp.logoSize,),
+          Image.asset(
+            "EndPoints.connectionIcon",
+            width: SizeApp.logoSize,
+          ),
           const SizedBox(height: 20),
-          Text(errorMessage,style: Theme.of(context).textTheme.bodyMedium,),
+          Text(
+            errorMessage,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: onRetry,

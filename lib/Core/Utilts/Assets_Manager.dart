@@ -1,13 +1,11 @@
 class AssetsManager {
-
   static const logo = 'assets/images/logo.png';
   //icon
   static const dashboard = 'assets/icons/dashboardIcon.svg';
   static const menuIcon = 'assets/icons/Category.svg';
   static const invoiceIcon = 'assets/icons/invoiceIcon.svg';
 
-
-
+  static const addMember = "assets/icons/Add-member.svg";
   static const poketIcon = 'assets/images/icons/pocket_icon.png';
   static const backtIcon = 'assets/icons/Arrow - Left.svg';
   static const carIcon = 'assets/icons/car-black.svg';
@@ -51,5 +49,4 @@ class AssetsManager {
   static const addedSuccess = 'assets/icons/success.json';
   static const verificationEmail = 'assets/icons/Verification_email.json';
   static const connectionIcon = 'assets/icons/connection_error.png';
-
 }

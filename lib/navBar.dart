@@ -4,7 +4,8 @@ import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
-
+import 'package:quality_management_system/Features/auth/view/screens/signin_screen.dart';
+import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
 import 'Core/models/nav_Item_model.dart';
 
 class Navbar extends StatefulWidget {
@@ -22,6 +23,7 @@ class _NavbarState extends State<Navbar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           NavigationRail(
             extended: isExpanded,
@@ -34,19 +36,18 @@ class _NavbarState extends State<Navbar> {
             selectedLabelTextStyle: const TextStyle(color: ColorApp.mainLight),
             destinations: List.generate(
               navItems.length,
-                  (index) {
+              (index) {
                 final isSelected = index == selectedIndex;
                 return NavigationRailDestination(
                   icon: CustomIcon(
                     assetPath: navItems[index].assetPath,
-                    color: isSelected ? ColorApp.primaryColor : ColorApp.mainLight,
+                    color:
+                        isSelected ? ColorApp.primaryColor : ColorApp.mainLight,
                   ),
                   label: Text(navItems[index].label),
                 );
               },
             ),
-
-
             selectedIndex: selectedIndex,
             onDestinationSelected: (index) {
               setState(() {
@@ -56,7 +57,7 @@ class _NavbarState extends State<Navbar> {
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -73,16 +74,21 @@ class _NavbarState extends State<Navbar> {
                           },
                           icon: const Icon(Icons.menu),
                         ),
-                        CustomIcon(assetPath: AssetsManager.logo,size: SizeApp.logoSize ,isImage: true,)
-
+                        CustomIcon(
+                          assetPath: AssetsManager.logo,
+                          size: SizeApp.logoSize,
+                          isImage: true,
+                        )
                       ],
                     ),
                     if (selectedIndex == 0)
                       const MainScreen()
                     else if (selectedIndex == 1)
-                      MainScreen()
+                      const MainScreen()
                     else if (selectedIndex == 2)
                       const MainScreen()
+                    else if (selectedIndex == 3)
+                      const SigninScreen()
                   ],
                 ),
               ),
