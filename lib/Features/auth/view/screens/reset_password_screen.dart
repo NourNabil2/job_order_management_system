@@ -10,7 +10,8 @@ import 'package:quality_management_system/Features/auth/view/widgets/text_form_f
 import 'package:quality_management_system/dependency_injection.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  final String email;
+  const ResetPasswordScreen({super.key, required this.email});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -161,7 +162,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     if (resetPasswordKey.currentState!
                                         .validate()) {
                                       context.read<SignupCubit>().signup(
-                                          "ahmed@quality.com",
+                                          widget.email!,
                                           passwordController.text);
                                     }
                                   },

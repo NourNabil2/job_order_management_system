@@ -43,7 +43,7 @@ class _SigninScreenScreenState extends State<SigninScreen> {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return BlocProvider(
                 create: (context) => sl<SignupCubit>(),
-                child: const ResetPasswordScreen(),
+                child: ResetPasswordScreen(email: emailController.text,),
               );
             }));
           } else if (state is SigninFailure) {

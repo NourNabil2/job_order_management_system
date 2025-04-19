@@ -11,14 +11,14 @@ import 'package:quality_management_system/Features/auth/view/widgets/form_button
 import 'package:quality_management_system/Features/auth/view/widgets/text_form_field.dart';
 import 'package:quality_management_system/dependency_injection.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class AddMemberScreen extends StatefulWidget {
+  const AddMemberScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<AddMemberScreen> createState() => _AddMemberScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _AddMemberScreenState extends State<AddMemberScreen> {
   final signupKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();

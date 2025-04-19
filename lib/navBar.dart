@@ -7,7 +7,8 @@ import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart'
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
-import 'package:quality_management_system/Features/auth/view/screens/signup_screen.dart';
+import 'Features/OrderTableDetails/view/OrdersDetails.dart';
+import 'Features/auth/view/screens/signin_screen.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -55,6 +56,7 @@ class _NavbarState extends State<Navbar> {
 
       desktopBuilder: (context) => Scaffold(
         body: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             NavigationRail(
               extended: isExpanded,
@@ -84,34 +86,30 @@ class _NavbarState extends State<Navbar> {
               },
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                isExpanded = !isExpanded;
-                              });
-                            },
-                            icon: const Icon(Icons.menu),
-                          ),
-                          CustomIcon(
-                            assetPath: AssetsManager.logo,
-                            size: SizeApp.logoSize,
-                            isImage: true,
-                          )
-                        ],
-                      ),
-                      _getSelectedScreen(),
-                    ],
-                  ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                           setState(() {
+                             isExpanded = !isExpanded;
+                           });
+                          },
+                          icon: const Icon(Icons.menu),
+                        ),
+                        CustomIcon(
+                          assetPath: AssetsManager.logo,
+                          size: SizeApp.logoSize,
+                          isImage: true,
+                        )
+                      ],
+                    ),
+                    _getSelectedScreen(), // Remove Expanded from here
+                  ],
                 ),
               ),
             ),
@@ -126,9 +124,9 @@ class _NavbarState extends State<Navbar> {
       case 0:
         return const MainScreen();
       case 1:
-        return const MainScreen();
+        return const OrdersTableExample1();
       case 2:
-        return const SignupScreen();
+        return const SigninScreen();
       default:
         return const MainScreen();
     }
