@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.quality_management_system"
-    compileSdk = 35
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 
 part 'add_order_state.dart';
@@ -37,6 +38,7 @@ class AddOrderCubit extends Cubit<AddOrderState> {
       orderNumber: data['orderNumber'] ?? '',
       companyName: data['companyName'] ?? '',
       supplyNumber: data['supplyNumber'] ?? '',
+      attachmentType: data['attachmentType'] ?? '',
       itemCount: (data['itemCount'] as num).toDouble(),
       date: (data['createdAt'] as Timestamp).toDate(),
       dateLine: (data['dateLine'] as Timestamp).toDate(),
@@ -48,31 +50,97 @@ class AddOrderCubit extends Cubit<AddOrderState> {
     required String orderNumber,
     required String companyName,
     required String supplyNumber,
-    required double itemCount,
+    required String attachmentType,
     required DateTime dateLine,
     required String orderStatus,
+    required List<OrderItem> items,
   }) async {
     emit(AddOrderLoading());
 
     try {
-      final docRef = _firestore.collection('orders').doc();
+      // إنشاء مرجع للطلب الرئيسي
+      final orderRef = _firestore.collection('orders').doc();
 
-      final newOrder = {
-        'id': docRef.id,
+      // إنشاء مرجع لمجموعة البنود الفرعية
+      final itemsRef = orderRef.collection('items');
+
+      // بيانات الطلب الأساسية
+      final orderData = {
+        'id': orderRef.id,
         'orderNumber': orderNumber,
         'companyName': companyName,
         'supplyNumber': supplyNumber,
-        'itemCount': itemCount,
         'dateLine': Timestamp.fromDate(dateLine),
         'orderStatus': orderStatus,
+        'itemCount': items.length,
+        'attachmentType': attachmentType,
         'createdAt': Timestamp.now(),
         'updatedAt': Timestamp.now(),
       };
 
-      await docRef.set(newOrder);
-      emit(AddOrderSuccess(docRef.id));
+      // تنفيذ العملية كمجموعة واحدة (Batch)
+      final batch = _firestore.batch();
+
+      // إضافة الطلب الرئيسي
+      batch.set(orderRef, orderData);
+
+      // إضافة جميع البنود
+      for (final item in items) {
+        final itemRef = itemsRef.doc(item.id);
+        batch.set(itemRef, item.toMap());
+      }
+
+      // تنفيذ العملية
+      await batch.commit();
+
+      emit(AddOrderSuccess(orderRef.id));
     } catch (e) {
       emit(AddOrderError(e.toString()));
     }
   }
+
+  Future<List<OrderItem>> getOrderItems(String orderId) async {
+    emit(OrderItemsLoading());
+
+    try {
+      final querySnapshot = await _firestore
+          .collection('orders')
+          .doc(orderId)
+          .collection('items')
+          .get();
+
+      final items = querySnapshot.docs.map((doc) {
+        final data = doc.data();
+        return OrderItem(
+          id: doc.id,
+          operationDescription: data['operationDescription'] ?? '',
+          status: data['status'] ?? '',
+          quantity: (data['quantity'] as num).toInt(),
+          materialType: data['materialType'] ?? '',
+          notes: data['notes'] ?? '',
+          attachments: List<String>.from(data['attachments'] ?? []),
+        );
+      }).toList();
+
+      emit(OrderItemsLoaded(items));
+      return items;
+    } catch (e) {
+      emit(AddOrderError('Failed to load order items: ${e.toString()}'));
+      throw Exception('Failed to load order items');
+    }
+  }
+
+  Future<void> updateItemStatus(String orderId, String itemId, String newStatus) async {
+    try {
+      await _firestore
+          .collection('orders')
+          .doc(orderId)
+          .collection('items')
+          .doc(itemId)
+          .update({'status': newStatus});
+    } catch (e) {
+      throw Exception('Failed to update item status');
+    }
+  }
+
 }

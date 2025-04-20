@@ -7,7 +7,7 @@ import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart'
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
-import 'Features/OrderTableDetails/view/OrdersDetails.dart';
+import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 import 'Features/auth/view/screens/signin_screen.dart';
 
 class Navbar extends StatefulWidget {
