@@ -32,3 +32,4 @@ class OrderItemsLoaded extends AddOrderState {
   @override
   List<Object> get props => [items];
 }
+

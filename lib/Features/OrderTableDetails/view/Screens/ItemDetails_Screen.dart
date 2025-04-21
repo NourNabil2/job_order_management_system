@@ -134,7 +134,7 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Deadline: ${DateFormat('yyyy-MM-dd').format(widget.order.dateLine)}',
+                          'Deadline: ${widget.order.dateLine}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 8),

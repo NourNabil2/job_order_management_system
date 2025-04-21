@@ -7,6 +7,7 @@ import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart'
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
+import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
 import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 import 'Features/auth/view/screens/signin_screen.dart';
 
@@ -124,9 +125,9 @@ class _NavbarState extends State<Navbar> {
       case 0:
         return const MainScreen();
       case 1:
-        return const OrdersTableExample1();
+        return const OrdersTableDetails();
       case 2:
-        return const SigninScreen();
+        return const AddMemberScreen();
       default:
         return const MainScreen();
     }

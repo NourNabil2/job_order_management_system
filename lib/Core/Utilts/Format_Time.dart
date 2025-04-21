@@ -7,6 +7,11 @@ class DateFormatter {
     return DateFormat(format).format(date);
   }
 
+  static String extractDateOnly(String dateTimeString) {
+    final dateTime = DateFormat("d MMMM yyyy 'at' HH:mm:ss").parse(dateTimeString);
+    return DateFormat('d MMMM yyyy').format(dateTime);
+  }
+
   static String formatDateTime(DateTime date, {String format = 'dd/MM/yyyy HH:mm'}) {
     return DateFormat(format).format(date);
   }

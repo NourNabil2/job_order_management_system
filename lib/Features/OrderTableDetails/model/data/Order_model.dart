@@ -1,3 +1,5 @@
+import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
+
 class OrderModel {
   final String id;
   final String orderNumber;
@@ -5,8 +7,8 @@ class OrderModel {
   final String supplyNumber;
   final String attachmentType;
   final double itemCount;
-  final DateTime date;
-  final DateTime dateLine;
+  final String date;
+  final String dateLine;
   final String orderStatus;
 
   OrderModel({

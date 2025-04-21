@@ -56,7 +56,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   Future<void> _selectDeadline(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().add(const Duration(days: 7)),
+      initialDate: DateTime.now().add(const Duration(days: 3)),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
+import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 
@@ -15,6 +16,23 @@ class AddOrderCubit extends Cubit<AddOrderState> {
   }
 
   static AddOrderCubit get(context) => BlocProvider.of(context);
+  /// ---------------- functions -----------------///
+  void sortOrders<T>(
+      List<OrderModel> orders,
+      Comparable<T> Function(OrderModel order) getField,
+      bool ascending,
+      ) {
+    orders.sort((a, b) {
+      final aValue = getField(a);
+      final bValue = getField(b);
+      return ascending
+          ? Comparable.compare(aValue, bValue)
+          : Comparable.compare(bValue, aValue);
+    });
+
+    emit(OrdersLoaded(List<OrderModel>.from(orders)));
+  }
+
 
   void _setupOrdersStream() {
     _ordersStream = _firestore
@@ -33,6 +51,10 @@ class AddOrderCubit extends Cubit<AddOrderState> {
 
   OrderModel _mapDocumentToOrder(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
+
+    final createdAt = (data['createdAt'] as Timestamp).toDate();
+    final dateLine = (data['dateLine'] as Timestamp).toDate();
+
     return OrderModel(
       id: doc.id,
       orderNumber: data['orderNumber'] ?? '',
@@ -40,8 +62,8 @@ class AddOrderCubit extends Cubit<AddOrderState> {
       supplyNumber: data['supplyNumber'] ?? '',
       attachmentType: data['attachmentType'] ?? '',
       itemCount: (data['itemCount'] as num).toDouble(),
-      date: (data['createdAt'] as Timestamp).toDate(),
-      dateLine: (data['dateLine'] as Timestamp).toDate(),
+      date: DateFormatter.formatDate(createdAt),
+      dateLine: DateFormatter.formatDate(dateLine),
       orderStatus: data['orderStatus'] ?? 'Pending',
     );
   }
