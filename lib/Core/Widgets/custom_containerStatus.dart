@@ -31,21 +31,21 @@ class StatusContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: style.color.withOpacity(0.2),
         borderRadius: BorderRadius.circular(SizeApp.radius * 2),
-        border: Border.all(
-          color: style.color.withOpacity(0.5),
-          width: 1,
-        ),
+        // border: Border.all(
+        //   color: style.color.withOpacity(0.5),
+        //   width: 1,
+        // ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (style.icon != null) ...[
-            Icon(
-              style.icon,
-              size: SizeApp.iconSizeSmall,
-              color: style.color,
-            ),
-            SizedBox(width: SizeApp.padding / 2),
+            // Icon(
+            //   style.icon,
+            //   size: SizeApp.iconSizeSmall,
+            //   color: style.color,
+            // ),
+            // SizedBox(width: SizeApp.padding / 2),
           ],
           Text(
             style.text ?? status,
