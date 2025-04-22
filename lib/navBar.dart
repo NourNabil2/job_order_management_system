@@ -1,5 +1,6 @@
 // navbar.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
@@ -8,8 +9,8 @@ import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
 import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
+import 'package:sidebarx/sidebarx.dart';
 import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
-import 'Features/auth/view/screens/signin_screen.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -20,14 +21,17 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  bool isExpanded = false;
   int selectedIndex = 0;
+  final SidebarXController sidebarController = SidebarXController(
+    selectedIndex: 0,
+    extended: true, // Start with sidebar expanded
+  );
 
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       mobileBuilder: (context) => Scaffold(
-        appBar: const CustomAppBar(title: StringApp.overView, icon: AssetsManager.dashboard,),
+        appBar: const CustomAppBar(title: StringApp.overView, icon: AssetsManager.dashboard),
         body: SingleChildScrollView(child: _getSelectedScreen()),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
@@ -54,64 +58,49 @@ class _NavbarState extends State<Navbar> {
           type: BottomNavigationBarType.fixed,
         ),
       ),
-
       desktopBuilder: (context) => Scaffold(
         body: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            NavigationRail(
-              extended: isExpanded,
-              backgroundColor: ColorApp.primaryColor,
-              unselectedIconTheme: const IconThemeData(color: ColorApp.mainLight),
-              unselectedLabelTextStyle: const TextStyle(color: ColorApp.mainLight),
-              selectedIconTheme: const IconThemeData(color: ColorApp.primaryColor),
-              selectedLabelTextStyle: const TextStyle(color: ColorApp.mainLight),
-              destinations: List.generate(
-                navItems.length,
-                    (index) {
-                  final isSelected = index == selectedIndex;
-                  return NavigationRailDestination(
-                    icon: CustomIcon(
-                      assetPath: navItems[index].assetPath,
-                      color: isSelected ? ColorApp.primaryColor : ColorApp.mainLight,
-                    ),
-                    label: Text(navItems[index].label),
-                  );
-                },
+            SidebarX(
+              controller: sidebarController,
+              showToggleButton: true,
+              extendedTheme: SidebarXTheme(
+                width: 200, // Expanded width
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: ColorApp.primaryColor,
+                  borderRadius: BorderRadius.circular(SizeApp.radius),
+                ),
               ),
-              selectedIndex: selectedIndex,
-              onDestinationSelected: (index) {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
+              theme: SidebarXTheme(
+                width: 70, // Collapsed width
+                margin: const EdgeInsets.all(10),
+                hoverColor: Colors.white,
+                hoverTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.mainLight),
+                decoration: BoxDecoration(
+                  color: ColorApp.primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.greyColor),
+                selectedTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.mainLight),
+
+              ),
+              items: List.generate(
+                navItems.length,
+                    (index) => SidebarXItem(
+
+                  iconBuilder: (selected, hovered) => SvgPicture.asset(navItems[index].assetPath,colorFilter: ColorFilter.mode(selectedIndex == index ? ColorApp.mainLight : ColorApp.greyColor, BlendMode.srcIn),),
+                  label: navItems[index].label,
+                      onTap: () => selectedIndex = index,
+                ),
+              ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                           setState(() {
-                             isExpanded = !isExpanded;
-                           });
-                          },
-                          icon: const Icon(Icons.menu),
-                        ),
-                        CustomIcon(
-                          assetPath: AssetsManager.logo,
-                          size: SizeApp.logoSize,
-                          isImage: true,
-                        )
-                      ],
-                    ),
-                    _getSelectedScreen(), // Remove Expanded from here
-                  ],
-                ),
+              child: AnimatedBuilder(
+                animation: sidebarController,
+                builder: (context, child) {
+                  return _getSelectedScreen();
+                },
               ),
             ),
           ],
