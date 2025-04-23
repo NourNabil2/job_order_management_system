@@ -68,58 +68,7 @@ class AddOrderCubit extends Cubit<AddOrderState> {
     );
   }
 
-  Future<void> addOrder({
-    required String orderNumber,
-    required String companyName,
-    required String supplyNumber,
-    required String attachmentType,
-    required DateTime dateLine,
-    required String orderStatus,
-    required List<OrderItem> items,
-  }) async {
-    emit(AddOrderLoading());
 
-    try {
-      // إنشاء مرجع للطلب الرئيسي
-      final orderRef = _firestore.collection('orders').doc();
-
-      // إنشاء مرجع لمجموعة البنود الفرعية
-      final itemsRef = orderRef.collection('items');
-
-      // بيانات الطلب الأساسية
-      final orderData = {
-        'id': orderRef.id,
-        'orderNumber': orderNumber,
-        'companyName': companyName,
-        'supplyNumber': supplyNumber,
-        'dateLine': Timestamp.fromDate(dateLine),
-        'orderStatus': orderStatus,
-        'itemCount': items.length,
-        'attachmentType': attachmentType,
-        'createdAt': Timestamp.now(),
-        'updatedAt': Timestamp.now(),
-      };
-
-      // تنفيذ العملية كمجموعة واحدة (Batch)
-      final batch = _firestore.batch();
-
-      // إضافة الطلب الرئيسي
-      batch.set(orderRef, orderData);
-
-      // إضافة جميع البنود
-      for (final item in items) {
-        final itemRef = itemsRef.doc(item.id);
-        batch.set(itemRef, item.toMap());
-      }
-
-      // تنفيذ العملية
-      await batch.commit();
-
-      emit(AddOrderSuccess(orderRef.id));
-    } catch (e) {
-      emit(AddOrderError(e.toString()));
-    }
-  }
 
   Future<List<OrderItem>> getOrderItems(String orderId) async {
     emit(OrderItemsLoading());
@@ -147,7 +96,7 @@ class AddOrderCubit extends Cubit<AddOrderState> {
       emit(OrderItemsLoaded(items));
       return items;
     } catch (e) {
-      emit(AddOrderError('Failed to load order items: ${e.toString()}'));
+      emit(OrderLoddedError('Failed to load order items: ${e.toString()}'));
       throw Exception('Failed to load order items');
     }
   }

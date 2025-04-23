@@ -1,5 +1,6 @@
 class AssetsManager {
   static const logo = 'assets/images/logo.png';
+  static const logoWhite = 'assets/images/logo_white.png';
   //icon
   static const dashboard = 'assets/icons/dashboardIcon.svg';
   static const menuIcon = 'assets/icons/Category.svg';

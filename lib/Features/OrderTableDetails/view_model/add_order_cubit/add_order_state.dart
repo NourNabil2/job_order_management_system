@@ -13,9 +13,9 @@ class AddOrderSuccess extends AddOrderState {
   final String orderId;
   AddOrderSuccess(this.orderId);
 }
-class AddOrderError extends AddOrderState {
+class OrderLoddedError extends AddOrderState {
   final String error;
-  AddOrderError(this.error);
+  OrderLoddedError(this.error);
 }
 
 class OrdersLoaded extends AddOrderState {

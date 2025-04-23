@@ -6,6 +6,7 @@ import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
+import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
 import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
@@ -66,32 +67,40 @@ class _NavbarState extends State<Navbar> {
               showToggleButton: true,
               extendedTheme: SidebarXTheme(
                 width: 200, // Expanded width
-                margin: const EdgeInsets.all(10),
+                margin: EdgeInsets.all(SizeApp.padding),
                 decoration: BoxDecoration(
                   color: ColorApp.primaryColor,
                   borderRadius: BorderRadius.circular(SizeApp.radius),
                 ),
               ),
               theme: SidebarXTheme(
+                selectedItemDecoration: BoxDecoration(color: ColorApp.mainLight,borderRadius: BorderRadius.circular(SizeApp.radius)),
+                iconTheme: const IconThemeData(color:ColorApp.mainLight),
                 width: 70, // Collapsed width
                 margin: const EdgeInsets.all(10),
-                hoverColor: Colors.white,
                 hoverTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.mainLight),
                 decoration: BoxDecoration(
                   color: ColorApp.primaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.greyColor),
-                selectedTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.mainLight),
+                textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.mainLight),
+                selectedTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.primaryColor),
 
               ),
+             extendIcon: Icons.arrow_forward_ios,
+              collapseIcon: Icons.arrow_back_ios_new,
+              headerBuilder: (context, extended) => Padding(
+                padding: EdgeInsets.all(SizeApp.defaultPadding),
+                child: CustomIcon(assetPath: AssetsManager.logoWhite,isImage: true,size: SizeApp.logoSize,),
+              ),
+              footerBuilder: (context, extended) => const CustomCancelButon(text: 'LogOut',),
+              footerDivider: const Divider(thickness: 0.3,),
               items: List.generate(
                 navItems.length,
                     (index) => SidebarXItem(
-
-                  iconBuilder: (selected, hovered) => SvgPicture.asset(navItems[index].assetPath,colorFilter: ColorFilter.mode(selectedIndex == index ? ColorApp.mainLight : ColorApp.greyColor, BlendMode.srcIn),),
+                  iconBuilder: (selected, hovered) => SvgPicture.asset(navItems[index].assetPath,colorFilter: ColorFilter.mode(selectedIndex == index ? ColorApp.primaryColor : ColorApp.mainLight, BlendMode.srcIn),),
                   label: navItems[index].label,
-                      onTap: () => selectedIndex = index,
+                  onTap: () => selectedIndex = index,
                 ),
               ),
             ),

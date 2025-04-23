@@ -98,7 +98,7 @@ const Map<String, StatusStyle> defaultStatusStyles = {
   ),
   'completed': StatusStyle(
     text: 'Completed',
-    color: Colors.purple,
+    color: Colors.green,
     icon: Icons.done_all,
   ),
   'default': StatusStyle(

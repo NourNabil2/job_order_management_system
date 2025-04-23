@@ -1,5 +1,6 @@
 
 // date_formatter.dart
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateFormatter {
@@ -7,10 +8,23 @@ class DateFormatter {
     return DateFormat(format).format(date);
   }
 
-  static String extractDateOnly(String dateTimeString) {
-    final dateTime = DateFormat("d MMMM yyyy 'at' HH:mm:ss").parse(dateTimeString);
-    return DateFormat('d MMMM yyyy').format(dateTime);
+
+  static  Future<DateTime?> selectDeadlineDate({
+    required BuildContext context,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+  }) async {
+    final DateTime now = DateTime.now();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate ?? now.add(const Duration(days: 3)),
+      firstDate: firstDate ?? now,
+      lastDate: lastDate ?? DateTime(2100),
+    );
+    return picked;
   }
+
 
   static String formatDateTime(DateTime date, {String format = 'dd/MM/yyyy HH:mm'}) {
     return DateFormat(format).format(date);

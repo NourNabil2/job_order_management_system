@@ -53,7 +53,7 @@ class AddedMessageScreen extends StatelessWidget {
                 Text(body, textAlign: TextAlign.center),
                 const Spacer(flex: 2),
                 if (title2 != null)
-                  CustomButon(
+                  CustomButton(
                     onTap: () {
                       if (function1 != null) {
                         function1!(context, "Parameter from button 1");
