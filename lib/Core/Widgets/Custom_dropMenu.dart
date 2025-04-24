@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
+
+/// PopupMenu Widget
 class CustomPopupMenu extends StatelessWidget {
   final List<CustomPopupMenuItem> items;
   final void Function(String value) onSelected;
@@ -94,4 +96,54 @@ class CustomPopupMenuItem {
     required this.icon,
     this.iconColor,
   });
+}
+
+
+
+/// DropMenu Widget
+
+class CustomDropMenu extends StatelessWidget {
+  final String label;
+  final String? value;
+  final List<String> options;
+  final Function(String?) onChanged;
+  final String? Function(String?)? validator;
+
+  const CustomDropMenu({
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.options,
+    required this.onChanged,
+    this.validator,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: ColorApp.primaryColor),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 1.5),
+        ),
+      ),
+      items: options
+          .map((option) => DropdownMenuItem<String>(
+        value: option,
+        child: Text(option),
+      ))
+          .toList(),
+      onChanged: onChanged,
+      validator: validator ?? (value) => value == null ? 'Required' : null,
+    );
+  }
 }

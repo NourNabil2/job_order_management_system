@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
+import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/AddItemsStep.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/ReviewStep.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/basic_info_step.dart';
@@ -27,12 +30,19 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   final _companyNameController = TextEditingController();
   final _supplyNumberController = TextEditingController();
   final _itemCountController = TextEditingController();
+
   DateTime? _selectedDeadline;
   String _selectedStatus = 'Pending';
   String? _selectedAttachmentType;
   List<OrderItem> _orderItems = [];
   int _currentStep = 0;
 
+
+  final List<String> stepIcons = [
+    AssetsManager.orderIcon,
+    AssetsManager.dashboard,
+    AssetsManager.scanQr,
+  ];
   final List<String> _statusOptions = ['Pending', 'In Progress', 'Delivered', 'Cancelled'];
   final List<String> _attachmentTypeOptions = ['رسم', 'عينه'];
 
@@ -152,6 +162,16 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
         child: Stepper(
           currentStep: _currentStep,
           steps: _buildSteps(),
+          stepIconBuilder: (stepIndex, stepState) {
+            String iconPath = stepIcons[stepIndex];
+            return CustomIcon(
+              assetPath: iconPath,
+              size: SizeApp.iconSizeLarge,
+              color: ColorApp.mainLight,
+            );
+          },
+          stepIconWidth: SizeApp.iconSizeLarge * 2 ,
+          stepIconHeight: SizeApp.iconSizeLarge * 2,
           onStepContinue: () {
             if (_currentStep == 0) {
               if (_formKey.currentState!.validate()) {
@@ -182,19 +202,22 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
           },
 
           controlsBuilder: (BuildContext context, ControlsDetails details) {
-            return Row(
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: details.onStepContinue,
-                  child: Text(_currentStep == 2 ? 'Submit' : 'Next'),
-                ),
-                const SizedBox(width: 8),
-                if (_currentStep != 0)
-                  TextButton(
-                    onPressed: details.onStepCancel,
-                    child: const Text('Back'),
+            return Padding(
+              padding: EdgeInsets.all(SizeApp.defaultPadding),
+              child: Row(
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: details.onStepContinue,
+                    child: Text(_currentStep == 2 ? 'Submit' : 'Next'),
                   ),
-              ],
+                  const SizedBox(width: 8),
+                  if (_currentStep != 0)
+                    TextButton(
+                      onPressed: details.onStepCancel,
+                      child: const Text('Back'),
+                    ),
+                ],
+              ),
             );
           },
 

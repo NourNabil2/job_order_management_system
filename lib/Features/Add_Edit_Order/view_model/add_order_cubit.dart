@@ -9,29 +9,12 @@ part 'add_order_state.dart';
 
 class AddNewOrderCubit extends Cubit<AddNewOrderState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Stream<List<OrderModel>>? _ordersStream;
+
 
   AddNewOrderCubit() : super(AddNewOrderInitial());
   static AddNewOrderCubit get(context) => BlocProvider.of(context);
 
-  OrderModel _mapDocumentToOrder(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
 
-    final createdAt = (data['createdAt'] as Timestamp).toDate();
-    final dateLine = (data['dateLine'] as Timestamp).toDate();
-
-    return OrderModel(
-      id: doc.id,
-      orderNumber: data['orderNumber'] ?? '',
-      companyName: data['companyName'] ?? '',
-      supplyNumber: data['supplyNumber'] ?? '',
-      attachmentType: data['attachmentType'] ?? '',
-      itemCount: (data['itemCount'] as num).toDouble(),
-      date: DateFormatter.formatDate(createdAt),
-      dateLine: DateFormatter.formatDate(dateLine),
-      orderStatus: data['orderStatus'] ?? 'Pending',
-    );
-  }
   Future<void> addOrder({
     required String orderNumber,
     required String companyName,

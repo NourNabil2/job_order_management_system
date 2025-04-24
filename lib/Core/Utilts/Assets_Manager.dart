@@ -28,13 +28,9 @@ class AssetsManager {
   static const leftArrowIcon = 'assets/icons/miniRight.svg';
   static const moonIcon = 'assets/icons/moon.svg';
   static const returnIcon = 'assets/icons/return.svg';
-  static const starIcon = 'assets/icons/star.svg';
   static const eyeIcon = 'assets/icons/eye_icon.svg';
-  static const portfolioIcon = 'assets/icons/portfolio.svg';
-  static const adIcon = 'assets/icons/ad_icon.svg';
   static const scanQr = 'assets/images/scanQR.svg';
   static const qrCodeIcon = 'assets/images/qr_code.svg';
-  static const incase = 'assets/images/incase_img.svg';
   static const wrongParking = 'assets/images/wrong_parking.svg';
   static const secureInfo = 'assets/images/secure_info.svg';
   static const logoImage = 'assets/images/logo.svg';
