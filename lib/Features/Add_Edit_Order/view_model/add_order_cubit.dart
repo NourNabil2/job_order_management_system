@@ -14,7 +14,13 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
   AddNewOrderCubit() : super(AddNewOrderInitial());
   static AddNewOrderCubit get(context) => BlocProvider.of(context);
 
+  bool isLoading = false;
 
+void changeLoading()
+{
+  isLoading = !isLoading;
+  emit(ChangeLoading());
+}
   Future<void> addOrder({
     required String orderNumber,
     required String companyName,
@@ -25,7 +31,7 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
     required List<OrderItem> items,
   }) async {
     emit(AddOrderLoading());
-
+    changeLoading();
     try {
       // إنشاء مرجع للطلب الرئيسي
       final orderRef = _firestore.collection('orders').doc();
@@ -61,9 +67,10 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
 
       // تنفيذ العملية
       await batch.commit();
-
+      changeLoading();
       emit(AddOrderSuccess(orderRef.id));
     } catch (e) {
+      changeLoading();
       emit(AddOrderError(e.toString()));
     }
   }

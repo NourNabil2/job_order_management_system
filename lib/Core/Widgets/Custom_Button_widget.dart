@@ -68,7 +68,7 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(SizeApp.radius),
         ),
         child: isLoading
-            ? const CircularProgressIndicator(color: Colors.white) // ⏳ Loading Indicator
+            ? SizedBox( width: SizeApp.s20,child: const CircularProgressIndicator(color: Colors.white)) // ⏳ Loading Indicator
             : Text(
           text,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -104,7 +104,7 @@ class CustomCancelButton extends StatelessWidget {
       onTap: isDisabled || isLoading ? null : onTap,
       child: Container(
         padding: EdgeInsets.all(SizeApp.s10),
-        height: height ?? SizeApp.s70,
+        height: height ?? SizeApp.s40,
         width: width,
         alignment: Alignment.center,
         decoration: BoxDecoration(

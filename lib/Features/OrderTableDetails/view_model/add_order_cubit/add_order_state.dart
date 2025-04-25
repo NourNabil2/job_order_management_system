@@ -5,14 +5,8 @@ sealed class AddOrderState {}
 
 final class AddOrderInitial extends AddOrderState {}
 
-class AddOrderLoading extends AddOrderState {}
-
 class OrderItemsLoading extends AddOrderState {}
 
-class AddOrderSuccess extends AddOrderState {
-  final String orderId;
-  AddOrderSuccess(this.orderId);
-}
 class OrderLoddedError extends AddOrderState {
   final String error;
   OrderLoddedError(this.error);

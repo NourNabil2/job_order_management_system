@@ -7,6 +7,8 @@ final class AddNewOrderInitial extends AddNewOrderState {}
 
 class AddOrderLoading extends AddNewOrderState {}
 
+class ChangeLoading extends AddNewOrderState {}
+
 class AddOrderSuccess extends AddNewOrderState {
   final String orderId;
   AddOrderSuccess(this.orderId);

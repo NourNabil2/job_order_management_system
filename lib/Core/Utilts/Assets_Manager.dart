@@ -5,15 +5,15 @@ class AssetsManager {
   static const dashboard = 'assets/icons/dashboardIcon.svg';
   static const menuIcon = 'assets/icons/Category.svg';
   static const invoiceIcon = 'assets/icons/invoiceIcon.svg';
-
+  static const addItemsIcon = "assets/icons/addItem.svg";
   static const addMember = "assets/icons/Add-member.svg";
-  static const poketIcon = 'assets/images/icons/pocket_icon.png';
+
   static const backtIcon = 'assets/icons/Arrow - Left.svg';
   static const carIcon = 'assets/icons/car-black.svg';
-  static const kidIcon = 'assets/icons/child.svg';
-  static const keyIcon = 'assets/icons/keys.svg';
-  static const petIcon = 'assets/icons/pet.svg';
-  static const backBagIcon = 'assets/icons/back-bag.svg';
+// Lotti icons
+  static const addedSuccess = 'assets/icons/success.json';
+  static const addedFail = 'assets/icons/error.json';
+
   static const logoutIcon = 'assets/icons/Logout.svg';
   static const profiletIcon = 'assets/icons/Profile.svg';
   static const cardsIcon = 'assets/icons/cards.svg';
@@ -40,10 +40,9 @@ class AssetsManager {
   static const sendIcon = 'assets/icons/send_icon.svg';
   static const orderListIcon = 'assets/images/ordersList.png';
   static const productsIcon = 'assets/images/products.png';
-  static const addItemIcon = 'assets/images/addProduct.png';
   //image
   static const logoPNG = 'assets/images/App_logo.png';
-  static const addedSuccess = 'assets/icons/success.json';
+
   static const verificationEmail = 'assets/icons/Verification_email.json';
   static const connectionIcon = 'assets/icons/connection_error.png';
 }

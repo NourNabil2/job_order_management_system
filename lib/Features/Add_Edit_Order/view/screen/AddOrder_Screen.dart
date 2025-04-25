@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
+import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/AddItemsStep.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/ReviewStep.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/basic_info_step.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add_order_cubit.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/addOrderItems.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view_model/add_order_cubit/add_order_cubit.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/screen/addOrderItems.dart';
 
 
 class AddOrderScreen extends StatefulWidget {
@@ -40,7 +39,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
   final List<String> stepIcons = [
     AssetsManager.orderIcon,
-    AssetsManager.dashboard,
+    AssetsManager.addItemsIcon,
     AssetsManager.scanQr,
   ];
   final List<String> _statusOptions = ['Pending', 'In Progress', 'Delivered', 'Cancelled'];
@@ -94,7 +93,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
     return [
       // Step 1: Basic Information
       Step(
-        title: const Text('Order Information'),
+        title: Text('Order Information',style: Theme.of(context).textTheme.titleLarge,),
         content: BasicInfoStep(
           orderNumberController: _orderNumberController,
           companyNameController: _companyNameController,
@@ -114,7 +113,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
       // Step 2: Add Items
       Step(
-        title: const Text('Add Items'),
+        title: Text('Add Items' , style: Theme.of(context).textTheme.titleLarge,),
         content: AddItemsStep(
           orderItems: _orderItems,
           onAddEditPressed: () async {
@@ -136,7 +135,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
       // Step 3: Review & Submit
       Step(
-        title: const Text('Review'),
+        title: Text('Review',style: Theme.of(context).textTheme.titleLarge,),
         content: ReviewStep(
           orderNumber: _orderNumberController.text,
           companyName: _companyNameController.text,
@@ -155,7 +154,15 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocConsumer<AddNewOrderCubit, AddNewOrderState>(
+        listener: (context, state) {
+          if (state is AddOrderSuccess)
+            {
+              Navigator.pop(context);
+            }
+        },
+  builder: (context, state) {
+  return  Scaffold(
       appBar: AppBar(title: const Text('Add New Order')),
       body: Form(
         key: _formKey,
@@ -206,16 +213,11 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
               padding: EdgeInsets.all(SizeApp.defaultPadding),
               child: Row(
                 children: <Widget>[
-                  ElevatedButton(
-                    onPressed: details.onStepContinue,
-                    child: Text(_currentStep == 2 ? 'Submit' : 'Next'),
-                  ),
-                  const SizedBox(width: 8),
+                  CustomButton(text: _currentStep == 2 ? 'Submit' : 'Next',onTap: details.onStepContinue,width: SizeApp.s70,isLoading: AddNewOrderCubit.get(context).isLoading,),
+                  SizedBox(width: SizeApp.s8),
                   if (_currentStep != 0)
-                    TextButton(
-                      onPressed: details.onStepCancel,
-                      child: const Text('Back'),
-                    ),
+                    CustomCancelButton(text: 'Back',onTap: details.onStepCancel,width: SizeApp.s70)
+
                 ],
               ),
             );
@@ -224,5 +226,8 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
         ),
       ),
     );
+  }
+
+);
   }
 }
