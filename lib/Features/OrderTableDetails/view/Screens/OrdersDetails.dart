@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
-import 'package:quality_management_system/Core/Widgets/alert_widget.dart';
-import 'package:quality_management_system/Core/components/DialogAlertMessage.dart';
 import 'package:quality_management_system/Core/components/loading_spinner.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/screen/AddOrder_Screen.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add_order_cubit.dart';
@@ -20,11 +18,13 @@ class OrdersTableDetails extends StatefulWidget {
 }
 
 class _OrdersTableDetailsState extends State<OrdersTableDetails> {
-  late var _rowsPerPage = 10;
+  late var _rowsPerPage = 100;
   int _sortColumnIndex = 0;
   bool _sortAscending = true;
   int _currentPage = 0;
   List<OrderModel> _sortedOrders = []; // قائمة منفصلة للبيانات بعد الفرز
+  final List<int> _availableRowsOptions = [5, 10, 15, 50, 100, 1000000]; // اعتبر 1000000 = الكل
+
   final PaginatorController _paginatorController = PaginatorController();
 
 
@@ -69,10 +69,10 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
               if (state is OrderLoddedError) {
                 return Center(child: Text('Error: ${state.error}'));
               }
-              final paginatedData = _sortedOrders
-                  .skip(_currentPage * _rowsPerPage)
-                  .take(_rowsPerPage)
-                  .toList();
+              final paginatedData = _rowsPerPage >= _sortedOrders.length
+                  ? _sortedOrders
+                  : _sortedOrders.skip(_currentPage * _rowsPerPage).take(_rowsPerPage).toList();
+
 
               return SizedBox(
                 height: MediaQuery.of(context).size.height - 200,
@@ -88,7 +88,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                   fit: FlexFit.tight,
                   controller: _paginatorController,
                   rowsPerPage: _rowsPerPage,
-                  availableRowsPerPage: const [5, 10, 20],
+                  availableRowsPerPage: _availableRowsOptions,
                   onRowsPerPageChanged: (value) {
                     setState(() {
                       _rowsPerPage = value ?? 10;

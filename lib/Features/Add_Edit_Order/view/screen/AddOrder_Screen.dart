@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
+import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/AddItemsStep.dart';
@@ -40,9 +41,17 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   final List<String> stepIcons = [
     AssetsManager.orderIcon,
     AssetsManager.addItemsIcon,
-    AssetsManager.scanQr,
+    AssetsManager.reviewIcon,
   ];
-  final List<String> _statusOptions = ['Pending', 'In Progress', 'Delivered', 'Cancelled'];
+
+  final List<String> _statusOptions = [
+    'Pending',
+    'in_progress',
+    'delivered',
+    'rejected',
+    'completed',
+  ];
+
   final List<String> _attachmentTypeOptions = ['رسم', 'عينه'];
 
   @override
@@ -163,7 +172,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
         },
   builder: (context, state) {
   return  Scaffold(
-      appBar: AppBar(title: const Text('Add New Order')),
+      appBar: const CustomAppBar(title: 'اضافه أمر توريد', icon: AssetsManager.invoiceIcon,),
       body: Form(
         key: _formKey,
         child: Stepper(

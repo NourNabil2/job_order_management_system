@@ -7,6 +7,7 @@ class AssetsManager {
   static const invoiceIcon = 'assets/icons/invoiceIcon.svg';
   static const addItemsIcon = "assets/icons/addItem.svg";
   static const addMember = "assets/icons/Add-member.svg";
+  static const reviewIcon = "assets/icons/reviewIcon.svg";
 
   static const backtIcon = 'assets/icons/Arrow - Left.svg';
   static const carIcon = 'assets/icons/car-black.svg';
@@ -29,7 +30,7 @@ class AssetsManager {
   static const moonIcon = 'assets/icons/moon.svg';
   static const returnIcon = 'assets/icons/return.svg';
   static const eyeIcon = 'assets/icons/eye_icon.svg';
-  static const scanQr = 'assets/images/scanQR.svg';
+
   static const qrCodeIcon = 'assets/images/qr_code.svg';
   static const wrongParking = 'assets/images/wrong_parking.svg';
   static const secureInfo = 'assets/images/secure_info.svg';

@@ -1,80 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
-import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomCardHolder.dart';
+
 import 'package:quality_management_system/Features/Dashboard/view/widgets/InteractionChart.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/card_info_Widget.dart';
 import 'package:quality_management_system/Features/Dashboard/view/widgets/sectionTitle.dart';
+import 'package:quality_management_system/Features/Dashboard/view_model/dashboard_cubit.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
-  @override
-  State<MainScreen> createState() => _TherapistaccountScreenState();
-}
-
-class _TherapistaccountScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(SizeApp.defaultPadding),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          const SectionTitle(title: 'معلومات سريعة'),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              DashboardCard(
-                  icon: Icons.person,
-                  title: 'عدد الموظفين',
-                  count: '12',
-                  color: ColorApp.primaryColor
-              ) ,
-              DashboardCard(
-                  icon: Icons.timelapse,
-                  title: 'أقرب موعد تسليم',
-                  count: 'امر التوريد رقم 454',
-                  color: ColorApp.primaryColor
-              ) ,
-             ],
-          ),
-           const SectionTitle(title: 'اخر المستجدات'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomContainer(
-                margin: EdgeInsets.all(SizeApp.padding),
-                  child: const InteractionChart(chartType: ChartType.ring,
-                    isOrderBased: true,
-                    totalCollections: 45,
-                    returns: 54,
-                    invoices: 54,
-                    doneCount: 54,
-                    notDoneCount: 41,
-                    totalViews: 4,),
+      child: BlocProvider(
+        create: (context) => DashboardCubit()..loadDashboardData(),
+        child: BlocBuilder<DashboardCubit, DashboardState>(
+          builder: (context, state) {
+            if (state is DashboardLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is DashboardError) {
+              return Center(child: Text(state.message));
+            } else if (state is DashboardLoaded) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const SectionTitle(title: 'معلومات سريعة'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DashboardCard(
+                        icon: Icons.person,
+                        title: 'عدد الموظفين',
+                        count: state.userCount.toString(),
+                        color: ColorApp.primaryColor,
+                      ),
+                      DashboardCard(
+                        icon: Icons.timelapse,
+                        title: 'أقرب موعد تسليم',
+                        count: state.nearestDeadlineWithOrder,
+                        color: ColorApp.primaryColor,
+                      ),
+                    ],
+                  ),
+                  const SectionTitle(title: 'اخر المستجدات'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CustomContainer(
+                        margin: EdgeInsets.all(SizeApp.padding),
+                        child: InteractionChart(
+                          chartType: ChartType.ring,
+                          isOrderBased: true,
+                          doneCount:  state.completedOrders,
+                          notDoneCount: state.userCount,
+                          totalViews:  state.totalOrders,
+                        ),
+                      ),
+                      CustomContainer(
+                        margin: EdgeInsets.all(SizeApp.padding),
+                        child: InteractionChart(
+                          chartType: ChartType.disc,
+                          isOrderBased: false,
+                          totalCollections: 45,
+                          returns: state.rejectedOrders,
+                          doneCount: state.completedOrders,
+                          invoices: state.pendingOrders,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }
 
-              ),
-
-              CustomContainer(
-                  margin: EdgeInsets.all(SizeApp.padding),
-                  child: const InteractionChart(
-                    chartType: ChartType.disc,
-                    isOrderBased: false,
-                    totalCollections: 45,
-                    returns: 54,
-                    doneCount: 54,
-                    invoices: 45,
-                    notDoneCount: 41,
-                    totalViews: 4,),
-              )
-            ],
-          ),
-        ],
+            return const SizedBox(); // fallback
+          },
+        ),
       ),
     );
   }
-
 }

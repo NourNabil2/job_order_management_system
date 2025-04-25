@@ -77,27 +77,27 @@ class StatusStyle {
 // الأنماط الافتراضية
 const Map<String, StatusStyle> defaultStatusStyles = {
   'pending': StatusStyle(
-    text: 'Pending',
+    text: 'قيد الانتظار',
     color: Colors.orange,
     icon: Icons.access_time,
   ),
-  'approved': StatusStyle(
-    text: 'Approved',
+  'delivered': StatusStyle(
+    text: 'تم التوصيل',
     color: Colors.green,
     icon: Icons.check_circle,
   ),
   'rejected': StatusStyle(
-    text: 'Rejected',
+    text: 'مرفوض',
     color: Colors.red,
     icon: Icons.cancel,
   ),
   'in_progress': StatusStyle(
-    text: 'In Progress',
+    text: 'قيد العمل',
     color: Colors.blue,
     icon: Icons.autorenew,
   ),
   'completed': StatusStyle(
-    text: 'Completed',
+    text: 'تم الانتهاء',
     color: Colors.green,
     icon: Icons.done_all,
   ),

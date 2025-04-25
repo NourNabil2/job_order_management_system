@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 
 class AddItemDialog extends StatefulWidget {
   final Function(OrderItem) onItemAdded;
+  final OrderItem? existingItem; // new
 
-  const AddItemDialog({Key? key, required this.onItemAdded}) : super(key: key);
+  const AddItemDialog({
+    Key? key,
+    required this.onItemAdded,
+    this.existingItem,
+  }) : super(key: key);
 
   @override
   _AddItemDialogState createState() => _AddItemDialogState();
 }
+
 
 class _AddItemDialogState extends State<AddItemDialog> {
   final _formKey = GlobalKey<FormState>();
@@ -26,6 +34,19 @@ class _AddItemDialogState extends State<AddItemDialog> {
     _notesController.dispose();
     super.dispose();
   }
+  @override
+  void initState() {
+    super.initState();
+    if (widget.existingItem != null) {
+      _descriptionController.text = widget.existingItem!.operationDescription;
+      _quantityController.text = widget.existingItem!.quantity.toString();
+      _materialTypeController.text = widget.existingItem!.materialType;
+      _statusController.text = widget.existingItem?.status ?? 'Pending';
+      _notesController.text = widget.existingItem!.notes;
+    }
+  }
+
+  final List<String> _statusOptions = ['Pending', 'In_Progress', 'Complete', 'rejected'];
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +92,12 @@ class _AddItemDialogState extends State<AddItemDialog> {
                   labelText: 'نوع الخامة',
                 ),
               ),
-              TextFormField(
-                controller: _statusController,
-                decoration: const InputDecoration(
-                  labelText: 'الخاله',
-                ),
-              ),
+              SizedBox(height: SizeApp.defaultPadding,),
+              CustomDropMenu(
+                  label: 'حاله التسليم',
+                  value: _statusOptions.contains(_statusController.text) ? _statusController.text : 'Pending',
+                  options: _statusOptions,
+                  onChanged: (val) =>   _statusController.text = val ?? 'pending'),
               TextFormField(
                 controller: _notesController,
                 decoration: const InputDecoration(
@@ -96,15 +117,15 @@ class _AddItemDialogState extends State<AddItemDialog> {
         ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              final newItem = OrderItem(
-                id: DateTime.now().millisecondsSinceEpoch.toString(),
+              final editedItem = OrderItem(
+                id: widget.existingItem?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
                 operationDescription: _descriptionController.text,
                 status: _statusController.text,
                 quantity: int.parse(_quantityController.text),
                 materialType: _materialTypeController.text,
                 notes: _notesController.text,
               );
-              widget.onItemAdded(newItem);
+              widget.onItemAdded(editedItem);
               Navigator.pop(context);
             }
           },

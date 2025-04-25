@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
+import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
+import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/Card_item_widget.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 
 import '../widget/AddItemDialog.dart';
@@ -46,35 +50,57 @@ class _AddOrderItemsScreenState extends State<AddOrderItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'أضافه البنود', icon: AssetsManager.addItemsIcon),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addNewItem,
-        child: const Icon(Icons.add),
+      appBar: const CustomAppBar(title: 'اضافه بنود', icon: AssetsManager.addItemsIcon),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            heroTag: 'add',
+            onPressed: _addNewItem,
+            icon: const Icon(Icons.add),
+            label: const Text('إضافة'),
+          ),
+          const SizedBox(width: 10),
+          FloatingActionButton.extended(
+            splashColor: ColorApp.primaryColor,
+            heroTag: 'done',
+            onPressed: () => Navigator.pop(context, _items),
+            icon: const Icon(Icons.done),
+            label: const Text('انتهاء'),
+          ),
+        ],
       ),
+
       body: ResponsiveBuilder(
         mobileBuilder: (context) => ListView.builder(
           itemCount: _items.length,
           itemBuilder: (context, index) {
             final item = _items[index];
-            return Card(
-              margin: const EdgeInsets.all(8),
-              child: ListTile(
-                title: Text(item.operationDescription),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Qty: ${item.quantity} | Material: ${item.materialType}'),
-                    if (item.notes.isNotEmpty) Text('Notes: ${item.notes}'),
-                  ],
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
+            return OperationCard(
+              item: item,
+              status: item.status,
+              widget: CustomPopupMenu(
+                items: const [
+                  CustomPopupMenuItem(
+                    value: 'Edit',
+                    label: 'تعديل البند',
+                    icon: Icons.edit,
+                  ),
+                  CustomPopupMenuItem(
+                    value: 'delete',
+                    label: 'مسح البند',
+                    icon: Icons.delete_forever,
+                  ),
+                ],
+                onSelected: (value) {
+                  if (value == 'Edit') {
+
+                  } else if (value == 'delete') {
                     setState(() {
                       _items.removeAt(index);
                     });
-                  },
-                ),
+                  }
+                },
               ),
             );
           },
@@ -83,33 +109,50 @@ class _AddOrderItemsScreenState extends State<AddOrderItemsScreen> {
           padding: const EdgeInsets.all(8),
           itemCount: _items.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, // adjust as needed
-            crossAxisSpacing: 12,
+            crossAxisCount: 2, // adjust as needed
+            crossAxisSpacing: 40,
             mainAxisSpacing: 12,
             childAspectRatio: 3, // makes cards wider
           ),
           itemBuilder: (context, index) {
             final item = _items[index];
-            return Card(
-              margin: const EdgeInsets.all(4),
-              child: ListTile(
-                title: Text(item.operationDescription),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Qty: ${item.quantity} | Material: ${item.materialType}'),
-                    if (item.notes.isNotEmpty) Text('Notes: ${item.notes}'),
+            return OperationCard(
+              item: item,
+              status: item.status,
+              widget: CustomPopupMenu(
+                  items: const [
+                    CustomPopupMenuItem(
+                      value: 'Edit',
+                      label: 'تعديل البند',
+                      icon: Icons.edit,
+                    ),
+                    CustomPopupMenuItem(
+                      value: 'delete',
+                      label: 'مسح البند',
+                      icon: Icons.delete_forever,
+                    ),
                   ],
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
+                onSelected: (value) async {
+                  if (value == 'Edit') {
+                    await showDialog<OrderItem>(
+                      context: context,
+                      builder: (context) => AddItemDialog(
+                        existingItem: item,
+                        onItemAdded: (updatedItem) {
+                          setState(() {
+                            _items[index] = updatedItem;
+                          });
+                        },
+                      ),
+                    );
+                  } else if (value == 'delete') {
                     setState(() {
                       _items.removeAt(index);
                     });
-                  },
-                ),
+                  }
+                },
               ),
+
             );
           },
         ),

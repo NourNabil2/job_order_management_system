@@ -396,12 +396,12 @@ class InteractionChart extends StatelessWidget {
                         children: isOrderBased
                             ? [
                                 InteractionItem(
-                                  color: ColorApp.purpleColor,
+                                  color:  ColorApp.primaryColor,
                                   title: StringApp.done,
                                   count: doneCount,
                                 ),
                                 InteractionItem(
-                                  color: ColorApp.primaryColor,
+                                  color: ColorApp.mainLight,
                                   title: StringApp.notDone,
                                   count: notDoneCount,
                                 ),
