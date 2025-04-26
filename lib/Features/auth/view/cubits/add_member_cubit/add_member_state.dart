@@ -14,3 +14,16 @@ final class AddMemberFailure extends AddMemberState {
   AddMemberFailure({required this.message});
 }
 
+class FetchMembersLoading extends AddMemberState {}
+
+class FetchMembersSuccess extends AddMemberState {
+  final List<UserModel> members;
+
+  FetchMembersSuccess({required this.members});
+}
+
+class FetchMembersFailure extends AddMemberState {
+  final String message;
+
+  FetchMembersFailure({required this.message});
+}

@@ -86,6 +86,16 @@ const Map<String, StatusStyle> defaultStatusStyles = {
     color: Colors.green,
     icon: Icons.check_circle,
   ),
+  'active': StatusStyle(
+    text: 'مفعل',  // "مفعل" للحالة الفعالة
+    color: Colors.green,
+    icon: Icons.check_circle,
+  ),
+  'inactive': StatusStyle(
+    text: 'غير مفعل',  // "غير مفعل" للحالة غير الفعالة
+    color: Colors.red,
+    icon: Icons.cancel,
+  ),
   'rejected': StatusStyle(
     text: 'مرفوض',
     color: Colors.red,

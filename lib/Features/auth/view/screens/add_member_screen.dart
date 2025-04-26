@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/extensions.dart';
+import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
+import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Core/components/snackbar.dart';
 import 'package:quality_management_system/Core/theme/text_theme.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
@@ -59,6 +62,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
                   Center(
                     child: SizedBox(
                       width: 450,
@@ -76,10 +80,15 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           child: SizedBox(
                             child: Column(
                               children: [
-                                Text(
-                                  "Add a new member",
-                                  style: appTextTheme.titleMedium!
-                                      .copyWith(color: ColorApp.primaryColor),
+                                Row(
+                                  children: [
+                                    CustomIcon(assetPath: AssetsManager.backtIcon,onTap: () => Navigator.pop(context),color: ColorApp.mainLight,),
+                                    Text(
+                                      "   Add a new member",
+                                      style: appTextTheme.titleMedium!
+                                          .copyWith(color: ColorApp.primaryColor),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(height: 30),
                                 // Name

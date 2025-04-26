@@ -10,6 +10,7 @@ import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
 import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
+import 'package:quality_management_system/Features/auth/view/screens/memberTable_Screen.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 
@@ -125,7 +126,7 @@ class _NavbarState extends State<Navbar> {
       case 1:
         return const OrdersTableDetails();
       case 2:
-        return const AddMemberScreen();
+        return const MembertableScreen();
       default:
         return const MainScreen();
     }

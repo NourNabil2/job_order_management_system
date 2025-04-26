@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quality_management_system/Core/Utilts/extensions.dart';
 import 'package:quality_management_system/Core/components/failure.dart';
 import 'package:quality_management_system/Features/auth/data/auth_data_source/auth_remote_data_source.dart';
+import 'package:quality_management_system/Features/auth/domain/models/user_model.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 import 'package:quality_management_system/Features/auth/domain/repo/auth_repo.dart';
 
@@ -43,6 +44,16 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await remoteDataSource.addMember(name, email, password, role);
       return right(unit);
+    } catch (e) {
+      return left(Failure(message: "An unexpected error occurred"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<UserModel>>> fetchAllMembers() async {
+    try {
+      final members = await remoteDataSource.fetchAllMembers();
+      return right(members);
     } catch (e) {
       return left(Failure(message: "An unexpected error occurred"));
     }

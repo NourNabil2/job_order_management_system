@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quality_management_system/Features/auth/domain/models/user_model.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 
 abstract class AuthRemoteDataSource {
   Future<void> addMember(String name, email, password, UserRole role);
   Future<User> signin(String email, password);
   Future<User> signup(String email, password);
+  Future<List<UserModel>> fetchAllMembers();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -47,4 +49,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
     return userCredential.user!;
   }
+
+  @override
+  Future<List<UserModel>> fetchAllMembers() async {
+    final querySnapshot = await FirebaseFirestore.instance.collection('Users').get();
+    return querySnapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList();
+  }
+
 }
