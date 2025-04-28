@@ -4,14 +4,14 @@ import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 
-class CustomAlert extends StatelessWidget {
+
+class _CustomAlert extends StatelessWidget {
   final bool isSuccess;
   final String cancelText;
   final VoidCallback onConfirm;
   final VoidCallback? onCancel;
 
-  const CustomAlert({
-    super.key,
+  const _CustomAlert({
     required this.isSuccess,
     required this.cancelText,
     required this.onConfirm,
@@ -22,12 +22,19 @@ class CustomAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Theme.of(context).cardColor,
-      title: Center(child:
-      Lottie.asset(isSuccess ? AssetsManager.addedSuccess:AssetsManager.addedFail,width: SizeApp.logoSize,repeat: isSuccess ? false : true,fit: BoxFit.fill)
-
+      title: Center(
+        child: Lottie.asset(
+          isSuccess ? AssetsManager.addedSuccess : AssetsManager.addedFail,
+          width: SizeApp.logoSize,
+          repeat: isSuccess ? false : true,
+          fit: BoxFit.fill,
+        ),
       ),
       contentTextStyle: Theme.of(context).textTheme.titleLarge,
-      content: Text(isSuccess ? 'تم تنفيذ العملية بنجاح' : 'فشلت العملية، حاول مرة أخرى',textAlign: TextAlign.center,),
+      content: Text(
+        isSuccess ? 'تم تنفيذ العملية بنجاح' : 'فشلت العملية، حاول مرة أخرى',
+        textAlign: TextAlign.center,
+      ),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,6 +55,7 @@ class CustomAlert extends StatelessWidget {
   }
 }
 
+
 void showCustomAlert({
   required BuildContext context,
   required bool isSuccess,
@@ -58,11 +66,11 @@ void showCustomAlert({
   showDialog(
     context: context,
     builder: (context) {
-      return CustomAlert(
+      return _CustomAlert(
         isSuccess: isSuccess,
         cancelText: cancelText,
         onConfirm: onConfirm,
-        onCancel: onCancel ??  () {
+        onCancel: onCancel ?? () {
           Navigator.pop(context);
         },
       );

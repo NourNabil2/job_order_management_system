@@ -107,7 +107,7 @@ class BasicInfoStep extends StatelessWidget {
                 label: 'حاله التسليم',
                 value: selectedStatus,
                 options: statusOptions,
-                onChanged: (val) => selectedStatus = val),
+                onChanged: onStatusChanged),
           ],
         ),
       ),
@@ -195,7 +195,7 @@ class BasicInfoStep extends StatelessWidget {
                       label: 'حاله التسليم',
                       value: selectedStatus,
                       options: statusOptions,
-                      onChanged: (val) => selectedStatus = val),
+                      onChanged: onStatusChanged),
                 ),
               ],
             )
