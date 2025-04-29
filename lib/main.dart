@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/theme/app_theme.dart';
+import 'package:quality_management_system/Features/auth/view/screens/signin_screen.dart';
 import 'package:quality_management_system/dependency_injection.dart';
 import 'package:quality_management_system/my_bloc_observer.dart';
 import 'Core/Network/local_db/share_preference.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.light,
           routes: <String, WidgetBuilder>{
             Navbar.id: (context) => const Navbar(),
+            SigninScreen.id: (context) => const SigninScreen(),
           },
           initialRoute: Navbar.id,
         );

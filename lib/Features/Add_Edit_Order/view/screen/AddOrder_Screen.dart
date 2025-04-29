@@ -6,6 +6,7 @@ import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
+import 'package:quality_management_system/Core/components/DialogAlertMessage.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/AddItemsStep.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/ReviewStep.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/basic_info_step.dart';
@@ -32,7 +33,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   final _itemCountController = TextEditingController();
 
   DateTime? _selectedDeadline;
-  String _selectedStatus = 'Pending';
+  String? _selectedStatus;
   String? _selectedAttachmentType;
   List<OrderItem> _orderItems = [];
   int _currentStep = 0;
@@ -86,6 +87,12 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       );
       return;
     }
+  if (_selectedStatus == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select Status')),
+      );
+      return;
+    }
 
     context.read<AddNewOrderCubit>().addOrder(
       orderNumber: _orderNumberController.text,
@@ -93,7 +100,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       attachmentType: _selectedAttachmentType!,
       supplyNumber: _supplyNumberController.text,
       dateLine: _selectedDeadline!,
-      orderStatus: _selectedStatus,
+      orderStatus: _selectedStatus!,
       items: _orderItems,
     );
   }
@@ -114,7 +121,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
           statusOptions: _statusOptions,
           onPickDate: _openDatePicker,
           onAttachmentTypeChanged: (val) => setState(() => _selectedAttachmentType = val),
-          onStatusChanged: (val) => setState(() => _selectedStatus = val ?? 'Pending'),
+          onStatusChanged: (val) => setState(() => _selectedStatus = val),
         ),
         isActive: _currentStep >= 0,
         state: _currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -167,8 +174,16 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
         listener: (context, state) {
           if (state is AddOrderSuccess)
             {
-              Navigator.pop(context);
-            }
+              Navigator.pop(context,);
+              showCustomAlert(isSuccess: true, onConfirm: () {
+
+              }, context: context,);
+            } else if (state is AddOrderError)
+              {
+                showCustomAlert(isSuccess: false, onConfirm: () {
+
+                }, context: context,);
+              }
         },
   builder: (context, state) {
   return  Scaffold(

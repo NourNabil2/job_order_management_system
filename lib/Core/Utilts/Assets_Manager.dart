@@ -43,6 +43,7 @@ class AssetsManager {
   static const productsIcon = 'assets/images/products.png';
   //image
   static const logoPNG = 'assets/images/App_logo.png';
+  static const backgroundImage = 'assets/images/bg_dashboard.jpg';
 
   static const verificationEmail = 'assets/icons/Verification_email.json';
   static const connectionIcon = 'assets/icons/connection_error.png';

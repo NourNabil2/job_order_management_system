@@ -11,6 +11,7 @@ import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dar
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
 import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
 import 'package:quality_management_system/Features/auth/view/screens/memberTable_Screen.dart';
+import 'package:quality_management_system/Features/auth/view/screens/signin_screen.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 
@@ -94,7 +95,7 @@ class _NavbarState extends State<Navbar> {
                 padding: EdgeInsets.all(SizeApp.defaultPadding),
                 child: CustomIcon(assetPath: AssetsManager.logoWhite,isImage: true,size: SizeApp.logoSize,),
               ),
-              footerBuilder: (context, extended) => const CustomCancelButon(text: 'LogOut',),
+              footerBuilder: (context, extended) =>  CustomCancelButon(text: 'LogOut',onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => const SigninScreen(),)),),
               footerDivider: const Divider(thickness: 0.3,),
               items: List.generate(
                 navItems.length,

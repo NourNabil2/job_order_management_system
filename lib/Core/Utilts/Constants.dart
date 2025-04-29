@@ -33,7 +33,7 @@ class StringApp {
   //admin
   static const done = 'تم الانهاء';
   static const notDone = 'قيد العمل';
-  static const invoices = 'الفواتير';
+  static const invoices = 'قيد الانتظار';
   static const returns = 'المرتجعات';
   static const totalCollections = 'التحصيلات';
 

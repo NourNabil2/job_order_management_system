@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Utilts/extensions.dart';
+import 'package:quality_management_system/Core/Widgets/CustomTextField_widget.dart';
+import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
+import 'package:quality_management_system/Core/components/DialogAlertMessage.dart';
 import 'package:quality_management_system/Core/components/snackbar.dart';
 import 'package:quality_management_system/Core/theme/text_theme.dart';
 import 'package:quality_management_system/Features/auth/view/cubits/signin_cubit/signin_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/cubits/signup_cubit/signup_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/screens/reset_password_screen.dart';
-import 'package:quality_management_system/Features/auth/view/widgets/form_button.dart';
-import 'package:quality_management_system/Features/auth/view/widgets/text_form_field.dart';
+import 'package:quality_management_system/Features/auth/view/widgets/rememberMe_widget.dart';
 import 'package:quality_management_system/dependency_injection.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
+  static String id = 'SigninScreen';
 
   @override
   State<SigninScreen> createState() => _SigninScreenScreenState();
@@ -23,6 +28,10 @@ class _SigninScreenScreenState extends State<SigninScreen> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final emailFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
+
 
   @override
   void dispose() {
@@ -47,125 +56,243 @@ class _SigninScreenScreenState extends State<SigninScreen> {
               );
             }));
           } else if (state is SigninFailure) {
+            showCustomAlert(context: context, isSuccess: false, onConfirm: () {
+
+            },);
             showCustomSnackBar(context, state.message);
           } else if (state is SigninSuccess) {
+            showCustomAlert(context: context, isSuccess: true, onConfirm: () {
+
+            },);
             showCustomSnackBar(context, "Login Successful");
           }
         },
         builder: (context, state) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight:
-                    MediaQuery.of(context).size.height - SizeApp.logoSize,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: SizedBox(
-                      width: 450,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: SizeApp.defaultPadding * 3,
-                            vertical: SizeApp.defaultPadding * 3),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(SizeApp.borderRadius * 2),
-                          color: ColorApp.blackColor40.withAlpha(200),
-                        ),
-                        child: Form(
-                          key: signinKey,
-                          child: SizedBox(
+          return ResponsiveBuilder(
+            mobileBuilder: (p0) => Scaffold(
+            body: SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(SizeApp.defaultPadding * 2),
+                  child: SizedBox(
+                    width: 450,
+                    child: Padding(
+                      padding: EdgeInsets.all(SizeApp.defaultPadding * 3),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Logo Section
+                          const Icon(Icons.lock_person_rounded,
+                            size: 60,
+                            color: ColorApp.primaryColor,
+                          ),
+                          SizedBox(height: SizeApp.defaultPadding),
+                          Text(
+                            "Welcome Back",
+                            style: appTextTheme.headlineSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            "Sign in to continue",
+                            style: appTextTheme.bodyMedium?.copyWith(
+                              color: Colors.white70,
+                            ),
+                          ),
+                          SizedBox(height: SizeApp.defaultPadding * 2),
+
+                          // Form Section
+                          Form(
+                            key: signinKey,
                             child: Column(
                               children: [
-                                Text(
-                                  "Sign in",
-                                  style: appTextTheme.titleMedium!
-                                      .copyWith(color: ColorApp.primaryColor),
-                                ),
-                                const SizedBox(height: 30),
-                                // Email
-                                CustomTextFormField(
-                                  controller: emailController,
-                                  hint: "Email",
+                                // Email Field
+                                CustomFormTextField(
+                                  focusNode: emailFocusNode,
+                                  nextFocusNode: passwordFocusNode,
+                                  textEditingController: emailController,
+                                  hintText: "Email",
                                   icon: Icons.email_rounded,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter an email";
-                                    } else {
-                                      if (!StringExtensions(value)
-                                          .isValidEmail()) {
-                                        return "Please enter a valid email";
-                                      }
-                                    }
-                                    return null;
-                                  },
                                 ),
-                                const SizedBox(height: 10),
-                                CustomTextFormField(
-                                  obsecure: passwordVisible,
-                                  suffixIcon: passwordVisible
-                                      ? IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              passwordVisible =
-                                                  !passwordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(Icons.visibility),
-                                        )
-                                      : IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              passwordVisible =
-                                                  !passwordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(
-                                              Icons.visibility_off_outlined),
-                                        ),
-                                  controller: passwordController,
-                                  hint: "Password",
-                                  icon: Icons.password_rounded,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter a password";
-                                    }
-                                    if (value.length < 8) {
-                                      return "Password must be at least 8 characters long";
-                                    }
-                                    if (value.length > 25) {
-                                      return "Password must be less than 25 characters long";
-                                    }
-                                    return null;
+                                SizedBox(height: SizeApp.defaultPadding),
+                                // Password Field
+                                CustomFormTextField(
+                                  focusNode: passwordFocusNode,
+                                  textEditingController: passwordController,
+                                  obscureText: passwordVisible,
+                                  onPressedObscureText: () {
+                                    setState(() {
+                                      passwordVisible =
+                                      !passwordVisible;
+                                    });
                                   },
+                                  iconObscureText: passwordVisible
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility,
+                                  hintText: "Password",
+                                  icon: Icons.password_rounded,
                                 ),
 
-                                const SizedBox(height: 20),
-                                FormButton(
-                                  loading: state is SigninLoading,
-                                  text: "Sign in",
-                                  onPressed: () {
-                                    if (signinKey.currentState!.validate()) {
-                                      context.read<SigninCubit>().signin(
+                                SizedBox(height: SizeApp.defaultPadding),
+                                RememberMeRow(isRememberMe: true, onChanged: (value) {
+
+                                },),
+                                SizedBox(height: SizeApp.defaultPadding),
+                                // Sign In Button
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: CustomButton(
+                                    onTap: () {
+                                      if (signinKey.currentState!.validate()) {
+                                        context.read<SigninCubit>().signin(
                                           emailController.text,
-                                          passwordController.text);
-                                    }
-                                  },
-                                )
+                                          passwordController.text,
+                                        );
+                                      }
+                                    },
+                                    text: "SIGN IN",
+                                    isLoading:  state is SigninLoading,
+                                  ),)
                               ],
+                            ),
+                          ),
+
+                          SizedBox(height: SizeApp.defaultPadding),
+
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+            desktopBuilder: (p0) => Scaffold(
+            body: SingleChildScrollView(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Image.asset(
+                      AssetsManager.backgroundImage, // your image path
+                      fit: BoxFit.cover, // cover the whole screen
+                    ),
+                  ),
+
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height,
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(SizeApp.defaultPadding * 2),
+                        child: SizedBox(
+                          width: 450,
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(SizeApp.borderRadius * 3),
+                            ),
+                            color: ColorApp.mainLight.withOpacity(0.5),
+                            child: Padding(
+                              padding: EdgeInsets.all(SizeApp.defaultPadding * 3),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Logo Section
+                                  const Icon(Icons.lock_person_rounded,
+                                    size: 60,
+                                    color: ColorApp.primaryColor,
+                                  ),
+                                  SizedBox(height: SizeApp.defaultPadding),
+                                  Text(
+                                    "Welcome Back",
+                                    style: appTextTheme.headlineSmall?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Sign in to continue",
+                                    style: appTextTheme.bodyMedium?.copyWith(
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                  SizedBox(height: SizeApp.defaultPadding * 2),
+
+                                  // Form Section
+                                  Form(
+                                    key: signinKey,
+                                    child: Column(
+                                      children: [
+                                        // Email Field
+                                        CustomFormTextField(
+                                          focusNode: emailFocusNode,
+                                          nextFocusNode: passwordFocusNode,
+                                          textEditingController: emailController,
+                                          hintText: "Email",
+                                          icon: Icons.email_rounded,
+                                        ),
+                                        SizedBox(height: SizeApp.defaultPadding),
+                                        // Password Field
+                                        CustomFormTextField(
+                                          focusNode: passwordFocusNode,
+                                          textEditingController: passwordController,
+                                          obscureText: passwordVisible,
+                                          onPressedObscureText: () {
+                                            setState(() {
+                                              passwordVisible =
+                                              !passwordVisible;
+                                            });
+                                          },
+                                          iconObscureText: passwordVisible
+                                              ? Icons.visibility_off_outlined
+                                              : Icons.visibility,
+                                          hintText: "Password",
+                                          icon: Icons.password_rounded,
+                                        ),
+
+
+                                        RememberMeRow(isRememberMe: true, onChanged: (value) {
+
+                                        },),
+                                        SizedBox(height: SizeApp.defaultPadding),
+                                        // Sign In Button
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 50,
+                                          child: CustomButton(
+                                            onTap: () {
+                                              if (signinKey.currentState!.validate()) {
+                                                context.read<SigninCubit>().signin(
+                                                  emailController.text,
+                                                  passwordController.text,
+                                                );
+                                              }
+                                            },
+                                            text: "SIGN IN",
+                                            isLoading:  state is SigninLoading,
+                                          ),)
+                                      ],
+                                    ),
+                                  ),
+
+                                  SizedBox(height: SizeApp.defaultPadding),
+
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
+                ]
+
+
               ),
             ),
-          );
+          ),);
         },
       ),
     );

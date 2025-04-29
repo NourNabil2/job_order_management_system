@@ -1,12 +1,10 @@
 // basic_info_step.dart
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomTextField_widget.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/DeadLinePicker_Widget.dart';
-import 'package:quality_management_system/Features/auth/view/widgets/text_form_field.dart';
 
 class BasicInfoStep extends StatelessWidget {
   final TextEditingController orderNumberController;
@@ -107,7 +105,7 @@ class BasicInfoStep extends StatelessWidget {
                 label: 'حاله التسليم',
                 value: selectedStatus,
                 options: statusOptions,
-                onChanged: (val) => selectedStatus = val),
+                onChanged: onStatusChanged),
           ],
         ),
       ),
@@ -195,7 +193,7 @@ class BasicInfoStep extends StatelessWidget {
                       label: 'حاله التسليم',
                       value: selectedStatus,
                       options: statusOptions,
-                      onChanged: (val) => selectedStatus = val),
+                      onChanged: onStatusChanged),
                 ),
               ],
             )

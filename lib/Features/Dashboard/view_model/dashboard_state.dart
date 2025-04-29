@@ -13,6 +13,7 @@ class DashboardLoaded extends DashboardState {
   final int completedOrders;
   final int pendingOrders;
   final int rejectedOrders;
+  final int inProgress;
   final String nearestDeadlineWithOrder;
 
   DashboardLoaded({
@@ -21,6 +22,7 @@ class DashboardLoaded extends DashboardState {
     required this.completedOrders,
     required this.pendingOrders,
     required this.rejectedOrders,
+    required this.inProgress,
     required this.nearestDeadlineWithOrder,
   });
 }

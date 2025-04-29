@@ -5,13 +5,13 @@ import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/extensions.dart';
 import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
+import 'package:quality_management_system/Core/Widgets/CustomTextField_widget.dart';
 import 'package:quality_management_system/Core/components/snackbar.dart';
 import 'package:quality_management_system/Core/theme/text_theme.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 import 'package:quality_management_system/Features/auth/view/cubits/add_member_cubit/add_member_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/drop_down_field.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/form_button.dart';
-import 'package:quality_management_system/Features/auth/view/widgets/text_form_field.dart';
 import 'package:quality_management_system/dependency_injection.dart';
 
 class AddMemberScreen extends StatefulWidget {
@@ -92,22 +92,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                 ),
                                 const SizedBox(height: 30),
                                 // Name
-                                CustomTextFormField(
-                                  controller: nameController,
-                                  hint: "Name",
+                                CustomFormTextField(
+                                  textEditingController: nameController,
+                                  hintText: "Name",
                                   icon: Icons.person,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter a name";
-                                    }
-                                    if (value.length < 2) {
-                                      return "Name must be at least 2 characters long";
-                                    }
-                                    if (value.length > 50) {
-                                      return "Name must be less than 50 characters long";
-                                    }
-                                    return null;
-                                  },
                                 ),
                                 const SizedBox(height: 10),
                                 // Drop Down to Select Role
@@ -152,60 +140,18 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                   },
                                 ),
                                 const SizedBox(height: 10),
-                                CustomTextFormField(
-                                  controller: emailController,
-                                  hint: "Email",
+                                CustomFormTextField(
+                                  textEditingController: emailController,
+                                  hintText: "Email",
                                   icon: Icons.email_rounded,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter an email";
-                                    } else {
-                                      if (!StringExtensions(value)
-                                          .isValidEmail()) {
-                                        return "Please enter a valid email";
-                                      }
-                                    }
-                                    return null;
-                                  },
                                 ),
                                 const SizedBox(height: 10),
-                                CustomTextFormField(
-                                  obsecure: passwordVisible,
-                                  suffixIcon: passwordVisible
-                                      ? IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              passwordVisible =
-                                                  !passwordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(Icons.visibility),
-                                        )
-                                      : IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              passwordVisible =
-                                                  !passwordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(
-                                              Icons.visibility_off_outlined),
-                                        ),
-                                  controller: passwordController,
-                                  hint: "Password",
+                                CustomFormTextField(
+                                  obscureText: passwordVisible,
+                                  iconObscureText: passwordVisible? Icons.visibility : Icons.visibility_off_outlined,
+                                  textEditingController: passwordController,
+                                  hintText: "Password",
                                   icon: Icons.password_rounded,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter a password";
-                                    }
-                                    if (value.length < 8) {
-                                      return "Password must be at least 8 characters long";
-                                    }
-                                    if (value.length > 25) {
-                                      return "Password must be less than 25 characters long";
-                                    }
-                                    return null;
-                                  },
                                 ),
 
                                 const SizedBox(height: 20),

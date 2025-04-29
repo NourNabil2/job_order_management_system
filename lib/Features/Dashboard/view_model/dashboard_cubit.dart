@@ -25,6 +25,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       int completedOrders = 0;
       int pendingOrders = 0;
       int rejectedOrders = 0;
+      int in_progress = 0;
 
       DateTime? nearestDeadline;
       String? nearestOrderNumber;
@@ -32,13 +33,16 @@ class DashboardCubit extends Cubit<DashboardState> {
       for (final doc in orders) {
         final status = doc['orderStatus']?.toString().toLowerCase() ?? '';
 
-        if (status == 'complete' || status == 'delivered') {
+        if (status == 'completed' || status == 'delivered') {
           completedOrders++;
         } else if (status == 'pending') {
           pendingOrders++;
         } else if (status == 'rejected') {
           rejectedOrders++;
-        }
+        } else if (status == 'in_progress')
+          {
+            in_progress++;
+          }
 
         final dateLineTimestamp = doc['dateLine'] as Timestamp?;
         if (dateLineTimestamp != null) {
@@ -62,6 +66,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         completedOrders: completedOrders,
         pendingOrders: pendingOrders,
         rejectedOrders: rejectedOrders,
+        inProgress: in_progress,
         nearestDeadlineWithOrder: formattedDeadlineWithOrder,
       ));
     } catch (e) {

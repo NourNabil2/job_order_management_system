@@ -17,15 +17,15 @@ class NavItem {
 
 final List<NavItem> navItems = [
   NavItem(
-      label: '  Overview',
+      label: '  الرئيسية',
       assetPath: AssetsManager.menuIcon,
       screen: const MainScreen()),
   NavItem(
-      label: '  Add Orders',
+      label: '  أوامر التوريد',
       assetPath: AssetsManager.invoiceIcon,
       screen: const MainScreen()),
   NavItem(
-      label: '  Add Member',
+      label: '  الموظفين',
       assetPath: AssetsManager.addMember,
       screen:  const AddMemberScreen()
       ),

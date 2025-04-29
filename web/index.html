@@ -14,6 +14,12 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
+  <!-- Firebase SDK -->
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js"></script>
+
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -33,6 +39,18 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+<script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging.js"></script>
+<script>
+  const messaging = firebase.messaging();
+  messaging.getToken({ vapidKey: "YOUR_VAPID_KEY" }).then((currentToken) => {
+    if (currentToken) {
+      console.log('Current token for client: ', currentToken);
+    } else {
+      console.log('No registration token available.');
+    }
+  });
+</script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

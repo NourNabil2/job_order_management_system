@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Widgets/CustomTextField_widget.dart';
 import 'package:quality_management_system/Core/components/snackbar.dart';
 import 'package:quality_management_system/Core/theme/text_theme.dart';
-import 'package:quality_management_system/Features/auth/view/cubits/signin_cubit/signin_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/cubits/signup_cubit/signup_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/form_button.dart';
-import 'package:quality_management_system/Features/auth/view/widgets/text_form_field.dart';
-import 'package:quality_management_system/dependency_injection.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email;
@@ -80,79 +78,32 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                       .copyWith(color: ColorApp.primaryColor),
                                 ),
                                 const SizedBox(height: 30),
-                                CustomTextFormField(
-                                  obsecure: passwordVisible,
-                                  suffixIcon: passwordVisible
-                                      ? IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              passwordVisible =
-                                                  !passwordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(Icons.visibility),
-                                        )
-                                      : IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              passwordVisible =
-                                                  !passwordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(
-                                              Icons.visibility_off_outlined),
-                                        ),
-                                  controller: passwordController,
-                                  hint: "Password",
-                                  icon: Icons.password_rounded,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please enter a password";
-                                    }
-                                    if (value.length < 8) {
-                                      return "Password must be at least 8 characters long";
-                                    }
-                                    if (value.length > 25) {
-                                      return "Password must be less than 25 characters long";
-                                    }
-                                    return null;
+                                CustomFormTextField(
+                                  obscureText: passwordVisible,
+                                  iconObscureText: passwordVisible? Icons.visibility : Icons.visibility_off_outlined,
+                                  onPressedObscureText: () {
+                                    setState(() {
+                                      passwordVisible =
+                                      !passwordVisible;
+                                    });
                                   },
+                                  textEditingController: passwordController,
+                                  hintText: "Password",
+                                  icon: Icons.password_rounded,
                                 ),
                                 const SizedBox(height: 10),
-                                CustomTextFormField(
-                                  obsecure: confirmPasswordVisible,
-                                  suffixIcon: confirmPasswordVisible
-                                      ? IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              confirmPasswordVisible =
-                                                  !confirmPasswordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(Icons.visibility),
-                                        )
-                                      : IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              confirmPasswordVisible =
-                                                  !confirmPasswordVisible;
-                                            });
-                                          },
-                                          icon: const Icon(
-                                              Icons.visibility_off_outlined),
-                                        ),
-                                  controller: confirmPasswordController,
-                                  hint: "Confirm Password",
-                                  icon: Icons.password_rounded,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Please confirm password";
-                                    }
-                                    if (value != passwordController.text) {
-                                      return "Passwords must be matching";
-                                    }
-                                    return null;
+                                CustomFormTextField(
+                                  obscureText: confirmPasswordVisible,
+                                  iconObscureText: confirmPasswordVisible ? Icons.visibility : Icons.visibility_off_outlined,
+                                  textEditingController: confirmPasswordController,
+                                  onPressedObscureText: () {
+                                    setState(() {
+                                      confirmPasswordVisible =
+                                      !confirmPasswordVisible;
+                                    });
                                   },
+                                  hintText: "Confirm Password",
+                                  icon: Icons.password_rounded,
                                 ),
                                 const SizedBox(height: 20),
                                 FormButton(
