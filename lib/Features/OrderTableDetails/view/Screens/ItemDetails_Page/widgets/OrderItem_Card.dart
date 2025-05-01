@@ -131,7 +131,7 @@ class OrderItemCard extends StatelessWidget {
   Widget _buildDetailChips() {
     return Row(
       children: [
-        _buildDetailChip(Icons.format_list_numbered, 'QTY: ${item.quantity}'),
+        _buildDetailChip(Icons.format_list_numbered, 'عدد: ${item.quantity}'),
         if (item.materialType.isNotEmpty)
           _buildDetailChip(Icons.category, item.materialType),
       ],

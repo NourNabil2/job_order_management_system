@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/InvoiceScreen.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/widgets/OrderSummary_Card.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/widgets/SectionHeaderSelected.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view_model/Item_details/item_details_cubit.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view_model/add_order_cubit/add_order_cubit.dart';
-
 import 'widgets/OrderItem_Card.dart';
 import 'widgets/ProgressChart_widget.dart';
 import 'widgets/StatisticsRow_widget.dart';
@@ -32,7 +28,6 @@ class OrderItemsDetailsScreen extends StatefulWidget {
 class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
   late Future<List<OrderItem>> _itemsFuture;
   List<OrderItem> _selectedItems = [];
-  final List<String> _itemStatusOptions = ['Pending', 'In Progress', 'Completed'];
 
   @override
   void initState() {
@@ -93,7 +88,7 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
   Map<String, int> _calculateStatusCounts(List<OrderItem> items) {
     final Map<String, int> counts = {
       'Pending': 0,
-      'In_Progress': 0,
+      'In Progress': 0,
       'Completed': 0,
       'Total': items.length,
     };
@@ -181,7 +176,7 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12.0),
                           child: OrderItemCard(item: item, isSelected: isSelected, theme: theme,
-                            onSelectionChanged: (value) => _toggleItemSelection(item,isSelected),
+                            onSelectionChanged: (value) => _toggleItemSelection(item,value),
                             onStatusChanged: (value) => _updateItemStatus(item,value),
                           ),
                         );

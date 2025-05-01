@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:quality_management_system/Features/auth/data/auth_data_source/auth_remote_data_source.dart';
@@ -11,7 +12,7 @@ final sl = GetIt.instance;
 void init() {
   // Firebase
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-
+  sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance); // أضف هذا السط
   // Data source
   sl.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(sl()));
@@ -20,7 +21,7 @@ void init() {
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
 
   // Cubit
-  sl.registerFactory(() => SigninCubit(sl()));
+  sl.registerFactory(() => SigninCubit(sl(),sl()));
   sl.registerFactory(() => SignupCubit(sl()));
   sl.registerFactory(() => AddMemberCubit(sl()));
   

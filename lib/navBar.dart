@@ -1,4 +1,5 @@
 // navbar.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
@@ -97,13 +98,28 @@ class _NavbarState extends State<Navbar> {
                 padding: EdgeInsets.all(SizeApp.defaultPadding),
                 child: CustomIcon(assetPath: AssetsManager.logoWhite,isImage: true,size: SizeApp.logoSize,),
               ),
-              footerBuilder: (context, extended) =>  CustomCancelButon(text: 'LogOut',onTap: () {
+              footerBuilder: (context, extended) =>  CustomCancelButon(
+                text: 'LogOut',
+                onTap: () {
+                  showCustomOptionsDialog(
+                    context: context,
+                    title: 'تسجيل الخروج',
+                    content: 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
+                    confirmText: 'نعم',
+                    onConfirm: () async {
+                      // تنفيذ تسجيل الخروج من Firebase
+                      await FirebaseAuth.instance.signOut();
 
-                showCustomOptionsDialog(context: context, title: 'تسجيل الخروج', content: 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟', confirmText: 'yes', onConfirm: () => Navigator.push(context,MaterialPageRoute(builder: (context) => const SigninScreen(),)),) ;
-              }
-
-
-                  ),
+                      // التنقل لصفحة تسجيل الدخول مع حذف كل الصفحات السابقة
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SigninScreen()),
+                            (route) => false,
+                      );
+                    },
+                  );
+                },
+        ),
               footerDivider: const Divider(thickness: 0.3,),
               items: List.generate(
                 navItems.length,

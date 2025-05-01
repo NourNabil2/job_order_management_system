@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
@@ -9,11 +10,13 @@ import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart
 import 'package:quality_management_system/Core/components/DialogAlertMessage.dart';
 import 'package:quality_management_system/Core/components/snackbar.dart';
 import 'package:quality_management_system/Core/theme/text_theme.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 import 'package:quality_management_system/Features/auth/view/cubits/signin_cubit/signin_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/cubits/signup_cubit/signup_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/screens/reset_password_screen.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/rememberMe_widget.dart';
 import 'package:quality_management_system/dependency_injection.dart';
+import 'package:quality_management_system/navBar.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -32,6 +35,7 @@ class _SigninScreenScreenState extends State<SigninScreen> {
   final emailFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
 
+  bool isRememberMe = false;
 
   @override
   void dispose() {
@@ -60,7 +64,19 @@ class _SigninScreenScreenState extends State<SigninScreen> {
 
             },);
             showCustomSnackBar(context, state.message);
-          } else if (state is SigninSuccess) {
+          } else if (state is SigninUserSuccess) {
+Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const OrdersTableDetails(),), (route) => false,).then((value) async {
+  isRememberMe ? await CashSaver.saveData(key: 'isRememberMe', value: isRememberMe) : null ;
+
+},);
+            showCustomAlert(context: context, isSuccess: true, onConfirm: () {
+
+            },);
+            showCustomSnackBar(context, "Login Successful");
+          } else if (state is SigninUserSuccess) {
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Navbar(),) ,(route) => false, ).then((value) async {
+              isRememberMe ? await CashSaver.saveData(key: 'isRememberMe', value: isRememberMe) : null;
+            },);
             showCustomAlert(context: context, isSuccess: true, onConfirm: () {
 
             },);
@@ -253,8 +269,10 @@ class _SigninScreenScreenState extends State<SigninScreen> {
                                         ),
 
 
-                                        RememberMeRow(isRememberMe: true, onChanged: (value) {
-
+                                        RememberMeRow(isRememberMe: isRememberMe,   onChanged: (value) {
+                                          setState(() {
+                                            isRememberMe = !isRememberMe;
+                                          });
                                         },),
                                         SizedBox(height: SizeApp.defaultPadding),
                                         // Sign In Button
