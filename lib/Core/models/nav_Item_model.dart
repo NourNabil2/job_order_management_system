@@ -27,6 +27,6 @@ final List<NavItem> navItems = [
   NavItem(
       label: '  الموظفين',
       assetPath: AssetsManager.addMember,
-      screen:  const AddMemberScreen()
+      screen:  const MainScreen()
       ),
 ];

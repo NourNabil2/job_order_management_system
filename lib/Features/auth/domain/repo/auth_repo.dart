@@ -4,7 +4,7 @@ import 'package:quality_management_system/Features/auth/domain/models/user_model
 import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, Unit>> addMember(String name, email, password, UserRole role);
+  Future<Either<Failure, Unit>> addMember(String name, email, password, role);
   Future<Either<Failure, Unit>> signin(String email, password);
   Future<Either<Failure, Unit>> signup(String email, password);
   Future<Either<Failure, List<UserModel>>> fetchAllMembers();

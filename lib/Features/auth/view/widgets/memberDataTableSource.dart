@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_model.dart';
-import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
+import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
 
 class MemberDataTableSource extends DataTableSource {
   final List<UserModel> members;
@@ -17,26 +17,39 @@ class MemberDataTableSource extends DataTableSource {
       cells: [
         DataCell(Text('${index + 1}')),
         DataCell(Text(member.name)),
-        DataCell(Text(member.role.value)),
+        DataCell(Text(member.role ?? 'No Role')),
         DataCell(StatusContainer(status: member.uid == '' ? 'Inactive' : 'Active')),
         DataCell(Row(
           children: [
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {
-                // Action for editing member
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                // Action for deleting member
-              },
+              onPressed: () => _navigateToEditMember(context, member),
             ),
           ],
         )),
       ],
     );
+  }
+
+  void _navigateToEditMember(BuildContext context, UserModel member) {
+    // Create a safe copy of the model in case properties are null
+    final UserModel safeModel = UserModel(
+      name: member.name,
+      email: member.email,
+      role: member.role ?? '',
+      uid: member.uid ?? '',
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: SizedBox(
+          child:  AddMemberScreen(memberToEdit: safeModel),
+        ),
+      ),
+    );
+
   }
 
   @override

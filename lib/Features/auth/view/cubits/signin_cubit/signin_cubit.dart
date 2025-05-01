@@ -49,4 +49,5 @@ class SigninCubit extends Cubit<SigninState> {
       emit(SigninFailure(message: 'An error occurred: ${e.toString()}'));
     }
   }
+
 }

@@ -35,4 +35,7 @@ class SignupCubit extends Cubit<SignupState> {
       emit(SignupFailure(message: e.toString()));
     }
   }
+
+
+
 }

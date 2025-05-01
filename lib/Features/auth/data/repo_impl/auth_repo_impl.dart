@@ -4,7 +4,6 @@ import 'package:quality_management_system/Core/Utilts/extensions.dart';
 import 'package:quality_management_system/Core/components/failure.dart';
 import 'package:quality_management_system/Features/auth/data/auth_data_source/auth_remote_data_source.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_model.dart';
-import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 import 'package:quality_management_system/Features/auth/domain/repo/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -40,7 +39,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, Unit>> addMember(
-      String name, email, password, UserRole role) async {
+      String name, email, password, role) async {
     try {
       await remoteDataSource.addMember(name, email, password, role);
       return right(unit);
