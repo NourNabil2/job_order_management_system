@@ -27,7 +27,7 @@ class CustomListTitle extends StatelessWidget {
               minLeadingWidth: 4,
               title: InkWell(
                 onLongPress: () => showBottomSheetOption(context, message, () {
-                  showCustomAlertDialog(
+                  showCustomOptionsDialog(
                     context: context, title: 'Report this message', content: 'Our team will review the content and take appropriate action.',
                     confirmText: 'Report',
                     onCancel: () => Navigator.pop(context),
