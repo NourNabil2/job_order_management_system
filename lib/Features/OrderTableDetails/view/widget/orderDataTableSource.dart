@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Screen.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/ItemDetails_Screen.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view_model/Item_details/item_details_cubit.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view_model/add_order_cubit/add_order_cubit.dart';
 
 class OrderDataTableSource extends DataTableSource {
@@ -52,7 +53,7 @@ class OrderDataTableSource extends DataTableSource {
                   context,
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
-                      create: (context) => AddOrderCubit(),
+                      create: (context) => ItemDetailsCubit(),
                       child: OrderItemsDetailsScreen(
                         order: order,
                         orderId: order.id,

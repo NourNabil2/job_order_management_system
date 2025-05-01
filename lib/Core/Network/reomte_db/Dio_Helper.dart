@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:image_picker/image_picker.dart';
 
-const String baseURL = 'https://rova-app.online/API/';
+const String baseURL = '';
 
 class Http {
   static Dio dio = Dio(

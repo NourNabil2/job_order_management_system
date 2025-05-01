@@ -5,8 +5,6 @@ sealed class AddOrderState {}
 
 final class AddOrderInitial extends AddOrderState {}
 
-class OrderItemsLoading extends AddOrderState {}
-
 class OrderLoddedError extends AddOrderState {
   final String error;
   OrderLoddedError(this.error);
@@ -18,12 +16,4 @@ class OrdersLoaded extends AddOrderState {
 }
 
 
-class OrderItemsLoaded extends AddOrderState {
-  final List<OrderItem> items;
-
-  OrderItemsLoaded(this.items);
-
-  @override
-  List<Object> get props => [items];
-}
 
