@@ -33,6 +33,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           materialType: data['materialType'] ?? '',
           notes: data['notes'] ?? '',
           attachments: List<String>.from(data['attachments'] ?? []),
+          unitPrice: 100
         );
       }).toList();
 
@@ -52,6 +53,17 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           .collection('items')
           .doc(itemId)
           .update({'status': newStatus});
+    } catch (e) {
+      throw Exception('Failed to update item status');
+    }
+  }
+
+  Future<void> updateOrderStatus(String orderId, String itemId, String newStatus) async {
+    try {
+      await _firestore
+          .collection('orders')
+          .doc(orderId)
+          .update({'orderStatus': newStatus});
     } catch (e) {
       throw Exception('Failed to update item status');
     }

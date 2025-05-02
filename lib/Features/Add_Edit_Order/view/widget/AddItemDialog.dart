@@ -124,6 +124,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
                 quantity: int.parse(_quantityController.text),
                 materialType: _materialTypeController.text,
                 notes: _notesController.text,
+                unitPrice: 100
               );
               widget.onItemAdded(editedItem);
               Navigator.pop(context);

@@ -16,14 +16,15 @@ import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dar
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
 import 'package:quality_management_system/Features/auth/view/screens/memberTable_Screen.dart';
 import 'package:quality_management_system/Features/auth/view/screens/signin_screen.dart';
+import 'package:quality_management_system/Features/settings/view/setting_page.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'Core/Widgets/alert_widget.dart';
 import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 
 class Navbar extends StatefulWidget {
-  final String role;
+  final String? role;
 
-  Navbar({super.key, required this.role});
+  Navbar({super.key, this.role});
   static String id = 'Mainscreen';
 
 
@@ -43,8 +44,6 @@ class _NavbarState extends State<Navbar> {
 
   final List<Widget> _userScreens = [
     const OrdersTableDetails(),
-    const OrdersTableDetails(),
-    const MembertableScreen(),
   ];
 
 
@@ -75,9 +74,27 @@ class _NavbarState extends State<Navbar> {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       mobileBuilder: (context) => Scaffold(
-        appBar: const CustomAppBar(title: StringApp.overView, icon: AssetsManager.dashboard),
+        appBar: CustomAppBar(title: StringApp.overView, icon: AssetsManager.dashboard ,onTap: () {
+          showCustomOptionsDialog(
+            context: context,
+            title: 'تسجيل الخروج',
+            content: 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
+            confirmText: 'نعم',
+            onConfirm: () async {
+              // تنفيذ تسجيل الخروج من Firebase
+              await FirebaseAuth.instance.signOut();
+              await CashSaver.clearAllData();
+              // التنقل لصفحة تسجيل الدخول مع حذف كل الصفحات السابقة
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const SigninScreen()),
+                    (route) => false,
+              );
+            },
+          );
+        } ,),
         body: SingleChildScrollView(child: _getSelectedScreen()),
-        bottomNavigationBar: BottomNavigationBar(
+          bottomNavigationBar: CashSaver.userRole == 'admin' ? BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: (index) {
             setState(() {
@@ -85,22 +102,22 @@ class _NavbarState extends State<Navbar> {
             });
           },
           items: List.generate(
-            navItems.length,
+            CashSaver.userRole == 'admin'? navItems.length : navItemsForWorkers.length,
                 (index) => BottomNavigationBarItem(
               icon: CustomIcon(
-                assetPath: navItems[index].assetPath,
+                assetPath: CashSaver.userRole == 'admin'? navItems[index].assetPath : navItemsForWorkers[index].assetPath ,
                 color: index == selectedIndex
                     ? ColorApp.primaryColor
                     : Colors.grey,
               ),
-              label: navItems[index].label,
+              label: CashSaver.userRole == 'admin'? navItems[index].label : navItemsForWorkers[index].label ,
             ),
           ),
           selectedItemColor: ColorApp.primaryColor,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
-        ),
+        ) : null ,
       ),
       desktopBuilder: (context) => Scaffold(
         body: Row(
@@ -160,10 +177,10 @@ class _NavbarState extends State<Navbar> {
         ),
               footerDivider: const Divider(thickness: 0.3,),
               items: List.generate(
-                navItems.length,
+                CashSaver.userRole == 'admin'? navItems.length : navItemsForWorkers.length,
                     (index) => SidebarXItem(
-                  iconBuilder: (selected, hovered) => SvgPicture.asset(navItems[index].assetPath,colorFilter: ColorFilter.mode(selectedIndex == index ? ColorApp.primaryColor : ColorApp.mainLight, BlendMode.srcIn),),
-                  label: navItems[index].label,
+                  iconBuilder: (selected, hovered) => CustomIcon(assetPath: CashSaver.userRole == 'admin'? navItems[index].assetPath : navItemsForWorkers[index].assetPath,color: selectedIndex == index ? ColorApp.primaryColor : ColorApp.mainLight, size: SizeApp.iconSizeMedium,),
+                  label: CashSaver.userRole == 'admin'? navItems[index].label : navItemsForWorkers[index].label ,
                   onTap: () => selectedIndex = index,
                 ),
               ),

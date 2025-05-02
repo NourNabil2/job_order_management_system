@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
+import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 
 class OrderItemCard extends StatelessWidget {
@@ -54,11 +57,11 @@ class OrderItemCard extends StatelessWidget {
   Widget _buildHeaderRow() {
     return Row(
       children: [
-        _buildCheckbox(),
+   if (CashSaver.userRole == 'admin' ) _buildCheckbox(),
         const SizedBox(width: 12),
         _buildDescription(),
         const Spacer(),
-        _buildStatusDropdown(),
+     if (CashSaver.userRole != 'collector' ) StatusDropdown(selectedStatus: statusOptions.contains(item.status) ? item.status : statusOptions.first, statusOptions: statusOptions, onStatusChanged: onStatusChanged) else StatusContainer(status: statusOptions.contains(item.status) ? item.status : statusOptions.first ),
       ],
     );
   }
@@ -89,44 +92,6 @@ class OrderItemCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusDropdown() {
-    return DropdownButton<String>(
-      value: statusOptions.contains(item.status) ? item.status : statusOptions.first,
-      icon: const Icon(Icons.arrow_drop_down, size: 20),
-      underline: const SizedBox(),
-      isDense: true,
-      onChanged: (newValue) {
-        if (newValue != null && newValue != item.status) {
-          onStatusChanged(newValue);
-        }
-      },
-      items: statusOptions.map((status) {
-        return DropdownMenuItem<String>(
-          value: status,
-          child: _buildStatusChipContent(status),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildStatusChipContent(String status) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: ColorApp.getStatusColor(status).withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: ColorApp.getStatusColor(status).withOpacity(0.5)),
-      ),
-      child: Text(
-        status,
-        style: TextStyle(
-          color: ColorApp.getStatusColor(status),
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
 
   Widget _buildDetailChips() {
     return Row(

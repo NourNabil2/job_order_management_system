@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 
@@ -8,11 +10,15 @@ import 'package:quality_management_system/Features/OrderTableDetails/model/data/
 class OrderSummaryCard extends StatelessWidget {
   final OrderModel order;
   final ThemeData theme;
+  final ValueChanged<String> onStatusChanged;
+  final List<String> statusOptions;
 
   const OrderSummaryCard({
     super.key,
     required this.order,
     required this.theme,
+    required this.onStatusChanged,
+    this.statusOptions = const ['Pending', 'In Progress', 'Completed', 'delivered'],
   });
 
   @override
@@ -52,7 +58,7 @@ class OrderSummaryCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildOrderInfoColumn(),
-        StatusContainer(status: order.orderStatus),
+       CashSaver.userRole == 'admin' || CashSaver.userRole == 'collector' ? StatusDropdown(selectedStatus: statusOptions.contains(order.orderStatus) ? order.orderStatus : statusOptions.first, statusOptions: statusOptions, onStatusChanged: onStatusChanged) : StatusContainer(status: order.orderStatus),
       ],
     );
   }

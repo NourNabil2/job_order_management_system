@@ -8,6 +8,7 @@ class AssetsManager {
   static const addItemsIcon = "assets/icons/addItem.svg";
   static const addMember = "assets/icons/Add-member.svg";
   static const reviewIcon = "assets/icons/reviewIcon.svg";
+  static const settingIcon = "assets/icons/settingIcon.svg";
 
   static const backtIcon = 'assets/icons/Arrow - Left.svg';
   static const carIcon = 'assets/icons/car-black.svg';

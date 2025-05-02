@@ -30,3 +30,10 @@ final List<NavItem> navItems = [
       screen:  const MainScreen()
       ),
 ];
+
+final List<NavItem> navItemsForWorkers = [
+  NavItem(
+      label: '  الرئيسية',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+];

@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CashSaver {
+
   static SharedPreferences? sharedPreferences;
 
   // Initialize SharedPreferences
@@ -8,6 +9,7 @@ class CashSaver {
     sharedPreferences = await SharedPreferences.getInstance();
   }
 
+  static String? userRole;
   // Save data based on type
   static Future<bool> saveData({
     required String key,

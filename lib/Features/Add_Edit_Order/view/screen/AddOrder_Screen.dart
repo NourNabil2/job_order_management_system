@@ -8,6 +8,7 @@ import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
 import 'package:quality_management_system/Core/components/DialogAlertMessage.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/AddItemsStep.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/FileUpload_Widget.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/ReviewStep.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/basic_info_step.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add_order_cubit.dart';
@@ -36,6 +37,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   String? _selectedStatus;
   String? _selectedAttachmentType;
   List<OrderItem> _orderItems = [];
+  List<FileAttachment> _attachments = [];
   int _currentStep = 0;
 
 
@@ -87,7 +89,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       );
       return;
     }
-  if (_selectedStatus == null) {
+    if (_selectedStatus == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select Status')),
       );
@@ -102,7 +104,14 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       dateLine: _selectedDeadline!,
       orderStatus: _selectedStatus!,
       items: _orderItems,
+      attachments: _attachments,
     );
+  }
+
+  void _updateAttachments(List<FileAttachment> attachments) {
+    setState(() {
+      _attachments = attachments;
+    });
   }
 
   List<Step> _buildSteps() {
@@ -159,11 +168,12 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
           supplyNumber: _supplyNumberController.text,
           status: _selectedStatus,
           orderItems: _orderItems,
+          attachments: _attachments,
+          onAttachmentsChanged: _updateAttachments,
         ),
         isActive: _currentStep >= 2,
         state: StepState.indexed,
       ),
-
     ];
   }
 
@@ -173,85 +183,83 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
     return BlocConsumer<AddNewOrderCubit, AddNewOrderState>(
         listener: (context, state) {
           if (state is AddOrderSuccess)
-            {
-              Navigator.pop(context,);
-              showCustomAlert(isSuccess: true, onConfirm: () {
+          {
+            Navigator.pop(context,);
+            showCustomAlert(isSuccess: true, onConfirm: () {
 
-              }, context: context,);
-            } else if (state is AddOrderError)
-              {
-                showCustomAlert(isSuccess: false, onConfirm: () {
+            }, context: context,);
+          } else if (state is AddOrderError)
+          {
+            showCustomAlert(isSuccess: false, onConfirm: () {
 
-                }, context: context,);
-              }
+            }, context: context,);
+          }
         },
-  builder: (context, state) {
-  return  Scaffold(
-      appBar: const CustomAppBar(title: 'اضافه أمر توريد', icon: AssetsManager.invoiceIcon,),
-      body: Form(
-        key: _formKey,
-        child: Stepper(
-          currentStep: _currentStep,
-          steps: _buildSteps(),
-          stepIconBuilder: (stepIndex, stepState) {
-            String iconPath = stepIcons[stepIndex];
-            return CustomIcon(
-              assetPath: iconPath,
-              size: SizeApp.iconSizeLarge,
-              color: ColorApp.mainLight,
-            );
-          },
-          stepIconWidth: SizeApp.iconSizeLarge * 2 ,
-          stepIconHeight: SizeApp.iconSizeLarge * 2,
-          onStepContinue: () {
-            if (_currentStep == 0) {
-              if (_formKey.currentState!.validate()) {
-                setState(() {
-                  _currentStep += 1;
-                });
-              }
-            } else if (_currentStep == 1) {
-              if (_orderItems.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please add at least one item')),
-                );
-              } else {
-                setState(() {
-                  _currentStep += 1;
-                });
-              }
-            } else if (_currentStep == 2) {
-              _submitForm();
-            }
-          },
-          onStepCancel: () {
-            if (_currentStep > 0) {
-              setState(() {
-                _currentStep -= 1;
-              });
-            }
-          },
+        builder: (context, state) {
+          return  Scaffold(
+            appBar: const CustomAppBar(title: 'اضافه أمر توريد', icon: AssetsManager.invoiceIcon,),
+            body: Form(
+              key: _formKey,
+              child: Stepper(
+                currentStep: _currentStep,
+                steps: _buildSteps(),
+                stepIconBuilder: (stepIndex, stepState) {
+                  String iconPath = stepIcons[stepIndex];
+                  return CustomIcon(
+                    assetPath: iconPath,
+                    size: SizeApp.iconSizeLarge,
+                    color: ColorApp.mainLight,
+                  );
+                },
+                stepIconWidth: SizeApp.iconSizeLarge * 2 ,
+                stepIconHeight: SizeApp.iconSizeLarge * 2,
+                onStepContinue: () {
+                  if (_currentStep == 0) {
+                    if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        _currentStep += 1;
+                      });
+                    }
+                  } else if (_currentStep == 1) {
+                    if (_orderItems.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please add at least one item')),
+                      );
+                    } else {
+                      setState(() {
+                        _currentStep += 1;
+                      });
+                    }
+                  } else if (_currentStep == 2) {
+                    _submitForm();
+                  }
+                },
+                onStepCancel: () {
+                  if (_currentStep > 0) {
+                    setState(() {
+                      _currentStep -= 1;
+                    });
+                  }
+                },
 
-          controlsBuilder: (BuildContext context, ControlsDetails details) {
-            return Padding(
-              padding: EdgeInsets.all(SizeApp.defaultPadding),
-              child: Row(
-                children: <Widget>[
-                  CustomButton(text: _currentStep == 2 ? 'Submit' : 'Next',onTap: details.onStepContinue,width: SizeApp.s70,isLoading: AddNewOrderCubit.get(context).isLoading,),
-                  SizedBox(width: SizeApp.s8),
-                  if (_currentStep != 0)
-                    CustomCancelButton(text: 'Back',onTap: details.onStepCancel,width: SizeApp.s70)
+                controlsBuilder: (BuildContext context, ControlsDetails details) {
+                  return Padding(
+                    padding: EdgeInsets.all(SizeApp.defaultPadding),
+                    child: Row(
+                      children: <Widget>[
+                        CustomButton(text: _currentStep == 2 ? 'Submit' : 'Next',onTap: details.onStepContinue,width: SizeApp.s70,isLoading: AddNewOrderCubit.get(context).isLoading,),
+                        SizedBox(width: SizeApp.s8),
+                        if (_currentStep != 0)
+                          CustomCancelButton(text: 'Back',onTap: details.onStepCancel,width: SizeApp.s70)
 
-                ],
+                      ],
+                    ),
+                  );
+                },
               ),
-            );
-          },
-
-        ),
-      ),
+            ),
+          );
+        }
     );
-  }
-
-);
   }
 }

@@ -147,3 +147,57 @@ class CustomDropMenu extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+class StatusDropdown extends StatelessWidget {
+  final String selectedStatus;
+  final List<String> statusOptions;
+  final ValueChanged<String> onStatusChanged;
+
+  const StatusDropdown({
+    Key? key,
+    required this.selectedStatus,
+    required this.statusOptions,
+    required this.onStatusChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: statusOptions.contains(selectedStatus) ? selectedStatus : statusOptions.first,
+      icon: const Icon(Icons.arrow_drop_down, size: 20),
+      underline: const SizedBox(),
+      isDense: true,
+      onChanged: (newValue) {
+        if (newValue != null && newValue != selectedStatus) {
+          onStatusChanged(newValue);
+        }
+      },
+      items: statusOptions.map((status) {
+        return DropdownMenuItem<String>(
+          value: status,
+          child: _buildStatusChipContent(status),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildStatusChipContent(String status) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: ColorApp.getStatusColor(status),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        status,
+        style: const TextStyle(color: Colors.white),
+      ),
+    );
+  }
+
+
+}

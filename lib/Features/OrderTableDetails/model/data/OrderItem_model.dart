@@ -4,6 +4,7 @@ class OrderItem {
   final String operationDescription;
   final int quantity;
   final String materialType;
+  final double unitPrice;
   late final String status;
   final String notes;
   final List<String> attachments;
@@ -11,6 +12,7 @@ class OrderItem {
   OrderItem({
     required this.id,
     required this.operationDescription,
+    required this.unitPrice,
     required this.quantity,
     required this.materialType,
     required this.status,
@@ -28,6 +30,7 @@ class OrderItem {
       'materialType': materialType,
       'status': status,
       'notes': notes,
+      'unitPrice': unitPrice,
       'attachments': attachments,
     };
   }
@@ -35,6 +38,7 @@ class OrderItem {
   factory OrderItem.fromMap(Map<String, dynamic> map) {
     return OrderItem(
       id: map['id'],
+      unitPrice: map['unitPrice'],
       operationDescription: map['operationDescription'],
       quantity: map['quantity'],
       materialType: map['materialType'],

@@ -56,6 +56,23 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
     }
   }
 
+  Future<void> _updateOrderStatus(OrderModel item, String newStatus) async {
+    try {
+      await context.read<ItemDetailsCubit>().updateOrderStatus(
+        widget.orderId,
+        item.id,
+        newStatus,
+      );
+      setState(() {
+        _itemsFuture = _fetchItemsForOrder();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update status: ${e.toString()}')),
+      );
+    }
+  }
+
   void _toggleItemSelection(OrderItem item, bool? selected) {
     setState(() {
       if (selected == true) {
@@ -155,7 +172,7 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
                   padding: const EdgeInsets.all(16.0),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      OrderSummaryCard(order: widget.order, theme: theme,),
+                      OrderSummaryCard(order: widget.order, theme: theme, onStatusChanged: (value) => _updateOrderStatus(widget.order,value),),
                       const SizedBox(height: 20),
                       StatisticsRow( statusCounts: statusCounts, completionPercentage: completionPercentage, theme: theme,),
                       const SizedBox(height: 20),
@@ -225,7 +242,6 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
           : null,
     );
   }
-
 
 }
 

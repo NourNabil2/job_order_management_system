@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
@@ -36,15 +37,10 @@ class OrderDataTableSource extends DataTableSource {
         DataCell(
           CustomPopupMenu(
             items: const [
-              CustomPopupMenuItem(
+               CustomPopupMenuItem(
                 value: 'view_details',
                 label: 'View Item Details',
                 icon: Icons.remove_red_eye,
-              ),
-              CustomPopupMenuItem(
-                value: 'create_invoice',
-                label: 'Create Invoice',
-                icon: Icons.receipt,
               ),
             ],
             onSelected: (value) {

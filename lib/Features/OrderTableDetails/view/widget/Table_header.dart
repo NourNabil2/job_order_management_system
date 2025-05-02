@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 
@@ -38,7 +39,7 @@ class OrderHeader extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          ElevatedButton(
+       if (CashSaver.userRole == 'admin') ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
               backgroundColor: ColorApp.mainLight,
@@ -52,7 +53,7 @@ class OrderHeader extends StatelessWidget {
               buttonText,
               style: const TextStyle(fontSize: 14),
             ),
-          ),
+          ) else const SizedBox.shrink(),
         ],
       ),
     );
