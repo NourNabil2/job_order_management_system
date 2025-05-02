@@ -1,17 +1,19 @@
 // navbar.dart
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
 import 'package:quality_management_system/Core/Widgets/CustomIcon.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_Button_widget.dart';
-import 'package:quality_management_system/Core/components/added_message_screen.dart';
 import 'package:quality_management_system/Features/Dashboard/view/mainScreen.dart';
 import 'package:quality_management_system/Core/models/nav_Item_model.dart';
-import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
 import 'package:quality_management_system/Features/auth/view/screens/memberTable_Screen.dart';
 import 'package:quality_management_system/Features/auth/view/screens/signin_screen.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -19,8 +21,11 @@ import 'Core/Widgets/alert_widget.dart';
 import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 
 class Navbar extends StatefulWidget {
-  const Navbar({super.key});
+  final String role;
+
+  Navbar({super.key, required this.role});
   static String id = 'Mainscreen';
+
 
   @override
   State<Navbar> createState() => _NavbarState();
@@ -28,6 +33,39 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   int selectedIndex = 0;
+
+
+  final List<Widget> _adminScreens = [
+    const MainScreen(),
+    const OrdersTableDetails(),
+    const MembertableScreen(),
+  ];
+
+  final List<Widget> _userScreens = [
+    const OrdersTableDetails(),
+    const OrdersTableDetails(),
+    const MembertableScreen(),
+  ];
+
+
+  void _fetchUserRole() async {
+
+    setState(() {
+      CashSaver.userRole = widget.role;
+    });
+
+    log('state.userData.role1111 ${widget.role}');
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserRole();
+  }
+
+
+
   final SidebarXController sidebarController = SidebarXController(
     selectedIndex: 0,
     extended: true, // Start with sidebar expanded
@@ -109,7 +147,7 @@ class _NavbarState extends State<Navbar> {
                     onConfirm: () async {
                       // تنفيذ تسجيل الخروج من Firebase
                       await FirebaseAuth.instance.signOut();
-
+                      await CashSaver.clearAllData();
                       // التنقل لصفحة تسجيل الدخول مع حذف كل الصفحات السابقة
                       Navigator.pushAndRemoveUntil(
                         context,
@@ -145,15 +183,12 @@ class _NavbarState extends State<Navbar> {
   }
 
   Widget _getSelectedScreen() {
-    switch (selectedIndex) {
-      case 0:
-        return const MainScreen();
-      case 1:
-        return const OrdersTableDetails();
-      case 2:
-        return const MembertableScreen();
-      default:
-        return const MainScreen();
+    if (CashSaver.userRole == 'admin') {
+      return _adminScreens[selectedIndex];
+    } else {
+      return _userScreens[selectedIndex];
     }
   }
+
+
 }

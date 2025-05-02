@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/theme/app_theme.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 import 'package:quality_management_system/Features/auth/view/screens/signin_screen.dart';
 import 'package:quality_management_system/dependency_injection.dart';
 import 'package:quality_management_system/my_bloc_observer.dart';
@@ -33,7 +33,7 @@ void main() async {
   //     logLevel: RealtimeLogLevel.info,
   //   ),
   // );
-
+  CashSaver.userRole = await CashSaver.getData(key: 'userRole');
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -63,34 +63,17 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: AppTheme.light,
           routes: {
-            Navbar.id: (context) => const Navbar(),
+            Navbar.id: (context) => Navbar(role: CashSaver.userRole!,),
             SigninScreen.id: (context) => const SigninScreen(),
           },
           home: StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasData) {
-                return FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance
-                      .collection('Users')
-                      .doc(snapshot.data!.email)
-                      .get(),
-                  builder: (context, userSnapshot) {
-                    if (userSnapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    if (userSnapshot.hasData) {
-                      final role = userSnapshot.data?.get('role') as String?;
-                      return role == 'admin'
-                          ? const Navbar()
-                          : const OrdersTableDetails();
-                    }
-                    return const SigninScreen();
-                  },
-                );
+                return Navbar(role: CashSaver.userRole!,); // التحقق من الدور يتم داخل Navbar
               }
               return const SigninScreen();
             },

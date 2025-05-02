@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
@@ -51,38 +53,53 @@ class _SigninScreenScreenState extends State<SigninScreen> {
     return BlocProvider(
       create: (context) => sl<SigninCubit>(),
       child: BlocConsumer<SigninCubit, SigninState>(
-        listener: (context, state) {
-          if (state is SigninResetPassword) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return BlocProvider(
-                create: (context) => sl<SignupCubit>(),
-                child: ResetPasswordScreen(email: emailController.text,),
+          listener: (context, state) async {
+            if (state is SigninResetPassword) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => sl<SignupCubit>(),
+                    child: ResetPasswordScreen(email: emailController.text),
+                  ),
+                ),
               );
-            }));
-          } else if (state is SigninFailure) {
-            showCustomAlert(context: context, isSuccess: false, onConfirm: () {
+            }
 
-            },);
-            showCustomSnackBar(context, state.message);
-          } else if (state is SigninUserSuccess) {
-Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const OrdersTableDetails(),), (route) => false,).then((value) async {
-  isRememberMe ? await CashSaver.saveData(key: 'isRememberMe', value: isRememberMe) : null ;
+            else if (state is SigninFailure) {
+              showCustomAlert(
+                context: context,
+                isSuccess: false,
+                onConfirm: () {},
+              );
+              showCustomSnackBar(context, state.message);
+            }
 
-},);
-            showCustomAlert(context: context, isSuccess: true, onConfirm: () {
+            else if (state is SigninSuccess) {
 
-            },);
-            showCustomSnackBar(context, "Login Successful");
-          } else if (state is SigninUserSuccess) {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Navbar(),) ,(route) => false, ).then((value) async {
-              isRememberMe ? await CashSaver.saveData(key: 'isRememberMe', value: isRememberMe) : null;
-            },);
-            showCustomAlert(context: context, isSuccess: true, onConfirm: () {
+              // حفظ حالة تذكّر الدخول
+              if (isRememberMe) {
+                await CashSaver.saveData(key: 'isRememberMe', value: true);
 
-            },);
-            showCustomSnackBar(context, "Login Successful");
-          }
-        },
+              }
+              // حفظ role في SharedPreferences
+              await CashSaver.saveData(key: 'userRole', value: state.userData.role);
+              log(' state.userData.role ${ state.userData.role}');
+              // الانتقال إلى الصفحة الرئيسية
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => Navbar(role: state.userData.role,)),
+                    (route) => false,
+              );
+
+              showCustomAlert(
+                context: context,
+                isSuccess: true,
+                onConfirm: () {},
+              );
+              showCustomSnackBar(context, "Login Successful");
+            }
+          },
         builder: (context, state) {
           return ResponsiveBuilder(
             mobileBuilder: (p0) => Scaffold(

@@ -40,7 +40,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         if (state is SignupFailure) {
           showCustomSnackBar(context, state.message);
         } else if (state is SignupSuccess) {
-          showCustomSnackBar(context, "Password Reset Successfuly");
+          Navigator.pop(context);
+          showCustomSnackBar(context, "Password Reset Successfully");
         }
       },
       builder: (context, state) {

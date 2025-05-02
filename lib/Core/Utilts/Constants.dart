@@ -6,14 +6,14 @@ class ColorApp {
   static const mainDark = Color(0xff373737);
   static const primaryColor = Color(0xff3B638C);
 
-  static const Color blackColor = Color(0xFF16161E);
+  static const Color blackColor   = Color(0xFF16161E);
   static const Color blackColor90 = Color(0xff42474e);
   static const Color blackColor80 = Color(0xFF45454B);
   static const Color blackColor60 = Color(0xFF737378);
   static const Color blackColor40 = Color(0xFFA2A2A5);
   static const Color blackColor20 = Color(0xFFD0D0D2);
   static const Color blackColor10 = Color(0xFFE8E8E9);
-  static const Color blackColor5 = Color(0xFFF3F3F4);
+  static const Color blackColor5  = Color(0xFFF3F3F4);
 
   static const Color greyColor = Color(0xFFB8B5C3);
   static const Color lightGreyColor = Color(0xFFF8F8F9);
@@ -43,6 +43,10 @@ class ColorApp {
 }
 
 class StringApp {
+
+  //EndPoints
+  static const users = 'Users';
+
   static const titleApp = '';
   //admin
   static const done = 'تم الانهاء';
