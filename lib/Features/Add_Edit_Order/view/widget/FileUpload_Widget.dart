@@ -1,11 +1,39 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Widgets/alert_widget.dart';
 import 'package:quality_management_system/Core/components/DialogAlertMessage.dart';
+
+class FileAttachment {
+  final String fileName;
+  final String filePath;
+  final int fileSize;
+  final dynamic fileData; // File for mobile, Uint8List for web
+
+  FileAttachment({
+    required this.fileName,
+    required this.filePath,
+    required this.fileSize,
+    this.fileData,
+  });
+
+  // For compatibility with existing code
+  File get fileObject => kIsWeb ? throw UnsupportedError('Cannot get File object on web') : File(filePath);
+
+  // Convert platform-specific object to bytes
+  Future<Uint8List> getBytes() async {
+    if (kIsWeb) {
+      return fileData as Uint8List;
+    } else {
+      return await File(filePath).readAsBytes();
+    }
+  }
+}
 
 class FileUploadWidget extends StatefulWidget {
   final List<FileAttachment> attachments;
@@ -33,9 +61,9 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
           'Attachments',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-         SizedBox(height: SizeApp.s8),
+        SizedBox(height: SizeApp.s8),
         _buildDropZone(),
-         SizedBox(height: SizeApp.s16),
+        SizedBox(height: SizeApp.s16),
         if (widget.attachments.isNotEmpty) _buildAttachmentsList(),
       ],
     );
@@ -44,14 +72,18 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
   Widget _buildDropZone() {
     return GestureDetector(
       onTap: _pickFiles,
-      child: DragTarget<List<File>>(
+      child: DragTarget<List<dynamic>>(
         onWillAccept: (_) {
           setState(() => _isDragging = true);
           return true;
         },
         onAccept: (files) {
           setState(() => _isDragging = false);
-          _handleDroppedFiles(files);
+          // Web drag and drop is handled differently and
+          // currently not fully supported in this widget
+          if (!kIsWeb) {
+            _handleDroppedFiles(files.cast<File>());
+          }
         },
         onLeave: (_) {
           setState(() => _isDragging = false);
@@ -80,17 +112,19 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
                     size: 48,
                     color: _isDragging ? ColorApp.mainLight : Colors.grey,
                   ),
-                   SizedBox(height: SizeApp.s16),
+                  SizedBox(height: SizeApp.s16),
                   Text(
-                    'Drag and drop files here',
+                    kIsWeb ? 'Click to select files' : 'Drag and drop files here',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                   SizedBox(height: SizeApp.s8),
-                  Text(
-                    'or',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                   SizedBox(height: SizeApp.s8),
+                  if (!kIsWeb) ...[
+                    SizedBox(height: SizeApp.s8),
+                    Text(
+                      'or',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                  SizedBox(height: SizeApp.s8),
                   ElevatedButton(
                     onPressed: _pickFiles,
                     child: const Text('Browse Files'),
@@ -112,7 +146,7 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
           'Selected Files (${widget.attachments.length})',
           style: Theme.of(context).textTheme.titleSmall,
         ),
-         SizedBox(height: SizeApp.s8),
+        SizedBox(height: SizeApp.s8),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -150,38 +184,51 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
         allowMultiple: true,
         type: FileType.custom,
         allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'],
+        withData: kIsWeb, // Important: get file bytes for web
       );
 
       if (result != null && result.files.isNotEmpty) {
         final newAttachments = result.files.map((file) {
-          final path = file.path;
-          if (path == null) {
-            throw Exception('File path is null');
-          }
-
-          return FileAttachment(
-            fileName: file.name,
-            filePath: path,
-            fileSize: file.size,
-            file: File(path),
-          );
-        }).toList();
-
-        // Check file size limit (10MB)
-        for (var attachment in newAttachments) {
-          if (attachment.fileSize > 10 * 1024 * 1024) {
+          // Check file size limit (10MB)
+          if (file.size > 10 * 1024 * 1024) {
             showCustomOptionsDialog(
               title: 'Wrong',
-              content: 'File ${attachment.fileName} exceeds 10MB limit',
+              content: 'File ${file.name} exceeds 10MB limit',
               onConfirm: () {},
-              context: context, confirmText: 'OK',
+              context: context,
+              confirmText: 'OK',
             );
-            return;
+            return null;
           }
-        }
 
-        final updatedAttachments = [...widget.attachments, ...newAttachments];
-        widget.onAttachmentsChanged(updatedAttachments);
+          if (kIsWeb) {
+            // Web implementation
+            return FileAttachment(
+              fileName: file.name,
+              filePath: file.name, // We don't have a real path on web
+              fileSize: file.size,
+              fileData: file.bytes, // Store the bytes directly
+            );
+          } else {
+            // Mobile implementation
+            final path = file.path;
+            if (path == null) {
+              throw Exception('File path is null');
+            }
+
+            return FileAttachment(
+              fileName: file.name,
+              filePath: path,
+              fileSize: file.size,
+              fileData: File(path),
+            );
+          }
+        }).whereType<FileAttachment>().toList(); // Filter out nulls (files exceeding size limit)
+
+        if (newAttachments.isNotEmpty) {
+          final updatedAttachments = [...widget.attachments, ...newAttachments];
+          widget.onAttachmentsChanged(updatedAttachments);
+        }
       }
     } catch (e) {
       log('$e');
@@ -189,22 +236,43 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
         title: 'Wrong',
         content: 'Error picking files: $e',
         onConfirm: () {},
-        context: context, confirmText: 'OK',
+        context: context,
+        confirmText: 'OK',
       );
     }
   }
 
   void _handleDroppedFiles(List<File> files) {
+    // This is only for mobile platforms
+    if (kIsWeb) return;
+
     final newAttachments = files.map((file) {
+      final fileSize = file.lengthSync();
+
+      // Check file size limit (10MB)
+      if (fileSize > 10 * 1024 * 1024) {
+        showCustomOptionsDialog(
+          title: 'Wrong',
+          content: 'File ${file.path.split('/').last} exceeds 10MB limit',
+          onConfirm: () {},
+          context: context,
+          confirmText: 'OK',
+        );
+        return null;
+      }
+
       return FileAttachment(
         fileName: file.path.split('/').last,
         filePath: file.path,
-        fileSize: file.lengthSync(),
+        fileSize: fileSize,
+        fileData: file,
       );
-    }).toList();
+    }).whereType<FileAttachment>().toList(); // Filter out nulls
 
-    final updatedAttachments = [...widget.attachments, ...newAttachments];
-    widget.onAttachmentsChanged(updatedAttachments);
+    if (newAttachments.isNotEmpty) {
+      final updatedAttachments = [...widget.attachments, ...newAttachments];
+      widget.onAttachmentsChanged(updatedAttachments);
+    }
   }
 
   void _removeAttachment(int index) {
@@ -253,21 +321,4 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
       return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
     }
   }
-}
-
-class FileAttachment {
-  final String fileName;
-  final String filePath;
-  final int fileSize;
-  final File? file;
-
-  FileAttachment({
-    required this.fileName,
-    required this.filePath,
-    required this.fileSize,
-    this.file,
-  });
-
-  // Getter to access the file object
-  File get path => File(filePath);
 }

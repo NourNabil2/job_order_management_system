@@ -1,11 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:quality_management_system/Core/Utilts/Image_Compressor.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/FileUpload_Widget.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
+import 'package:image/image.dart' as img;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:supabase_flutter/supabase_flutter.dart';
 part 'add_order_state.dart';
 
@@ -20,22 +23,34 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
   final SupabaseClient supabase = Supabase.instance.client;
 
 
-void changeLoading()
-{
-  isLoading = !isLoading;
-  emit(ChangeLoading());
-}
+  void changeLoading()
+  {
+    isLoading = !isLoading;
+    emit(ChangeLoading());
+  }
 
+  Future<File> compressImage(File file) async {
+    // قراءة الملف وتحويله إلى صورة
+    final bytes = await file.readAsBytes();
+    final image = img.decodeImage(Uint8List.fromList(bytes));
 
+    // ضغط الصورة (مثلاً إلى 50% من الحجم الأصلي)
+    final compressedImage = img.encodeJpg(image!, quality: 50);
 
-  Future<void> addOrder({
+    // حفظ الصورة المضغوطة إلى ملف جديد
+    final compressedFile = File('${file.parent.path}/compressed_${file.path}');
+    await compressedFile.writeAsBytes(compressedImage);
+
+    return compressedFile;
+  }
+  Future addOrder({
     required String orderNumber,
     required String companyName,
     required String supplyNumber,
     required String attachmentType,
     required DateTime dateLine,
     required String orderStatus,
-    required List<OrderItem> items,
+    required List items,
     required List<FileAttachment> attachments,
   }) async {
     emit(AddOrderLoading());
@@ -44,25 +59,41 @@ void changeLoading()
       final orderRef = _firestore.collection('orders').doc();
       final itemsRef = orderRef.collection('items');
 
-      // 1. Upload files to Supabase
-      List<String> uploadedUrls = [];
+      // 1. Upload files to Supabase with compression
+      List uploadedUrls = [];
 
       for (final attachment in attachments) {
         final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
         final filePath = 'orders/${orderRef.id}/$fileName';
+       // final isImageFile = ImageCompressor.isImage(attachment.fileName);
 
-        // Upload the file to Supabase
-        await supabase.storage
-            .from('storage')
-            .upload(filePath, attachment.path);
+        if (kIsWeb) {
+          // Web platform handling
+          Uint8List bytesToUpload;
+
+          // Get bytes from the attachment
+          final bytes = await attachment.getBytes();
+
+          bytesToUpload = bytes;
+
+          // Upload bytes to Supabase
+          await supabase.storage
+              .from('storage')
+              .uploadBinary(filePath, bytesToUpload);
+        } else {
+
+            // Upload the file to Supabase
+            await supabase.storage
+                .from('storage')
+                .upload(filePath, attachment.fileObject);
+
+        }
 
         // Get the public URL
-        final fileUrl = supabase.storage
-            .from('storage')
-            .getPublicUrl(filePath);
-
+        final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
         uploadedUrls.add(fileUrl);
       }
+
 
       // 2. Prepare order data
       final orderData = {
@@ -94,12 +125,10 @@ void changeLoading()
       changeLoading();
       emit(AddOrderSuccess(orderRef.id));
     } catch (e) {
-      log('eee$e');
+      log('Error adding order: $e');
       changeLoading();
       emit(AddOrderError(e.toString()));
     }
   }
-
-
 
 }

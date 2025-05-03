@@ -72,21 +72,26 @@ class _SigninScreenScreenState extends State<SigninScreen> {
 
           else if (state is SigninSuccess) {
 
-            // حفظ حالة تذكّر الدخول
+            // Save remember me preference
             if (isRememberMe) {
               await CashSaver.saveData(key: 'isRememberMe', value: true);
-
             }
-            // حفظ role في SharedPreferences
+
+            // Save role with verification
+            log('Saving user role: ${state.userData.role}');
             await CashSaver.saveData(key: 'userRole', value: state.userData.role);
-            log(' state.userData.role ${ state.userData.role}');
-           String role = state.userData.role;
-            // الانتقال إلى الصفحة الرئيسية
-          await Navigator.pushAndRemoveUntil(
+
+            // Verify saved role
+            final savedRole = await CashSaver.getData(key: 'userRole');
+            log('Saved role verification: $savedRole');
+            if (savedRole != null) {
+              // Navigate to home
+            Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => Navbar(role: role,)),
+              MaterialPageRoute(builder: (context) => Navbar(role: state.userData.role)),
                   (route) => false,
             );
+            }
 
             showCustomAlert(
               context: context,
