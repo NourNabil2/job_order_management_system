@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/InvoiceScreen.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/widgets/AttachmentListViewer.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/widgets/OrderSummary_Card.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/widgets/SectionHeaderSelected.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view_model/Item_details/item_details_cubit.dart';
@@ -177,6 +178,8 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
                       StatisticsRow( statusCounts: statusCounts, completionPercentage: completionPercentage, theme: theme,),
                       const SizedBox(height: 20),
                       ProgressChart(statusCounts: statusCounts),
+                      const SizedBox(height: 20),
+                      AttachmentListViewer(attachmentLinks: widget.order.attachmentLinks),
                       const SizedBox(height: 20),
                       buildSectionHeader('Order Items', _selectedItems.length),
                       const SizedBox(height: 10),

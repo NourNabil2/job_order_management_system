@@ -64,6 +64,7 @@ class AddOrderCubit extends Cubit<AddOrderState> {
       itemCount: (data['itemCount'] as num).toDouble(),
       date: DateFormatter.formatDate(createdAt),
       dateLine: DateFormatter.formatDate(dateLine),
+      attachmentLinks: List<String>.from(data['attachmentLinks'] ?? []),
       orderStatus: data['orderStatus'] ?? 'Pending',
     );
   }
