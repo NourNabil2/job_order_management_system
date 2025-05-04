@@ -24,8 +24,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  bool remembered = await CashSaver.getData(key: 'isRememberMe') ?? false ;
-
   await supabase.Supabase.initialize(
     url: 'https://tcusdwgvyrddurqczvlr.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjdXNkd2d2eXJkZHVycWN6dmxyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4Mzg2MjksImV4cCI6MjA2MDQxNDYyOX0.Raw6ZVpnqV4IbXS7NOGZfIJxifWwSpp2kLU16AtHQp4',
@@ -75,8 +73,8 @@ class MyApp extends StatelessWidget {
             home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Navbar(role: CashSaver.userRole,); // التحقق من الدور يتم داخل Navbar
+                if (snapshot.hasData && CashSaver.userRole != null) {
+                  return Navbar(role: CashSaver.userRole,);
                 }
                 return const SigninScreen();
               },

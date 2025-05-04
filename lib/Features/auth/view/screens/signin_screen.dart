@@ -98,7 +98,7 @@ class _SigninScreenScreenState extends State<SigninScreen> {
               isSuccess: true,
               onConfirm: () {},
             );
-            showCustomSnackBar(context, "Login Successful");
+
           }
         },
       builder: (context, state) {
