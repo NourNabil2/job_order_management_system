@@ -64,9 +64,6 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
         item.id,
         newStatus,
       );
-      setState(() {
-        _itemsFuture = _fetchItemsForOrder();
-      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to update status: ${e.toString()}')),

@@ -7,7 +7,7 @@ import 'package:quality_management_system/Core/Widgets/custom_containerStatus.da
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 
 
-class OrderSummaryCard extends StatelessWidget {
+class OrderSummaryCard extends StatefulWidget {
   final OrderModel order;
   final ThemeData theme;
   final ValueChanged<String> onStatusChanged;
@@ -18,12 +18,27 @@ class OrderSummaryCard extends StatelessWidget {
     required this.order,
     required this.theme,
     required this.onStatusChanged,
-    this.statusOptions = const ['Pending', 'In Progress', 'Completed', 'delivered'],
+    this.statusOptions = const ['Pending', 'in_progress', 'Completed', 'Collected', 'rejected'],
   });
 
   @override
+  State<OrderSummaryCard> createState() => _OrderSummaryCardState();
+}
+
+class _OrderSummaryCardState extends State<OrderSummaryCard> {
+  late String _currentStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentStatus = widget.statusOptions.contains(widget.order.orderStatus)
+        ? widget.order.orderStatus
+        : widget.statusOptions.first;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final deadlineText = _getFormattedDeadlineText(order.dateLine);
+    final deadlineText = _getFormattedDeadlineText(widget.order.dateLine);
 
     return Card(
       elevation: 4,
@@ -36,8 +51,8 @@ class OrderSummaryCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              theme.primaryColor.withOpacity(0.8),
-              theme.primaryColor,
+              widget.theme.primaryColor.withOpacity(0.8),
+              widget.theme.primaryColor,
             ],
           ),
         ),
@@ -58,7 +73,18 @@ class OrderSummaryCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildOrderInfoColumn(),
-       CashSaver.userRole == 'admin' || CashSaver.userRole == 'collector' ? StatusDropdown(selectedStatus: statusOptions.contains(order.orderStatus) ? order.orderStatus : statusOptions.first, statusOptions: statusOptions, onStatusChanged: onStatusChanged) : StatusContainer(status: order.orderStatus),
+        CashSaver.userRole == 'admin' || CashSaver.userRole == 'collector'
+            ? StatusDropdown(
+          selectedStatus: _currentStatus,
+          statusOptions: widget.statusOptions,
+          onStatusChanged: (newStatus) {
+            setState(() {
+              _currentStatus = newStatus;
+            });
+            widget.onStatusChanged(newStatus);
+          },
+        )
+            : StatusContainer(status: _currentStatus),
       ],
     );
   }
@@ -68,7 +94,7 @@ class OrderSummaryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Order #${order.orderNumber}',
+          'Order #${widget.order.orderNumber}',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 22,
@@ -77,7 +103,7 @@ class OrderSummaryCard extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          order.companyName,
+          widget.order.companyName,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
@@ -97,7 +123,7 @@ class OrderSummaryCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildInfoRow('Attachment Type:', order.attachmentType),
+          _buildInfoRow('Attachment Type:', widget.order.attachmentType),
           const SizedBox(height: 8),
           _buildInfoRow(
             'Deadline:',

@@ -21,7 +21,7 @@ class OrderDataTableSource extends DataTableSource {
 
     return DataRow.byIndex(
       color: WidgetStateProperty.resolveWith<Color?>((states) {
-        if (order.orderStatus == 'Delivered') return Colors.green[50];
+        if (order.orderStatus == 'completed') return Colors.green[50];
         return index % 2 == 0 ? Colors.grey[100] : Colors.white;
       }),
       index: index,

@@ -29,11 +29,17 @@ class ColorApp {
     switch (status) {
       case 'Pending':
         return Colors.orange;
-      case 'In Progress':
+      case 'In Progress' :
+        return Colors.blue;
+        case 'in_progress' :
         return Colors.blue;
       case 'Completed':
         return Colors.green;
+        case 'Collected':
+        return Colors.green;
       case 'Cancelled':
+        return Colors.red;
+        case 'rejected':
         return Colors.red;
       default:
         return Colors.grey;
