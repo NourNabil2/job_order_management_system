@@ -107,13 +107,13 @@ class _NavbarState extends State<Navbar> {
               icon: CustomIcon(
                 assetPath: CashSaver.userRole == 'admin'? navItems[index].assetPath : navItemsForWorkers[index].assetPath ,
                 color: index == selectedIndex
-                    ? ColorApp.primaryColor
+                    ? ColorApp.mainLight
                     : Colors.grey,
               ),
               label: CashSaver.userRole == 'admin'? navItems[index].label : navItemsForWorkers[index].label ,
             ),
           ),
-          selectedItemColor: ColorApp.primaryColor,
+          selectedItemColor: ColorApp.mainLight,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,

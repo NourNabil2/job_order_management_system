@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
+import 'package:quality_management_system/Core/theme/text_theme.dart';
 
 
 /// PopupMenu Widget
@@ -194,7 +195,7 @@ class StatusDropdown extends StatelessWidget {
       ),
       child: Text(
         status,
-        style: const TextStyle(color: Colors.white),
+        style: appTextTheme.bodySmall
       ),
     );
   }

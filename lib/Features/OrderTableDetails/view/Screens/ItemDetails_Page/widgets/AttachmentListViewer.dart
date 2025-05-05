@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quality_management_system/Core/components/DialogAlertMessage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AttachmentListViewer extends StatelessWidget {
@@ -24,12 +25,15 @@ class AttachmentListViewer extends StatelessWidget {
     return Icons.insert_drive_file;
   }
 
-  Future<void> _openFile(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $url';
-    }
+  Future<void> _openFile(String url,context) async {
+    // if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication,webViewConfiguration: const WebViewConfiguration(enableJavaScript: false),);
+    // } else {
+    //  // showCustomAlert(context: context, isSuccess: false, onConfirm: () {
+    //
+    //  // },);
+    //   throw 'Could not launch $url';
+    // }
   }
 
   @override
@@ -49,7 +53,7 @@ class AttachmentListViewer extends StatelessWidget {
 
         if (_isImage(url)) {
           return GestureDetector(
-            onTap: () => _openFile(url),
+            onTap: () => _openFile(url,context),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
@@ -66,7 +70,7 @@ class AttachmentListViewer extends StatelessWidget {
             title: Text(fileName, overflow: TextOverflow.ellipsis),
             trailing: IconButton(
               icon: const Icon(Icons.open_in_new),
-              onPressed: () => _openFile(url),
+              onPressed: () => _openFile(url,context),
             ),
           );
         }
