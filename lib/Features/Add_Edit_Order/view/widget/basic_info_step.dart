@@ -7,7 +7,7 @@ import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/DeadLinePicker_Widget.dart';
 
 class BasicInfoStep extends StatelessWidget {
-  final TextEditingController orderNumberController;
+  //final TextEditingController orderNumberController;
   final TextEditingController companyNameController;
   final TextEditingController supplyNumberController;
   final String? selectedAttachmentType;
@@ -26,7 +26,7 @@ class BasicInfoStep extends StatelessWidget {
 
   BasicInfoStep({
     super.key,
-    required this.orderNumberController,
+    //required this.orderNumberController,
     required this.companyNameController,
     required this.supplyNumberController,
     required this.selectedAttachmentType,
@@ -54,14 +54,14 @@ class BasicInfoStep extends StatelessWidget {
               focusNode: supplyNumber,
               nextFocusNode: companyName,
             ),
-            const SizedBox(height: 16),
-            CustomFormTextField(
-              textEditingController: orderNumberController,
-              title: 'رقم إذن تشغيل المنتج',
-              hintText: 'رقم إذن تشغيل المنتج',
-              focusNode: orderNumber,
-              nextFocusNode: supplyNumber,
-            ),
+            // const SizedBox(height: 16),
+            // CustomFormTextField(
+            //   textEditingController: orderNumberController,
+            //   title: 'رقم إذن تشغيل المنتج',
+            //   hintText: 'رقم إذن تشغيل المنتج',
+            //   focusNode: orderNumber,
+            //   nextFocusNode: supplyNumber,
+            // ),
             const SizedBox(height: 16),
             CustomFormTextField(
               textEditingController: companyNameController,
@@ -124,16 +124,16 @@ class BasicInfoStep extends StatelessWidget {
                     nextFocusNode: companyName,
                   ),
                 ),
-                SizedBox(width: SizeApp.s16),
-                Expanded(
-                  child: CustomFormTextField(
-                    textEditingController: orderNumberController,
-                    title: 'رقم إذن تشغيل المنتج',
-                    hintText: 'رقم إذن تشغيل المنتج',
-                    focusNode: orderNumber,
-                    nextFocusNode: supplyNumber,
-                  ),
-                ),
+                // SizedBox(width: SizeApp.s16),
+                // Expanded(
+                //   child: CustomFormTextField(
+                //     textEditingController: orderNumberController,
+                //     title: 'رقم إذن تشغيل المنتج',
+                //     hintText: 'رقم إذن تشغيل المنتج',
+                //     focusNode: orderNumber,
+                //     nextFocusNode: supplyNumber,
+                //   ),
+                // ),
               ],
             ),
             Row(

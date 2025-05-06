@@ -28,7 +28,7 @@ class AddOrderScreen extends StatefulWidget {
 
 class _AddOrderScreenState extends State<AddOrderScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _orderNumberController = TextEditingController();
+  //final _orderNumberController = TextEditingController();
   final _companyNameController = TextEditingController();
   final _supplyNumberController = TextEditingController();
   final _itemCountController = TextEditingController();
@@ -59,7 +59,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
   @override
   void dispose() {
-    _orderNumberController.dispose();
+   // _orderNumberController.dispose();
     _companyNameController.dispose();
     _supplyNumberController.dispose();
     _itemCountController.dispose();
@@ -97,7 +97,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
     }
 
     context.read<AddNewOrderCubit>().addOrder(
-      orderNumber: _orderNumberController.text,
+    //  orderNumber: _orderNumberController.text,
       companyName: _companyNameController.text,
       attachmentType: _selectedAttachmentType!,
       supplyNumber: _supplyNumberController.text,
@@ -120,7 +120,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       Step(
         title: Text('Order Information',style: Theme.of(context).textTheme.titleLarge,),
         content: BasicInfoStep(
-          orderNumberController: _orderNumberController,
+         // orderNumberController: _orderNumberController,
           companyNameController: _companyNameController,
           supplyNumberController: _supplyNumberController,
           selectedAttachmentType: _selectedAttachmentType,
@@ -162,7 +162,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       Step(
         title: Text('Review',style: Theme.of(context).textTheme.titleLarge,),
         content: ReviewStep(
-          orderNumber: _orderNumberController.text,
+          //orderNumber: _orderNumberController.text,
           companyName: _companyNameController.text,
           attachmentType: _selectedAttachmentType,
           supplyNumber: _supplyNumberController.text,

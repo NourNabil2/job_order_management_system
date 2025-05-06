@@ -5,7 +5,7 @@ import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/Fi
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 
 class ReviewStep extends StatefulWidget {
-  final String orderNumber;
+ // final String orderNumber;
   final String companyName;
   final String? attachmentType;
   final String supplyNumber;
@@ -16,7 +16,7 @@ class ReviewStep extends StatefulWidget {
 
   const ReviewStep({
     Key? key,
-    required this.orderNumber,
+  //  required this.orderNumber,
     required this.companyName,
     required this.attachmentType,
     required this.supplyNumber,
@@ -39,7 +39,7 @@ class _ReviewStepState extends State<ReviewStep> {
         children: [
           _buildSectionTitle('Order Information'),
           _buildInfoCard([
-            _buildInfoRow('Order Number', widget.orderNumber),
+          //  _buildInfoRow('Order Number', widget.orderNumber),
             _buildInfoRow('Company Name', widget.companyName),
             _buildInfoRow('Supply Number', widget.supplyNumber),
             _buildInfoRow('Status', widget.status ?? ''),
