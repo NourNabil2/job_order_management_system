@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:quality_management_system/Core/Serviecs/Firebase_Notification.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 
 part 'dashboard_state.dart';
@@ -43,6 +44,7 @@ class DashboardCubit extends Cubit<DashboardState> {
           {
             in_progress++;
           }
+        NotificationHelper.getFirebaseMessagingToken();
 
         final dateLineTimestamp = doc['dateLine'] as Timestamp?;
         if (dateLineTimestamp != null) {

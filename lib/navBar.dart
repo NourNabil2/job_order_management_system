@@ -18,6 +18,7 @@ import 'package:quality_management_system/Features/auth/view/screens/memberTable
 import 'package:quality_management_system/Features/auth/view/screens/signin_screen.dart';
 import 'package:quality_management_system/Features/settings/view/setting_page.dart';
 import 'package:sidebarx/sidebarx.dart';
+import 'Core/Serviecs/Firebase_Notification.dart';
 import 'Core/Widgets/alert_widget.dart';
 import 'Features/OrderTableDetails/view/Screens/OrdersDetails.dart';
 
@@ -59,6 +60,7 @@ class _NavbarState extends State<Navbar> {
 
   @override
   void initState() {
+    NotificationHelper.getFirebaseMessagingToken();
     super.initState();
     _fetchUserRole();
   }
