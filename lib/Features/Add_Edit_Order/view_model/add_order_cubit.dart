@@ -60,11 +60,11 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
       final String formattedNumber = orderCount.toString().padLeft(3, '0');
 
       // إرجاع الرقم بالتنسيق المطلوب: السنة/الرقم
-      return '$currentYear/$formattedNumber';
+      return '$formattedNumber/$currentYear';
     } catch (e) {
       log('Error generating order number: $e');
       // في حالة حدوث خطأ، نرجع رقمًا افتراضيًا
-      return '$currentYear/001';
+      return '001/$currentYear';
     }
   }
 
