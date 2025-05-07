@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Serviecs/Firebase_Notification.dart';
 import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
@@ -184,6 +185,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
         listener: (context, state) {
           if (state is AddOrderSuccess)
           {
+            NotificationHelper.sendNotificationToAllUsers(title: 'أمر توريد جديد', body: 'هناك أمر توريد جديد', topic: 'all_users');
             Navigator.pop(context,);
             showCustomAlert(isSuccess: true, onConfirm: () {
 

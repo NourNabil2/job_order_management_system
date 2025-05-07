@@ -61,6 +61,7 @@ class _NavbarState extends State<Navbar> {
   @override
   void initState() {
     NotificationHelper.getFirebaseMessagingToken();
+   // NotificationHelper.checkSubscriptionStatus();
     super.initState();
     _fetchUserRole();
   }
