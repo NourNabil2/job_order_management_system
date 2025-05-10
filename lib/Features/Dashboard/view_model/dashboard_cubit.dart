@@ -31,6 +31,8 @@ class DashboardCubit extends Cubit<DashboardState> {
       DateTime? nearestDeadline;
       String? nearestOrderNumber;
 
+      final now = DateTime.now();
+
       for (final doc in orders) {
         final status = doc['orderStatus']?.toString().toLowerCase() ?? '';
 
@@ -40,18 +42,21 @@ class DashboardCubit extends Cubit<DashboardState> {
           pendingOrders++;
         } else if (status == 'rejected') {
           rejectedOrders++;
-        } else if (status == 'in_progress')
-          {
-            in_progress++;
-          }
-        NotificationHelper.getFirebaseMessagingToken();
+        } else if (status == 'in_progress') {
+          in_progress++;
+        }
+
 
         final dateLineTimestamp = doc['dateLine'] as Timestamp?;
         if (dateLineTimestamp != null) {
           final deadline = dateLineTimestamp.toDate();
-          if (nearestDeadline == null || deadline.isBefore(nearestDeadline)) {
-            nearestDeadline = deadline;
-            nearestOrderNumber = doc['orderNumber']?.toString() ?? '';
+
+          // ✅ شرط عدم اختيار موعد قديم
+          if (deadline.isAfter(now)) {
+            if (nearestDeadline == null || deadline.isBefore(nearestDeadline)) {
+              nearestDeadline = deadline;
+              nearestOrderNumber = doc['orderNumber']?.toString() ?? '';
+            }
           }
         }
       }

@@ -5,7 +5,7 @@ import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 
-class OrderItemCard extends StatelessWidget {
+class OrderItemCard extends StatefulWidget {
   final OrderItem item;
   final bool isSelected;
   final ThemeData theme;
@@ -24,6 +24,41 @@ class OrderItemCard extends StatelessWidget {
   });
 
   @override
+  State<OrderItemCard> createState() => _OrderItemCardState();
+}
+
+
+class _OrderItemCardState extends State<OrderItemCard> {
+
+  void _handleStatusChange(String newStatus) async {
+    if (newStatus == 'Completed') {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('تأكيد'),
+          content: const Text('تم إنهاء هذه العملية ولا يمكن الرجوع عنها. هل أنت متأكد؟'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('إلغاء'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('تأكيد'),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true) {
+        widget.onStatusChanged(newStatus);
+      }
+    } else {
+      widget.onStatusChanged(newStatus);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
@@ -31,8 +66,8 @@ class OrderItemCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: isSelected
-              ? Border.all(color: theme.primaryColor, width: 2)
+          border: widget.isSelected
+              ? Border.all(color: widget.theme.primaryColor, width: 2)
               : null,
         ),
         child: Padding(
@@ -45,8 +80,9 @@ class OrderItemCard extends StatelessWidget {
               const Divider(),
               const SizedBox(height: 8),
               _buildDetailChips(),
-              if (item.notes.isNotEmpty) _buildNotesSection(),
-              if (item.attachments.isNotEmpty) _buildAttachmentsSection(),
+              if (widget.item.notes.isNotEmpty) _buildNotesSection(),
+              if (widget.item.attachments.isNotEmpty) _buildAttachmentsSection(),
+              if (widget.item.deliveryDate != '') _buildDeliveryDateBox(),
             ],
           ),
         ),
@@ -57,33 +93,33 @@ class OrderItemCard extends StatelessWidget {
   Widget _buildHeaderRow() {
     return Row(
       children: [
-   if (CashSaver.userRole == 'admin' ) _buildCheckbox(),
-        const SizedBox(width: 12),
         _buildDescription(),
         const Spacer(),
-     if (CashSaver.userRole != 'collector' ) StatusDropdown(selectedStatus: statusOptions.contains(item.status) ? item.status : statusOptions.first, statusOptions: statusOptions, onStatusChanged: onStatusChanged) else StatusContainer(status: statusOptions.contains(item.status) ? item.status : statusOptions.first ),
-      ],
-    );
-  }
 
-  Widget _buildCheckbox() {
-    return SizedBox(
-      width: 24,
-      height: 24,
-      child: Checkbox(
-        value: isSelected,
-        onChanged: onSelectionChanged,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
-      ),
+        if (CashSaver.userRole != 'collector')
+          widget.item.deliveryDate != '' && CashSaver.userRole != 'admin'
+              ? const StatusContainer(status: 'Completed')
+              : StatusDropdown(
+            selectedStatus: widget.statusOptions.contains(widget.item.status)
+                ? widget.item.status
+                : widget.statusOptions.first,
+            statusOptions: widget.statusOptions,
+            onStatusChanged: _handleStatusChange,
+          )
+        else
+          StatusContainer(
+            status: widget.statusOptions.contains(widget.item.status)
+                ? widget.item.status
+                : widget.statusOptions.first,
+          ),
+      ],
     );
   }
 
   Widget _buildDescription() {
     return Expanded(
       child: Text(
-        item.operationDescription,
+        widget.item.operationDescription,
         style: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 16,
@@ -92,13 +128,12 @@ class OrderItemCard extends StatelessWidget {
     );
   }
 
-
   Widget _buildDetailChips() {
     return Row(
       children: [
-        _buildDetailChip(Icons.format_list_numbered, 'عدد: ${item.quantity}'),
-        if (item.materialType.isNotEmpty)
-          _buildDetailChip(Icons.category, item.materialType),
+        _buildDetailChip(Icons.format_list_numbered, 'عدد: ${widget.item.quantity}'),
+        if (widget.item.materialType.isNotEmpty)
+          _buildDetailChip(Icons.category, widget.item.materialType),
       ],
     );
   }
@@ -144,7 +179,7 @@ class OrderItemCard extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          item.notes,
+          widget.item.notes,
           style: TextStyle(
             color: Colors.grey[600],
             fontSize: 14,
@@ -170,7 +205,7 @@ class OrderItemCard extends StatelessWidget {
         const SizedBox(height: 6),
         Wrap(
           spacing: 8,
-          children: item.attachments
+          children: widget.item.attachments
               .map((attachment) => Chip(
             label: Text(
               attachment,
@@ -183,6 +218,30 @@ class OrderItemCard extends StatelessWidget {
               .toList(),
         ),
       ],
+    );
+  }
+
+  Widget _buildDeliveryDateBox() {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.green.shade100,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            'تم الانتهاء في ${widget.item.deliveryDate}',
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -28,14 +28,12 @@ class Navbar extends StatefulWidget {
   Navbar({super.key, this.role});
   static String id = 'Mainscreen';
 
-
   @override
   State<Navbar> createState() => _NavbarState();
 }
 
 class _NavbarState extends State<Navbar> {
   int selectedIndex = 0;
-
 
   final List<Widget> _adminScreens = [
     const MainScreen(),
@@ -47,26 +45,23 @@ class _NavbarState extends State<Navbar> {
     const OrdersTableDetails(),
   ];
 
-
   void _fetchUserRole() async {
-
     setState(() {
       CashSaver.userRole = widget.role;
+      if (widget.role == 'admin') {
+        NotificationHelper.checkSubscriptionStatusAdmin();
+      } else {
+        NotificationHelper.checkSubscriptionStatus();
+      }
     });
-
-    log('state.userData.role1111 ${widget.role}');
   }
-
 
   @override
   void initState() {
     NotificationHelper.getFirebaseMessagingToken();
-   // NotificationHelper.checkSubscriptionStatus();
     super.initState();
     _fetchUserRole();
   }
-
-
 
   final SidebarXController sidebarController = SidebarXController(
     selectedIndex: 0,
@@ -77,50 +72,62 @@ class _NavbarState extends State<Navbar> {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
       mobileBuilder: (context) => Scaffold(
-        appBar: CustomAppBar(title: StringApp.overView, icon: AssetsManager.dashboard ,onTap: () {
-          showCustomOptionsDialog(
-            context: context,
-            title: 'تسجيل الخروج',
-            content: 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
-            confirmText: 'نعم',
-            onConfirm: () async {
-              // تنفيذ تسجيل الخروج من Firebase
-              await FirebaseAuth.instance.signOut();
-              await CashSaver.clearAllData();
-              // التنقل لصفحة تسجيل الدخول مع حذف كل الصفحات السابقة
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const SigninScreen()),
-                    (route) => false,
-              );
-            },
-          );
-        } ,),
-        body: SingleChildScrollView(child: _getSelectedScreen()),
-          bottomNavigationBar: CashSaver.userRole == 'admin' ? BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: (index) {
-            setState(() {
-              selectedIndex = index;
-            });
+        appBar: CustomAppBar(
+          title: StringApp.overView,
+          icon: AssetsManager.dashboard,
+          onTap: () {
+            showCustomOptionsDialog(
+              context: context,
+              title: 'تسجيل الخروج',
+              content: 'هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟',
+              confirmText: 'نعم',
+              onConfirm: () async {
+                // تنفيذ تسجيل الخروج من Firebase
+                await FirebaseAuth.instance.signOut();
+                await CashSaver.clearAllData();
+                // التنقل لصفحة تسجيل الدخول مع حذف كل الصفحات السابقة
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SigninScreen()),
+                  (route) => false,
+                );
+              },
+            );
           },
-          items: List.generate(
-            CashSaver.userRole == 'admin'? navItems.length : navItemsForWorkers.length,
-                (index) => BottomNavigationBarItem(
-              icon: CustomIcon(
-                assetPath: CashSaver.userRole == 'admin'? navItems[index].assetPath : navItemsForWorkers[index].assetPath ,
-                color: index == selectedIndex
-                    ? ColorApp.mainLight
-                    : Colors.grey,
-              ),
-              label: CashSaver.userRole == 'admin'? navItems[index].label : navItemsForWorkers[index].label ,
-            ),
-          ),
-          selectedItemColor: ColorApp.mainLight,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-        ) : null ,
+        ),
+        body: SingleChildScrollView(child: _getSelectedScreen()),
+        bottomNavigationBar: CashSaver.userRole == 'admin'
+            ? BottomNavigationBar(
+                currentIndex: selectedIndex,
+                onTap: (index) {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+                items: List.generate(
+                  CashSaver.userRole == 'admin'
+                      ? navItems.length
+                      : navItemsForWorkers.length,
+                  (index) => BottomNavigationBarItem(
+                    icon: CustomIcon(
+                      assetPath: CashSaver.userRole == 'admin'
+                          ? navItems[index].assetPath
+                          : navItemsForWorkers[index].assetPath,
+                      color: index == selectedIndex
+                          ? ColorApp.mainLight
+                          : Colors.grey,
+                    ),
+                    label: CashSaver.userRole == 'admin'
+                        ? navItems[index].label
+                        : navItemsForWorkers[index].label,
+                  ),
+                ),
+                selectedItemColor: ColorApp.mainLight,
+                unselectedItemColor: Colors.grey,
+                showUnselectedLabels: true,
+                type: BottomNavigationBarType.fixed,
+              )
+            : null,
       ),
       desktopBuilder: (context) => Scaffold(
         body: Row(
@@ -137,26 +144,40 @@ class _NavbarState extends State<Navbar> {
                 ),
               ),
               theme: SidebarXTheme(
-                selectedItemDecoration: BoxDecoration(color: ColorApp.mainLight,borderRadius: BorderRadius.circular(SizeApp.radius)),
-                iconTheme: const IconThemeData(color:ColorApp.mainLight),
+                selectedItemDecoration: BoxDecoration(
+                    color: ColorApp.mainLight,
+                    borderRadius: BorderRadius.circular(SizeApp.radius)),
+                iconTheme: const IconThemeData(color: ColorApp.mainLight),
                 width: 70, // Collapsed width
                 margin: const EdgeInsets.all(10),
-                hoverTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.mainLight),
+                hoverTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: ColorApp.mainLight),
                 decoration: BoxDecoration(
                   color: ColorApp.primaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.mainLight),
-                selectedTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorApp.primaryColor),
-
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: ColorApp.mainLight),
+                selectedTextStyle: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: ColorApp.primaryColor),
               ),
-             extendIcon: Icons.arrow_forward_ios,
+              extendIcon: Icons.arrow_forward_ios,
               collapseIcon: Icons.arrow_back_ios_new,
               headerBuilder: (context, extended) => Padding(
                 padding: EdgeInsets.all(SizeApp.defaultPadding),
-                child: CustomIcon(assetPath: AssetsManager.logoWhite,isImage: true,size: SizeApp.logoSize,),
+                child: CustomIcon(
+                  assetPath: AssetsManager.logoWhite,
+                  isImage: true,
+                  size: SizeApp.logoSize,
+                ),
               ),
-              footerBuilder: (context, extended) =>  CustomCancelButon(
+              footerBuilder: (context, extended) => CustomCancelButon(
                 text: 'LogOut',
                 onTap: () {
                   showCustomOptionsDialog(
@@ -168,22 +189,38 @@ class _NavbarState extends State<Navbar> {
                       // تنفيذ تسجيل الخروج من Firebase
                       await FirebaseAuth.instance.signOut();
                       await CashSaver.clearAllData();
+                      CashSaver.userRole == 'admin' ? NotificationHelper.unsubscribeFromTopic('admin') : NotificationHelper.unsubscribeFromTopic('all_users');
                       // التنقل لصفحة تسجيل الدخول مع حذف كل الصفحات السابقة
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => const SigninScreen()),
-                            (route) => false,
+                        MaterialPageRoute(
+                            builder: (context) => const SigninScreen()),
+                        (route) => false,
                       );
                     },
                   );
                 },
-        ),
-              footerDivider: const Divider(thickness: 0.3,),
+              ),
+              footerDivider: const Divider(
+                thickness: 0.3,
+              ),
               items: List.generate(
-                CashSaver.userRole == 'admin'? navItems.length : navItemsForWorkers.length,
-                    (index) => SidebarXItem(
-                  iconBuilder: (selected, hovered) => CustomIcon(assetPath: CashSaver.userRole == 'admin'? navItems[index].assetPath : navItemsForWorkers[index].assetPath,color: selectedIndex == index ? ColorApp.primaryColor : ColorApp.mainLight, size: SizeApp.iconSizeMedium,),
-                  label: CashSaver.userRole == 'admin'? navItems[index].label : navItemsForWorkers[index].label ,
+                CashSaver.userRole == 'admin'
+                    ? navItems.length
+                    : navItemsForWorkers.length,
+                (index) => SidebarXItem(
+                  iconBuilder: (selected, hovered) => CustomIcon(
+                    assetPath: CashSaver.userRole == 'admin'
+                        ? navItems[index].assetPath
+                        : navItemsForWorkers[index].assetPath,
+                    color: selectedIndex == index
+                        ? ColorApp.primaryColor
+                        : ColorApp.mainLight,
+                    size: SizeApp.iconSizeMedium,
+                  ),
+                  label: CashSaver.userRole == 'admin'
+                      ? navItems[index].label
+                      : navItemsForWorkers[index].label,
                   onTap: () => selectedIndex = index,
                 ),
               ),
@@ -209,6 +246,4 @@ class _NavbarState extends State<Navbar> {
       return _userScreens[selectedIndex];
     }
   }
-
-
 }

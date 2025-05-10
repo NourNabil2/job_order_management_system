@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/FileUpload_Widget.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/file_upload_widget.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 
 class ReviewStep extends StatefulWidget {
@@ -12,10 +13,12 @@ class ReviewStep extends StatefulWidget {
   final String? status;
   final List<OrderItem> orderItems;
   final List<FileAttachment> attachments;
+  final List<FileAttachment> attachmentsOrder;
   final Function(List<FileAttachment>) onAttachmentsChanged;
+  final Function(List<FileAttachment>) onAttachmentOrdersChanged;
 
   const ReviewStep({
-    Key? key,
+    super.key,
   //  required this.orderNumber,
     required this.companyName,
     required this.attachmentType,
@@ -23,8 +26,10 @@ class ReviewStep extends StatefulWidget {
     required this.status,
     required this.orderItems,
     this.attachments = const [],
+    this.attachmentsOrder = const [],
     required this.onAttachmentsChanged,
-  }) : super(key: key);
+    required this.onAttachmentOrdersChanged,
+  });
 
   @override
   _ReviewStepState createState() => _ReviewStepState();
@@ -56,9 +61,20 @@ class _ReviewStepState extends State<ReviewStep> {
            SizedBox(height: SizeApp.s16),
 
           // File upload widget
-          FileUploadWidget(
-            attachments: widget.attachments,
-            onAttachmentsChanged: widget.onAttachmentsChanged,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FileUploadWidget(
+                attachments: widget.attachments,
+                onAttachmentsChanged: widget.onAttachmentsChanged,
+                title: 'مرفقات الورشه',
+              ),
+              FileUploadWidget(
+                attachments: widget.attachmentsOrder,
+                onAttachmentsChanged: widget.onAttachmentOrdersChanged,
+                title: 'مرفق أمر التوريد',
+              ),
+            ],
           ),
            SizedBox(height: SizeApp.s16),
         ],

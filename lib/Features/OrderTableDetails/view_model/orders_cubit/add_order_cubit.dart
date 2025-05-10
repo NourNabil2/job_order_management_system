@@ -2,20 +2,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 
 part 'add_order_state.dart';
 
-class AddOrderCubit extends Cubit<AddOrderState> {
+class OrdersCubit extends Cubit<AddOrderState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Stream<List<OrderModel>>? _ordersStream;
 
-  AddOrderCubit() : super(AddOrderInitial()) {
+  OrdersCubit() : super(AddOrderInitial()) {
     _setupOrdersStream();
   }
 
-  static AddOrderCubit get(context) => BlocProvider.of(context);
+  static OrdersCubit get(context) => BlocProvider.of(context);
   /// ---------------- functions -----------------///
   void sortOrders<T>(
       List<OrderModel> orders,
@@ -65,6 +64,7 @@ class AddOrderCubit extends Cubit<AddOrderState> {
       date: DateFormatter.formatDate(createdAt),
       dateLine: DateFormatter.formatDate(dateLine),
       attachmentLinks: List<String>.from(data['attachmentLinks'] ?? []),
+      attachmentOrderLinks: List<String>.from(data['attachmentOrderLinks'] ?? []),
       orderStatus: data['orderStatus'] ?? 'Pending',
     );
   }

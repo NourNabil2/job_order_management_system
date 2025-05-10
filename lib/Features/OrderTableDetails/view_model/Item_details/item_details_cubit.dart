@@ -2,6 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:quality_management_system/Core/Serviecs/Firebase_Notification.dart';
+import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 
 part 'item_details_state.dart';
@@ -32,6 +34,7 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
           quantity: (data['quantity'] as num).toInt(),
           materialType: data['materialType'] ?? '',
           notes: data['notes'] ?? '',
+          deliveryDate: data['deliveryDate'] ?? '',
           attachments: List<String>.from(data['attachments'] ?? []),
           unitPrice: 100
         );
@@ -45,18 +48,30 @@ class ItemDetailsCubit extends Cubit<ItemDetailsState> {
     }
   }
 
-  Future<void> updateItemStatus(String orderId, String itemId, String newStatus) async {
+  Future<void> updateItemStatus(String orderId, String itemId, String newStatus, String itemName) async {
     try {
+      final updateData = {'status': newStatus};
+
+      if (newStatus == 'Completed') {
+        updateData['deliveryDate'] = DateFormatter.formatDate(DateTime.now());
+        await NotificationHelper.sendNotificationToAllUsers(title: 'تم انتهاء من بند', body: 'انتهي عمل بند:  ${itemName}', topic: 'all_users');
+      } else {
+        updateData['deliveryDate'] = '';
+        await NotificationHelper.sendNotificationToAllUsers(title: 'تم تغيير حاله بند', body: 'تم تغيير حاله بند: ${itemName} الي ${newStatus}', topic: 'all_users');
+
+      }
+
       await _firestore
           .collection('orders')
           .doc(orderId)
           .collection('items')
           .doc(itemId)
-          .update({'status': newStatus});
+          .update(updateData);
     } catch (e) {
       throw Exception('Failed to update item status');
     }
   }
+
 
   Future<void> updateOrderStatus(String orderId, String itemId, String newStatus) async {
     try {

@@ -9,7 +9,7 @@ import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/widget/Table_header.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/widget/orderDataTableSource.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view_model/add_order_cubit/add_order_cubit.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view_model/orders_cubit/add_order_cubit.dart';
 
 class OrdersTableDetails extends StatefulWidget {
   const OrdersTableDetails({super.key});
@@ -56,8 +56,8 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
             },
           ),
         ResponsiveBuilder(mobileBuilder: (p0) =>   BlocProvider(
-          create: (context) => AddOrderCubit(),
-          child: BlocConsumer<AddOrderCubit, AddOrderState>(
+          create: (context) => OrdersCubit(),
+          child: BlocConsumer<OrdersCubit, AddOrderState>(
             listener: (context, state) {
               if (state is OrdersLoaded) {
                 _sortedOrders = List.from(state.orders); // تحديث القائمة المفرزة
@@ -117,7 +117,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                         _sortColumnIndex = columnIndex;
                         _sortAscending = ascending;
 
-                        AddOrderCubit.get(context).sortOrders<String>(
+                        OrdersCubit.get(context).sortOrders<String>(
                           _sortedOrders,
                               (order) => order.orderNumber,
                           ascending,
@@ -134,7 +134,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                         _sortColumnIndex = columnIndex;
                         _sortAscending = ascending;
 
-                        AddOrderCubit.get(context).sortOrders<String>(
+                        OrdersCubit.get(context).sortOrders<String>(
                           _sortedOrders,
                               (order) => order.supplyNumber,
                           ascending,
@@ -148,7 +148,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                         _sortColumnIndex = columnIndex;
                         _sortAscending = ascending;
 
-                        AddOrderCubit.get(context).sortOrders<num>(
+                        OrdersCubit.get(context).sortOrders<num>(
                           _sortedOrders,
                               (order) => order.itemCount,
                           ascending,
@@ -162,7 +162,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                         _sortColumnIndex = columnIndex;
                         _sortAscending = ascending;
 
-                        AddOrderCubit.get(context).sortOrders<num>(
+                        OrdersCubit.get(context).sortOrders<num>(
                           _sortedOrders,
                               (order) => order.itemCount,
                           ascending,
@@ -177,7 +177,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                         _sortColumnIndex = columnIndex;
                         _sortAscending = ascending;
 
-                        AddOrderCubit.get(context).sortOrders<String>(
+                        OrdersCubit.get(context).sortOrders<String>(
                           _sortedOrders,
                               (order) => order.date,
                           ascending,
@@ -191,7 +191,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                         _sortColumnIndex = columnIndex;
                         _sortAscending = ascending;
 
-                        AddOrderCubit.get(context).sortOrders<String>(
+                        OrdersCubit.get(context).sortOrders<String>(
                           _sortedOrders,
                               (order) => order.dateLine,
                           ascending,
@@ -210,8 +210,8 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
           ),
         ), desktopBuilder: (p0) =>   Expanded(
           child: BlocProvider(
-            create: (context) => AddOrderCubit(),
-            child: BlocConsumer<AddOrderCubit, AddOrderState>(
+            create: (context) => OrdersCubit(),
+            child: BlocConsumer<OrdersCubit, AddOrderState>(
               listener: (context, state) {
                 if (state is OrdersLoaded) {
                   _sortedOrders = List.from(state.orders); // تحديث القائمة المفرزة
@@ -271,7 +271,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                           _sortColumnIndex = columnIndex;
                           _sortAscending = ascending;
 
-                          AddOrderCubit.get(context).sortOrders<String>(
+                          OrdersCubit.get(context).sortOrders<String>(
                             _sortedOrders,
                                 (order) => order.orderNumber,
                             ascending,
@@ -288,7 +288,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                           _sortColumnIndex = columnIndex;
                           _sortAscending = ascending;
 
-                          AddOrderCubit.get(context).sortOrders<String>(
+                          OrdersCubit.get(context).sortOrders<String>(
                             _sortedOrders,
                                 (order) => order.supplyNumber,
                             ascending,
@@ -302,7 +302,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                           _sortColumnIndex = columnIndex;
                           _sortAscending = ascending;
 
-                          AddOrderCubit.get(context).sortOrders<num>(
+                          OrdersCubit.get(context).sortOrders<num>(
                             _sortedOrders,
                                 (order) => order.itemCount,
                             ascending,
@@ -316,7 +316,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                           _sortColumnIndex = columnIndex;
                           _sortAscending = ascending;
 
-                          AddOrderCubit.get(context).sortOrders<num>(
+                          OrdersCubit.get(context).sortOrders<num>(
                             _sortedOrders,
                                 (order) => order.itemCount,
                             ascending,
@@ -331,7 +331,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                           _sortColumnIndex = columnIndex;
                           _sortAscending = ascending;
 
-                          AddOrderCubit.get(context).sortOrders<String>(
+                          OrdersCubit.get(context).sortOrders<String>(
                             _sortedOrders,
                                 (order) => order.date,
                             ascending,
@@ -345,7 +345,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                           _sortColumnIndex = columnIndex;
                           _sortAscending = ascending;
 
-                          AddOrderCubit.get(context).sortOrders<String>(
+                          OrdersCubit.get(context).sortOrders<String>(
                             _sortedOrders,
                                 (order) => order.dateLine,
                             ascending,

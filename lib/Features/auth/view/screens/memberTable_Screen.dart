@@ -2,16 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
-import 'package:quality_management_system/Core/Utilts/Responsive_Helper.dart';
 import 'package:quality_management_system/Core/components/loading_spinner.dart';
-import 'package:quality_management_system/Features/Add_Edit_Order/view/screen/AddOrder_Screen.dart';
-import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add_order_cubit.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/widget/Table_header.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view/widget/orderDataTableSource.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view_model/add_order_cubit/add_order_cubit.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_model.dart';
-import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 import 'package:quality_management_system/Features/auth/view/cubits/add_member_cubit/add_member_cubit.dart';
 import 'package:quality_management_system/Features/auth/view/screens/add_member_screen.dart';
 import 'package:quality_management_system/Features/auth/view/widgets/memberDataTableSource.dart';
@@ -29,7 +22,6 @@ class _MembertableScreenState extends State<MembertableScreen> {
   int _sortColumnIndex = 0;
   bool _sortAscending = true;
   List<UserModel> members = [];
-  List<OrderModel> _sortedOrders = []; // قائمة منفصلة للبيانات بعد الفرز
   final List<int> _availableRowsOptions = [5, 10, 15, 30, 50, 70,100, 120,200]; // اعتبر 1000000 = الكل
 
   final PaginatorController _paginatorController = PaginatorController();

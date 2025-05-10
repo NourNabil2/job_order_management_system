@@ -25,54 +25,60 @@ class MainScreen extends StatelessWidget {
             } else if (state is DashboardError) {
               return Center(child: Text(state.message));
             } else if (state is DashboardLoaded) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SectionTitle(title: 'معلومات سريعة'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              return Align(
+                alignment: AlignmentDirectional.topStart,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+
                     children: [
-                      DashboardCard(
-                        icon: Icons.person,
-                        title: 'عدد الموظفين',
-                        count: state.userCount.toString(),
-                        color: ColorApp.primaryColor,
+                      const SectionTitle(title: 'معلومات سريعة'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          DashboardCard(
+                            icon: Icons.person,
+                            title: 'عدد الموظفين',
+                            count: state.userCount.toString(),
+                            color: ColorApp.primaryColor,
+                          ),
+                          DashboardCard(
+                            icon: Icons.timelapse,
+                            title: 'أقرب موعد تسليم',
+                            count: state.nearestDeadlineWithOrder,
+                            color: ColorApp.primaryColor,
+                          ),
+                        ],
                       ),
-                      DashboardCard(
-                        icon: Icons.timelapse,
-                        title: 'أقرب موعد تسليم',
-                        count: state.nearestDeadlineWithOrder,
-                        color: ColorApp.primaryColor,
+                      const SectionTitle(title: 'اخر المستجدات'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CustomContainer(
+                            margin: EdgeInsets.all(SizeApp.padding),
+                            child: InteractionChart(
+                              chartType: ChartType.ring,
+                              isOrderBased: true,
+                              doneCount:  state.completedOrders,
+                              notDoneCount: state.inProgress,
+                              totalViews:  state.totalOrders,
+                            ),
+                          ),
+                          CustomContainer(
+                            margin: EdgeInsets.all(SizeApp.padding),
+                            child: InteractionChart(
+                              chartType: ChartType.disc,
+                              isOrderBased: false,
+                              totalCollections: state.completedOrders,
+                              returns: state.rejectedOrders,
+                              pending: state.pendingOrders,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SectionTitle(title: 'اخر المستجدات'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CustomContainer(
-                        margin: EdgeInsets.all(SizeApp.padding),
-                        child: InteractionChart(
-                          chartType: ChartType.ring,
-                          isOrderBased: true,
-                          doneCount:  state.completedOrders,
-                          notDoneCount: state.inProgress,
-                          totalViews:  state.totalOrders,
-                        ),
-                      ),
-                      CustomContainer(
-                        margin: EdgeInsets.all(SizeApp.padding),
-                        child: InteractionChart(
-                          chartType: ChartType.disc,
-                          isOrderBased: false,
-                          totalCollections: state.completedOrders,
-                          returns: state.rejectedOrders,
-                          pending: state.pendingOrders,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               );
             }
 

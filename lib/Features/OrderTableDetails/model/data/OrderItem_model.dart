@@ -4,6 +4,7 @@ class OrderItem {
   final String operationDescription;
   final int quantity;
   final String materialType;
+  String? deliveryDate;
   final double unitPrice;
   late final String status;
   final String notes;
@@ -11,6 +12,7 @@ class OrderItem {
 
   OrderItem({
     required this.id,
+    this.deliveryDate,
     required this.operationDescription,
     required this.unitPrice,
     required this.quantity,
@@ -32,6 +34,7 @@ class OrderItem {
       'notes': notes,
       'unitPrice': unitPrice,
       'attachments': attachments,
+      'deliveryDate': deliveryDate,
     };
   }
 
@@ -42,6 +45,7 @@ class OrderItem {
       operationDescription: map['operationDescription'],
       quantity: map['quantity'],
       materialType: map['materialType'],
+      deliveryDate: map['deliveryDate'] ?? '',
       status: map['status'],
       notes: map['notes'],
       attachments: List<String>.from(map['attachments'] ?? []),

@@ -39,6 +39,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   String? _selectedAttachmentType;
   List<OrderItem> _orderItems = [];
   List<FileAttachment> _attachments = [];
+  List<FileAttachment> _attachments_order = [];
   int _currentStep = 0;
 
 
@@ -60,7 +61,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
   @override
   void dispose() {
-   // _orderNumberController.dispose();
     _companyNameController.dispose();
     _supplyNumberController.dispose();
     _itemCountController.dispose();
@@ -98,7 +98,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
     }
 
     context.read<AddNewOrderCubit>().addOrder(
-    //  orderNumber: _orderNumberController.text,
       companyName: _companyNameController.text,
       attachmentType: _selectedAttachmentType!,
       supplyNumber: _supplyNumberController.text,
@@ -106,12 +105,19 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       orderStatus: _selectedStatus!,
       items: _orderItems,
       attachments: _attachments,
+      attachmentsOrder: _attachments_order,
     );
   }
 
   void _updateAttachments(List<FileAttachment> attachments) {
     setState(() {
       _attachments = attachments;
+    });
+  }
+
+  void _updateAttachmentsOrder(List<FileAttachment> attachments_orders) {
+    setState(() {
+      _attachments_order = attachments_orders;
     });
   }
 
@@ -163,7 +169,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       Step(
         title: Text('Review',style: Theme.of(context).textTheme.titleLarge,),
         content: ReviewStep(
-          //orderNumber: _orderNumberController.text,
           companyName: _companyNameController.text,
           attachmentType: _selectedAttachmentType,
           supplyNumber: _supplyNumberController.text,
@@ -171,6 +176,9 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
           orderItems: _orderItems,
           attachments: _attachments,
           onAttachmentsChanged: _updateAttachments,
+
+          attachmentsOrder: _attachments_order,
+          onAttachmentOrdersChanged: _updateAttachmentsOrder,
         ),
         isActive: _currentStep >= 2,
         state: StepState.indexed,

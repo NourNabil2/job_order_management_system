@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
+import 'package:quality_management_system/Core/Utilts/Assets_Manager.dart';
+import 'package:quality_management_system/Core/Widgets/CustomAppBar_widget.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/InvoiceScreen.dart';
@@ -40,12 +43,13 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
     return context.read<ItemDetailsCubit>().getOrderItems(widget.orderId);
   }
 
-  Future<void> _updateItemStatus(OrderItem item, String newStatus) async {
+  Future<void> _updateItemStatus(OrderItem item, String newStatus, String itemName ) async {
     try {
       await context.read<ItemDetailsCubit>().updateItemStatus(
         widget.orderId,
         item.id,
         newStatus,
+        itemName
       );
       setState(() {
         _itemsFuture = _fetchItemsForOrder();
@@ -56,6 +60,7 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
       );
     }
   }
+
 
   Future<void> _updateOrderStatus(OrderModel item, String newStatus) async {
     try {
@@ -81,24 +86,24 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
     });
   }
 
-  void _createInvoiceForSelectedItems() {
-    if (_selectedItems.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select at least one item')),
-      );
-      return;
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => InvoiceScreen(
-          order: widget.order,
-          items: _selectedItems,
-        ),
-      ),
-    );
-  }
+  // void _createInvoiceForSelectedItems() {
+  //   if (_selectedItems.isEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Please select at least one item')),
+  //     );
+  //     return;
+  //   }
+  //
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => InvoiceScreen(
+  //         order: widget.order,
+  //         items: _selectedItems,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Map<String, int> _calculateStatusCounts(List<OrderItem> items) {
     final Map<String, int> counts = {
@@ -127,22 +132,7 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Order Dashboard'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {
-                _itemsFuture = _fetchItemsForOrder();
-                _selectedItems.clear();
-              });
-            },
-            tooltip: 'Refresh',
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(title: 'تفاصيل أمر التوريد', icon: AssetsManager.backtIcon,onTap: () => Navigator.pop(context),),
       body: FutureBuilder<List<OrderItem>>(
         future: _itemsFuture,
         builder: (context, snapshot) {
@@ -176,7 +166,9 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
                       const SizedBox(height: 20),
                       ProgressChart(statusCounts: statusCounts),
                       const SizedBox(height: 20),
-                      AttachmentListViewer(attachmentLinks: widget.order.attachmentLinks),
+                      AttachmentGridViewer(attachmentLinks: widget.order.attachmentLinks,title: 'مرفقات الورشه',),
+                      const SizedBox(height: 20),
+                     if (CashSaver.userRole != 'work shop') AttachmentGridViewer(attachmentLinks: widget.order.attachmentOrderLinks, title: 'مرفقات أمر التوريد',),
                       const SizedBox(height: 20),
                       buildSectionHeader('Order Items', _selectedItems.length),
                       const SizedBox(height: 10),
@@ -194,7 +186,7 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
                           padding: const EdgeInsets.only(bottom: 12.0),
                           child: OrderItemCard(item: item, isSelected: isSelected, theme: theme,
                             onSelectionChanged: (value) => _toggleItemSelection(item,value),
-                            onStatusChanged: (value) => _updateItemStatus(item,value),
+                            onStatusChanged: (value) => _updateItemStatus(item,value,item.operationDescription),
                           ),
                         );
                       },
@@ -211,35 +203,14 @@ class _OrderItemsDetailsScreenState extends State<OrderItemsDetailsScreen> {
           );
         },
       ),
-      floatingActionButton: _selectedItems.isNotEmpty
-          ? FloatingActionButton.extended(
-        onPressed: _createInvoiceForSelectedItems,
-        icon: const Icon(Icons.receipt_long),
-        label: Text('Create Invoice (${_selectedItems.length})'),
-        backgroundColor: theme.primaryColor,
-      )
-          : null,
-      bottomNavigationBar: _selectedItems.isNotEmpty
-          ? Container(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        child: ElevatedButton.icon(
-          onPressed: _createInvoiceForSelectedItems,
-          icon: const Icon(Icons.receipt_long),
-          label: Text('Create Invoice for ${_selectedItems.length} Items'),
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            backgroundColor: theme.primaryColor,
-            foregroundColor: Colors.white,
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ),
-      )
-          : null,
+      // floatingActionButton: _selectedItems.isNotEmpty
+      //     ? FloatingActionButton.extended(
+      //   onPressed: _createInvoiceForSelectedItems,
+      //   icon: const Icon(Icons.receipt_long),
+      //   label: Text('Create Invoice (${_selectedItems.length})'),
+      //   backgroundColor: theme.primaryColor,
+      // )
+      //     : null,
     );
   }
 
