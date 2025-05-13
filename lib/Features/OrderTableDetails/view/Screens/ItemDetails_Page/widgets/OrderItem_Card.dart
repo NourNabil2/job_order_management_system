@@ -93,11 +93,14 @@ class _OrderItemCardState extends State<OrderItemCard> {
   Widget _buildHeaderRow() {
     return Row(
       children: [
+        Checkbox(
+          value: widget.isSelected,
+          onChanged: widget.onSelectionChanged,
+        ),
         _buildDescription(),
         const Spacer(),
-
-        if (CashSaver.userRole != 'collector')
-          widget.item.deliveryDate != '' && CashSaver.userRole != 'admin'
+        if (CacheSaver.userRole != 'collector')
+          widget.item.deliveryDate != '' && CacheSaver.userRole != 'admin'
               ? const StatusContainer(status: 'Completed')
               : StatusDropdown(
             selectedStatus: widget.statusOptions.contains(widget.item.status)
@@ -115,6 +118,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
       ],
     );
   }
+
 
   Widget _buildDescription() {
     return Expanded(

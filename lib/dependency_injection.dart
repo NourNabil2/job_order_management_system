@@ -21,7 +21,7 @@ void init() {
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
 
   // Cubit
-  sl.registerFactory(() => SigninCubit(sl(),sl()));
+  sl.registerFactory(() => SigninCubit(sl()));
   sl.registerFactory(() => SignupCubit(sl()));
   sl.registerFactory(() => AddMemberCubit(sl()));
   

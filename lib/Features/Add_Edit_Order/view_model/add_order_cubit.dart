@@ -61,7 +61,7 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
       // إرجاع الرقم بالتنسيق المطلوب: السنة/الرقم
       return '$formattedNumber/$currentYear';
     } catch (e) {
-      log('Error generating order number: $e');
+      log('Error generating order_complete number: $e');
       // في حالة حدوث خطأ، نرجع رقمًا افتراضيًا
       return '001/$currentYear';
     }
@@ -149,7 +149,7 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
       await NotificationHelper.sendNotificationToAllUsers(title: 'أمر توريد جديد', body: 'هناك أمر توريد جديد,\n اضغط لمعرفه المزيد', topic: 'all_users');
       emit(AddOrderSuccess(orderRef.id));
     } catch (e) {
-      log('Error adding order: $e');
+      log('Error adding order_complete: $e');
       changeLoading();
       emit(AddOrderError(e.toString()));
     }

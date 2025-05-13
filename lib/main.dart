@@ -18,7 +18,7 @@ import 'navBar.dart';
 void main() async {
   init();
   WidgetsFlutterBinding.ensureInitialized();
-  await CashSaver.init();
+  await CacheSaver.init();
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -32,7 +32,7 @@ void main() async {
     ),
   );
 
-  CashSaver.userRole = await CashSaver.getData(key: 'userRole');
+  CacheSaver.userRole = await CacheSaver.getData(key: 'userRole');
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -67,14 +67,14 @@ class MyApp extends StatelessWidget {
             title: 'Flutter Demo',
             theme: AppTheme.light,
             routes: {
-              Navbar.id: (context) => Navbar(role: CashSaver.userRole,),
+              Navbar.id: (context) => Navbar(role: CacheSaver.userRole,),
               SigninScreen.id: (context) => const SigninScreen(),
             },
             home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
-                if (snapshot.hasData && CashSaver.userRole != null) {
-                  return Navbar(role: CashSaver.userRole,);
+                if (snapshot.hasData && CacheSaver.userRole != null) {
+                  return Navbar(role: CacheSaver.userRole,);
                 }
                 return const SigninScreen();
               },

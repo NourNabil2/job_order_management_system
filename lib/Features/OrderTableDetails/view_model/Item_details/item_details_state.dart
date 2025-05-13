@@ -5,6 +5,11 @@ sealed class ItemDetailsState {}
 
 final class ItemDetailsInitial extends ItemDetailsState {}
 
+final class sendAttachmentLoading extends ItemDetailsState {}
+
+final class AddAttachmentSuccess extends ItemDetailsState {}
+
+
 
 class OrderItemsLoading extends ItemDetailsState {}
 

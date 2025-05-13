@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CustomCachedImage extends StatelessWidget {
@@ -25,22 +24,26 @@ class CustomCachedImage extends StatelessWidget {
       onTap: onTap,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
-        child: CachedNetworkImage(
-          imageUrl: imageUrl,
+        child: Image.network(
+          imageUrl,
           height: height,
           width: width,
           fit: fit,
-          placeholder: (context, url) => Container(
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              height: height,
+              width: width,
+              alignment: Alignment.center,
+              color: Colors.grey[300],
+              child: const CircularProgressIndicator(),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) => Container(
             height: height,
             width: width,
+            color: Colors.grey[300],
             alignment: Alignment.center,
-            color: Colors.grey[300],
-            child: const CircularProgressIndicator(),
-          ),
-          errorWidget: (context, error, stackTrace) => Container(
-            height: height,
-            width: width,
-            color: Colors.grey[300],
             child: const Icon(Icons.broken_image, color: Colors.red, size: 40),
           ),
         ),

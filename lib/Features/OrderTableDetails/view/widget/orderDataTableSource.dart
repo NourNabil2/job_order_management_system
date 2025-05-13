@@ -11,7 +11,7 @@ class OrderDataTableSource extends DataTableSource {
   final List<OrderModel> orders;
   final BuildContext context;
 
-  OrderDataTableSource(this.orders, this.context);
+  OrderDataTableSource(this.orders, this.context,);
 
   @override
   DataRow? getRow(int index) {

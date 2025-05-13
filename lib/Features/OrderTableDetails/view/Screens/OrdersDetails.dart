@@ -203,7 +203,7 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
                     ),
                     const DataColumn(label: Text('Actions')),
                   ],
-                  source: OrderDataTableSource(paginatedData, context),
+                  source: OrderDataTableSource(paginatedData, context ,),
                 ),
               );
             },
@@ -369,5 +369,3 @@ class _OrdersTableDetailsState extends State<OrdersTableDetails> {
     );
   }
 }
-
-

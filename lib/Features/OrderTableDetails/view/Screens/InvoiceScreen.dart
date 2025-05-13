@@ -28,7 +28,7 @@ class InvoiceScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.print),
-            onPressed: () => _printInvoice(context, formattedDate),
+            onPressed: () => _printInvoice(context),
             tooltip: 'طباعة أمر التشغيل',
           ),
         ],
@@ -119,7 +119,7 @@ class InvoiceScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('التاريخ:    $formattedDate'),
+                      Text('التاريخ:    '),
                       Text('أمر تشغيل منتجات رقم:    ${order.orderNumber}'),
                     ],
                   ),
@@ -127,7 +127,6 @@ class InvoiceScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('رسم:    ${order.id.substring(0, 8)}'),
                       Text('المرفقات:    ${order.attachmentType}'),
                     ],
                   ),
@@ -135,7 +134,7 @@ class InvoiceScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('تاريخ التسليم:    ${DateFormatter.formatDate(DateTime.parse(order.dateLine))}'),
+                      Text('تاريخ التسليم:    '),
                       Text('إسم الشركة:    ${order.companyName}'),
                     ],
                   ),
@@ -160,22 +159,22 @@ class InvoiceScreen extends StatelessWidget {
               child: Table(
                 border: TableBorder.all(color: Colors.black),
                 columnWidths: const {
-                  0: FlexColumnWidth(0.5),
-                  1: FlexColumnWidth(2),
-                  2: FlexColumnWidth(1),
-                  3: FlexColumnWidth(2),
-                  4: FlexColumnWidth(0.5),
+                  0: FlexColumnWidth(0.5),  // رقم
+                  1: FlexColumnWidth(2),    // بيان العمليه
+                  2: FlexColumnWidth(1),    // العدد
+                  3: FlexColumnWidth(1.5),  // نوع الخام
+                  4: FlexColumnWidth(2.5),  // ملاحظات - تم زيادة العرض هنا
                 },
                 children: [
                   // Table Header
                   TableRow(
                     decoration: const BoxDecoration(color: Colors.grey),
                     children: [
-                      _buildTableCell('م', isHeader: true, textAlign: TextAlign.center),
-                      _buildTableCell('بيان المعدة', isHeader: true, textAlign: TextAlign.center),
-                      _buildTableCell('العدد', isHeader: true, textAlign: TextAlign.center),
-                      _buildTableCell('نوع الخام', isHeader: true, textAlign: TextAlign.center),
-                      _buildTableCell('ملاحظات', isHeader: true, textAlign: TextAlign.center),
+                      _buildTableCell('م', isHeader: true, ),
+                      _buildTableCell('بيان العمليه', isHeader: true,),
+                      _buildTableCell('العدد', isHeader: true, ),
+                      _buildTableCell('نوع الخام', isHeader: true, ),
+                      _buildTableCell('ملاحظات', isHeader: true, ),
                     ],
                   ),
 
@@ -184,11 +183,11 @@ class InvoiceScreen extends StatelessWidget {
                     final item = items[index];
                     return TableRow(
                       children: [
-                        _buildTableCell('${index + 1}', textAlign: TextAlign.center),
+                        _buildTableCell('${index + 1}',),
                         _buildTableCell(item.materialType),
-                        _buildTableCell('${item.quantity}', textAlign: TextAlign.center),
-                        _buildTableCell(item.materialType.contains('Spring') ? 'Spring Steel' : 'Steel', textAlign: TextAlign.center),
-                        _buildTableCell(''),
+                        _buildTableCell('${item.quantity}'),
+                        _buildTableCell(item.materialType),
+                        _buildTableCell(item.notes),
                       ],
                     );
                   }),
@@ -199,12 +198,12 @@ class InvoiceScreen extends StatelessWidget {
             const SizedBox(height: 40),
 
             // Signatures
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'مسؤول المبيعات',
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -214,10 +213,11 @@ class InvoiceScreen extends StatelessWidget {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'مدير عام المصنع',
                       style: TextStyle(fontWeight: FontWeight.bold),
+                      textDirection: TextDirection.rtl,
                     ),
                     Text('التوقيع / ____________'),
                   ],
@@ -230,7 +230,7 @@ class InvoiceScreen extends StatelessWidget {
             // Footer
             const Center(
               child: Text(
-                'الإدارة والمصانع: القاهرة - مدينة العبور - المنطقة الصناعية - الامتداد الغربي - قطعة رقم 6 بلوك 20013',
+                'الإدارة والمصانع: القاهرة - مدينة العبور - المنطقة الصناعية - الامتداد الغربي - قطعة رقم 6 بلوك 20036',
                 style: TextStyle(fontSize: 10),
                 textDirection: TextDirection.rtl,
               ),
@@ -238,7 +238,7 @@ class InvoiceScreen extends StatelessWidget {
             const SizedBox(height: 6),
             const Center(
               child: Text(
-                'تليفون: 46810477(202+)     فاكس: 46810478(202+)     موبايل: 01001538050',
+                'تليفون: 44810477(202+)     فاكس: 44810478(202+)     موبايل: 01001538045',
                 style: TextStyle(fontSize: 10),
               ),
             ),
@@ -249,21 +249,25 @@ class InvoiceScreen extends StatelessWidget {
   }
 
   // Helper method to build table cells with consistent styling
-  Widget _buildTableCell(String text, {bool isHeader = false, TextAlign textAlign = TextAlign.start}) {
+  Widget _buildTableCell(String text, {bool isHeader = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+      child: Directionality(
+        textDirection: TextDirection.rtl, // دعم اتجاه اللغة العربية
+        child: Text(
+          text,
+          style: TextStyle(
+            fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+            fontFamily: 'Cairo',
+          ),
         ),
-        textAlign: textAlign,
       ),
     );
   }
 
+
   // Method to generate and print invoice PDF
-  Future<void> _printInvoice(BuildContext context, String formattedDate) async {
+  Future<void> _printInvoice(BuildContext context) async {
     final pdf = pw.Document();
     final arabicFont = await PdfGoogleFonts.cairoRegular();
     final arabicBoldFont = await PdfGoogleFonts.cairoBold();
@@ -354,11 +358,12 @@ class InvoiceScreen extends StatelessWidget {
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text(
-                            'التاريخ:    $formattedDate',
+                            'تاريخ التسليم:  ${order.dateLine}',
                             style: pw.TextStyle(font: arabicFont),
+                            textDirection: pw.TextDirection.rtl,
                           ),
                           pw.Text(
-                            'أمر تشغيل منتجات رقم:    ${order.orderNumber}',
+                            'اذن تشغيل منتج رقم:    ${order.orderNumber}',
                             style: pw.TextStyle(font: arabicFont),
                             textDirection: pw.TextDirection.rtl,
                           ),
@@ -369,14 +374,16 @@ class InvoiceScreen extends StatelessWidget {
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text(
-                            'رسم:    ${order.id.substring(0, 8)}',
-                            style: pw.TextStyle(font: arabicFont),
-                          ),
-                          pw.Text(
-                            'المرفقات:    ${order.attachmentType}',
+                            'المرفقات:  ${order.attachmentType}',
                             style: pw.TextStyle(font: arabicFont),
                             textDirection: pw.TextDirection.rtl,
                           ),
+                          pw.Text(
+                            'التاريخ:  ${DateFormatter.formatDate(DateTime.now())}',
+                            style: pw.TextStyle(font: arabicFont),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+
                         ],
                       ),
                       pw.SizedBox(height: 10),
@@ -384,26 +391,12 @@ class InvoiceScreen extends StatelessWidget {
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text(
-                            'تاريخ التسليم:    ${DateFormatter.formatDate(DateTime.parse(order.dateLine))}',
-                            style: pw.TextStyle(font: arabicFont),
-                          ),
-                          pw.Text(
-                            'إسم الشركة:    ${order.companyName}',
+                            'أمر التوريد:  ${order.supplyNumber}',
                             style: pw.TextStyle(font: arabicFont),
                             textDirection: pw.TextDirection.rtl,
                           ),
-                        ],
-                      ),
-                      pw.SizedBox(height: 10),
-                      pw.Row(
-                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                        children: [
                           pw.Text(
-                            'ميناء الوصول:    ---',
-                            style: pw.TextStyle(font: arabicFont),
-                          ),
-                          pw.Text(
-                            'التسليم:    ${order.orderStatus}',
+                            'إسم الشركة:  ${order.companyName}',
                             style: pw.TextStyle(font: arabicFont),
                             textDirection: pw.TextDirection.rtl,
                           ),
@@ -427,25 +420,14 @@ class InvoiceScreen extends StatelessWidget {
                       crossAxisAlignment: pw.CrossAxisAlignment.center,
                       children: [
                         pw.Text(
-                          'مسؤول المبيعات',
+                          'مسؤول الورشة',
                           style: pw.TextStyle(font: arabicBoldFont),
+                          textDirection: pw.TextDirection.rtl,
                         ),
                         pw.Text(
                           'التوقيع / ____________',
                           style: pw.TextStyle(font: arabicFont),
-                        ),
-                      ],
-                    ),
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.center,
-                      children: [
-                        pw.Text(
-                          'مدير عام المصنع',
-                          style: pw.TextStyle(font: arabicBoldFont),
-                        ),
-                        pw.Text(
-                          'التوقيع / ____________',
-                          style: pw.TextStyle(font: arabicFont),
+                          textDirection: pw.TextDirection.rtl,
                         ),
                       ],
                     ),
@@ -457,7 +439,7 @@ class InvoiceScreen extends StatelessWidget {
                 // Footer
                 pw.Center(
                   child: pw.Text(
-                    'الإدارة والمصانع: القاهرة - مدينة العبور - المنطقة الصناعية - الامتداد الغربي - قطعة رقم 6 بلوك 20013',
+                    'الإدارة والمصانع: القاهرة - مدينة العبور - المنطقة الصناعية - الامتداد الغربي - قطعة رقم 6 بلوك 20036',
                     style: pw.TextStyle(font: arabicFont, fontSize: 9),
                     textDirection: pw.TextDirection.rtl,
                   ),
@@ -465,8 +447,9 @@ class InvoiceScreen extends StatelessWidget {
                 pw.SizedBox(height: 6),
                 pw.Center(
                   child: pw.Text(
-                    'تليفون: 46810477(202+)     فاكس: 46810478(202+)     موبايل: 01001538050',
+                    'تليفون: 44810477(202+)     فاكس: 44810478(202+)     موبايل: 01001538045',
                     style: pw.TextStyle(fontSize: 9, font: arabicFont),
+                    textDirection: pw.TextDirection.rtl,
                   ),
                 ),
               ],
@@ -482,6 +465,7 @@ class InvoiceScreen extends StatelessWidget {
     );
   }
 
+
   // Helper method to build the items table for PDF
   pw.Widget _buildItemsTablePDF(pw.Font arabicFont, pw.Font arabicBoldFont) {
     return pw.Container(
@@ -491,22 +475,24 @@ class InvoiceScreen extends StatelessWidget {
       child: pw.Table(
         border: pw.TableBorder.all(),
         columnWidths: const {
-          0: pw.FlexColumnWidth(0.5),
-          1: pw.FlexColumnWidth(2),
-          2: pw.FlexColumnWidth(1),
-          3: pw.FlexColumnWidth(2),
-          4: pw.FlexColumnWidth(0.5),
+          0: pw.FlexColumnWidth(4),
+          1: pw.FlexColumnWidth(1.5),
+          2: pw.FlexColumnWidth(4),
+          3: pw.FlexColumnWidth(4),
+          4: pw.FlexColumnWidth(1),
         },
         children: [
           // Table Header
           pw.TableRow(
             decoration: const pw.BoxDecoration(color: PdfColors.grey300),
             children: [
-              _buildTableCellPDF('م', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
-              _buildTableCellPDF('بيان المعدة', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
+
+              _buildTableCellPDF('ملاحظات', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
               _buildTableCellPDF('العدد', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
               _buildTableCellPDF('نوع الخام', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
-              _buildTableCellPDF('ملاحظات', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
+              _buildTableCellPDF('بيان العملية', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
+              _buildTableCellPDF('بند', arabicBoldFont, isHeader: true, textAlign: pw.TextAlign.center),
+
             ],
           ),
 
@@ -515,11 +501,13 @@ class InvoiceScreen extends StatelessWidget {
             final item = items[index];
             return pw.TableRow(
               children: [
-                _buildTableCellPDF('${index + 1}', arabicFont, textAlign: pw.TextAlign.center),
-                _buildTableCellPDF(item.materialType, arabicFont),
+
+                _buildTableCellPDF(item.notes, arabicFont, textAlign: pw.TextAlign.right, isNotes: true),
                 _buildTableCellPDF('${item.quantity}', arabicFont, textAlign: pw.TextAlign.center),
-                _buildTableCellPDF(item.materialType.contains('Spring') ? 'Spring Steel' : 'Steel', arabicFont, textAlign: pw.TextAlign.center),
-                _buildTableCellPDF('', arabicFont),
+                _buildTableCellPDF(item.materialType, arabicFont, textAlign: pw.TextAlign.center),
+                _buildTableCellPDF(item.operationDescription, arabicFont),
+                _buildTableCellPDF('${index + 1}', arabicFont, textAlign: pw.TextAlign.center),
+
               ],
             );
           }),
@@ -529,11 +517,15 @@ class InvoiceScreen extends StatelessWidget {
   }
 
   // Helper method to build PDF table cells with consistent styling
-  pw.Widget _buildTableCellPDF(String text, pw.Font font, {bool isHeader = false, pw.TextAlign textAlign = pw.TextAlign.left}) {
+  pw.Widget _buildTableCellPDF(String text, font, {bool isHeader = false, pw.TextAlign textAlign = pw.TextAlign.left, bool isNotes = false}) {
     return pw.Container(
       padding: const pw.EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      // زيادة المساحة المتاحة للكتابة في خانة الملاحظات
+      height: isNotes ? 40 : null,
+      alignment: isNotes ? pw.Alignment.topRight : null,
       child: pw.Text(
         text,
+        textDirection: pw.TextDirection.rtl,
         style: pw.TextStyle(
           font: font,
           fontWeight: isHeader ? pw.FontWeight.bold : null,

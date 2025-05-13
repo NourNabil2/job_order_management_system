@@ -21,7 +21,7 @@ version: 1.0.0+1
 environment:
   sdk: ^3.5.1
 
-# Dependencies specify other packages that your package needs in order to work.
+# Dependencies specify other packages that your package needs in order_complete to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
@@ -29,8 +29,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   bloc: null
-  cached_network_image: null
+  cached_network_image: ^3.4.1
   cloud_firestore: ^5.6.6
+  onesignal_flutter:
   connectivity_plus: null
   cupertino_icons: ^1.0.8
   flutter_animate: ^4.5.2
@@ -69,6 +70,7 @@ dependencies:
   shared_preferences_android: ^2.3.0
   shorebird_code_push: null
   skeletonizer: ^1.4.3
+  universal_html:
 
 dev_dependencies:
   flutter_lints: ^4.0.0

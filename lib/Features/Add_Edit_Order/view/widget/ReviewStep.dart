@@ -55,11 +55,6 @@ class _ReviewStepState extends State<ReviewStep> {
           _buildSectionTitle('Order Items'),
           _buildItemsTable(),
            SizedBox(height: SizeApp.s16),
-
-          _buildSectionTitle('Order Summary'),
-          _buildOrderSummary(),
-           SizedBox(height: SizeApp.s16),
-
           // File upload widget
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,24 +168,6 @@ class _ReviewStepState extends State<ReviewStep> {
             ),
           ),
         ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            'Unit Price',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            'Total',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -210,64 +187,9 @@ class _ReviewStepState extends State<ReviewStep> {
             flex: 2,
             child: Text(item.quantity.toString()),
           ),
-          Expanded(
-            flex: 2,
-            child: Text('${item.unitPrice.toStringAsFixed(2)}'),
-          ),
-          Expanded(
-            flex: 2,
-            child: Text('${total.toStringAsFixed(2)}'),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildOrderSummary() {
-    double subTotal = 0;
-    for (var item in widget.orderItems) {
-      subTotal += item.quantity * item.unitPrice;
-    }
-
-    final tax = subTotal * 0.14; // Assuming 14% tax
-    final total = subTotal + tax;
-
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: EdgeInsets.all(SizeApp.defaultPadding),
-        child: Column(
-          children: [
-            _buildSummaryRow('Subtotal', '${subTotal.toStringAsFixed(2)}'),
-            _buildSummaryRow('Tax (14%)', '${tax.toStringAsFixed(2)}'),
-            const Divider(),
-            _buildSummaryRow('Total', '${total.toStringAsFixed(2)}', isTotal: true),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(String label, String value, {bool isTotal = false}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: SizeApp.s4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

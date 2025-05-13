@@ -74,15 +74,15 @@ class _SigninScreenScreenState extends State<SigninScreen> {
 
             // Save remember me preference
             if (isRememberMe) {
-              await CashSaver.saveData(key: 'isRememberMe', value: true);
+              await CacheSaver.saveData(key: 'isRememberMe', value: true);
             }
 
             // Save role with verification
             log('Saving user role: ${state.userData.role}');
-            await CashSaver.saveData(key: 'userRole', value: state.userData.role);
+            await CacheSaver.saveData(key: 'userRole', value: state.userData.role);
 
             // Verify saved role
-            final savedRole = await CashSaver.getData(key: 'userRole');
+            final savedRole = await CacheSaver.getData(key: 'userRole');
             log('Saved role verification: $savedRole');
             if (savedRole != null) {
               // Navigate to home

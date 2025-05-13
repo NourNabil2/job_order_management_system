@@ -82,7 +82,8 @@ class AttachmentGridViewer extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: CustomCachedImage(imageUrl: url)
+            child: Image.network(url)
+
           ),
           Positioned(
             bottom: 0,

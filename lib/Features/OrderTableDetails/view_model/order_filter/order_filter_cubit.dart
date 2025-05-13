@@ -1,51 +1,70 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 
-part 'add_order_state.dart';
+part 'order_filter_state.dart';
 
-class OrdersCubit extends Cubit<AddOrderState> {
+class OrderFilterCubit extends Cubit<OrderFilterState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Stream<List<OrderModel>>? _ordersStream;
 
-  OrdersCubit() : super(AddOrderInitial()) {
+  OrderFilterCubit() : super(OrderFilterInitial()){
     _setupOrdersStream();
   }
 
-  static OrdersCubit get(context) => BlocProvider.of(context);
+  static OrderFilterCubit get(context) => BlocProvider.of(context);
   /// ---------------- functions -----------------///
   void sortOrders<T>(
       List<OrderModel> orders,
       Comparable<T> Function(OrderModel order) getField,
       bool ascending,
       ) {
-    orders.sort((a, b) {
-      final aValue = getField(a);
-      final bValue = getField(b);
-      return ascending
-          ? Comparable.compare(aValue, bValue)
-          : Comparable.compare(bValue, aValue);
-    });
-
-    emit(OrdersLoaded(List<OrderModel>.from(orders)));
+    try {
+      orders.sort((a, b) {
+        final aValue = getField(a);
+        final bValue = getField(b);
+        return ascending
+            ? Comparable.compare(aValue, bValue)
+            : Comparable.compare(bValue, aValue);
+      });
+      emit(OrderFilterLodded(List<OrderModel>.from(orders)));
+    } catch (e) {
+      emit(OrderFilterLoddedError("Sorting error: $e"));
+    }
   }
 
 
   void _setupOrdersStream() {
     _ordersStream = _firestore
         .collection('orders')
-        .orderBy('createdAt', descending: true)
+        .where('orderStatus', isEqualTo: 'Pending')
         .snapshots()
         .map((snapshot) => snapshot.docs
         .map((doc) => _mapDocumentToOrder(doc))
         .toList());
 
-    // تحديث الحالة عند تغيير البيانات
+    List<OrderModel> previousOrders = [];
+
     _ordersStream?.listen((orders) {
-      emit(OrdersLoaded(orders));
+      if (orders.isEmpty) {
+        emit(OrderFilterEmpty());
+      } else {
+        if (previousOrders.isNotEmpty && orders.length > previousOrders.length) {
+          // New order has been added, perform necessary actions
+          emit(OrderFilterNewOrder(orders));
+        }
+        emit(OrderFilterLodded(orders));
+      }
+      previousOrders = orders;
+    }, onError: (error) {
+      log('$error');
+      emit(OrderFilterLoddedError(error.toString()));
     });
+
   }
 
   OrderModel _mapDocumentToOrder(DocumentSnapshot doc) {
@@ -69,5 +88,4 @@ class OrdersCubit extends Cubit<AddOrderState> {
       orderStatus: data['orderStatus'] ?? 'Pending',
     );
   }
-
 }

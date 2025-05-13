@@ -70,11 +70,14 @@ class FullScreenImagePage extends StatelessWidget {
       body: Stack(
         children: [
           Center(
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
+            child: Image.network(
+              imageUrl,
               fit: BoxFit.contain,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, error, stackTrace) => const Icon(
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const Center(child: CircularProgressIndicator());
+              },
+              errorBuilder: (context, error, stackTrace) => const Icon(
                 Icons.error,
                 color: Colors.white,
               ),

@@ -69,25 +69,43 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
   }
 
   Widget _buildHeaderRow() {
+    final isAdmin = CacheSaver.userRole == 'admin';
+    final isCollectorNotCollected = CacheSaver.userRole == 'collector' && _currentStatus != 'Collected';
+    final isWorkshopAndPending = CacheSaver.userRole == 'workShop' && _currentStatus == 'Pending';
+
+    Widget statusWidget;
+
+    if (isAdmin || isCollectorNotCollected) {
+      statusWidget = StatusDropdown(
+        selectedStatus: _currentStatus,
+        statusOptions: widget.statusOptions,
+        onStatusChanged: (newStatus) {
+          setState(() => _currentStatus = newStatus);
+          widget.onStatusChanged(newStatus);
+        },
+      );
+    } else if (isWorkshopAndPending) {
+      statusWidget = StatusDropdown(
+        selectedStatus: _currentStatus,
+        statusOptions: widget.statusOptions,
+        onStatusChanged: (newStatus) {
+          setState(() => _currentStatus = newStatus);
+          widget.onStatusChanged(newStatus);
+        },
+      );
+    } else {
+      statusWidget = StatusContainer(status: _currentStatus);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildOrderInfoColumn(),
-        CashSaver.userRole == 'admin' || CashSaver.userRole == 'collector'
-            ? StatusDropdown(
-          selectedStatus: _currentStatus,
-          statusOptions: widget.statusOptions,
-          onStatusChanged: (newStatus) {
-            setState(() {
-              _currentStatus = newStatus;
-            });
-            widget.onStatusChanged(newStatus);
-          },
-        )
-            : StatusContainer(status: _currentStatus),
+        statusWidget,
       ],
     );
   }
+
 
   Widget _buildOrderInfoColumn() {
     return Column(
