@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/screen/EditOrderScreen.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add_order_cubit.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/ItemDetails_Screen.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view_model/Item_details/item_details_cubit.dart';
@@ -35,12 +38,18 @@ class OrderDataTableSource extends DataTableSource {
         DataCell(StatusContainer(status: order.orderStatus,)),
         DataCell(
           CustomPopupMenu(
-            items: const [
-               CustomPopupMenuItem(
+            items:  [
+              const CustomPopupMenuItem(
                 value: 'view_details',
-                label: 'View Item Details',
+                label: 'عرض التفاصيل',
                 icon: Icons.remove_red_eye,
               ),
+
+              if (CacheSaver.userRole == 'admin') const CustomPopupMenuItem(
+                value: 'edit_order',
+                label: 'تعديل أمر التوريد',
+                icon: Icons.edit,
+              )
             ],
             onSelected: (value) {
               if (value == 'view_details') {
@@ -56,13 +65,21 @@ class OrderDataTableSource extends DataTableSource {
                     ),
                   ),
                 );
-              } else if (value == 'create_invoice') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Invoice created for ${order.orderNumber}'),
-                    backgroundColor: Colors.green,
+              } else if (value == 'edit_order') {
+                // In your order list or detail screen:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => AddNewOrderCubit(),
+                      child: EditOrderScreen(order: order),
+                    ),
                   ),
-                );
+                ).then((success) {
+                  if (success == true) {
+                    // Refresh your order list if needed
+                  }
+                });
               }
             },
           ),

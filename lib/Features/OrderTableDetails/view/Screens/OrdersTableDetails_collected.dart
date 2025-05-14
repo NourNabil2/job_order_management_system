@@ -81,7 +81,7 @@ class _OrdersTableDetailsCollectedState extends State<OrdersTableDetailsCollecte
               child: Container(
                 padding: const EdgeInsets.all(20),
                 color: Colors.grey.shade200,
-                child: const Text('No pending orders found'),
+                child: const Text('No orders found'),
               ),
             );
           }

@@ -155,4 +155,106 @@ class AddNewOrderCubit extends Cubit<AddNewOrderState> {
     }
   }
 
+
+
+  Future updateOrder({
+    required String orderId,
+    required String orderNumber,
+    required String companyName,
+    required String supplyNumber,
+    required String attachmentType,
+    required String orderStatus,
+    required List<FileAttachment> newAttachments,
+    required List<FileAttachment> newAttachmentsOrder,
+    required List<String> existingAttachmentLinks,
+    required List<String> existingAttachmentOrderLinks,
+  }) async {
+    emit(AddOrderLoading());
+    changeLoading();
+    try {
+      final orderRef = _firestore.collection('orders').doc(orderId);
+      final itemsRef = orderRef.collection('items');
+
+      // 1. Upload new attachments
+      List<String> updatedAttachmentUrls = List.from(existingAttachmentLinks);
+      for (final attachment in newAttachments) {
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
+        final filePath = 'orders/$orderId/$fileName';
+
+        if (kIsWeb) {
+          final bytes = await attachment.getBytes();
+          await supabase.storage.from('storage').uploadBinary(filePath, bytes);
+        } else {
+          await supabase.storage.from('storage').upload(filePath, attachment.fileObject);
+        }
+
+        final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
+        updatedAttachmentUrls.add(fileUrl);
+      }
+
+      // 2. Upload new order attachments
+      List<String> updatedOrderAttachmentUrls = List.from(existingAttachmentOrderLinks);
+      for (final attachment in newAttachmentsOrder) {
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
+        final filePath = 'orders/$orderId/order_docs/$fileName';
+
+        if (kIsWeb) {
+          final bytes = await attachment.getBytes();
+          await supabase.storage.from('storage').uploadBinary(filePath, bytes);
+        } else {
+          await supabase.storage.from('storage').upload(filePath, attachment.fileObject);
+        }
+
+        final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
+        updatedOrderAttachmentUrls.add(fileUrl);
+      }
+
+      // 3. Prepare updated order data
+      final updatedOrderData = {
+        'companyName': companyName,
+        'supplyNumber': supplyNumber,
+        'orderStatus': orderStatus,
+        'attachmentLinks': updatedAttachmentUrls,
+        'attachmentOrderLinks': updatedOrderAttachmentUrls,
+        'attachmentType': attachmentType,
+        'updatedAt': Timestamp.now(),
+      };
+
+      // 4. Update Firestore documents in batch
+      final batch = _firestore.batch();
+      batch.update(orderRef, updatedOrderData);
+
+      // Delete all existing items and add new ones
+      final existingItems = await itemsRef.get();
+      for (final doc in existingItems.docs) {
+        batch.delete(doc.reference);
+      }
+
+      await batch.commit();
+      changeLoading();
+
+      await NotificationHelper.sendNotificationToAllUsers(
+          title: 'تم تحديث أمر التوريد',
+          body: 'تم تحديث أمر التوريد رقم $orderNumber',
+          topic: 'all_users'
+      );
+
+      emit(AddOrderSuccess(orderId));
+    } catch (e) {
+      log('Error updating order: $e');
+      changeLoading();
+      emit(AddOrderError(e.toString()));
+    }
+  }
+
+// Helper method to delete attachments (optional)
+  Future<void> _deleteAttachment(String fileUrl) async {
+    try {
+      final path = fileUrl.split('storage/v1/object/public/storage/')[1];
+      await supabase.storage.from('storage').remove([path]);
+    } catch (e) {
+      log('Error deleting attachment: $e');
+    }
+  }
+
 }
