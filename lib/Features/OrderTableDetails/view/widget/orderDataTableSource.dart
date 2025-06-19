@@ -4,6 +4,7 @@ import 'package:quality_management_system/Core/Network/local_db/share_preference
 import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view/screen/EditOrderScreen.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/FileUpload_Widget.dart';
 import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add_order_cubit.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/ItemDetails_Screen.dart';
@@ -72,7 +73,7 @@ class OrderDataTableSource extends DataTableSource {
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) => AddNewOrderCubit(),
-                      child: EditOrderScreen(order: order),
+                      child: EditOrderScreen(order: order,orderItems: const [],),
                     ),
                   ),
                 ).then((success) {
