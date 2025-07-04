@@ -4,7 +4,7 @@ class UserModel {
   final String uid;
   final String email;
   final String name;
-  final UserRole role;
+  final String role;
 
   // Removed password from model - passwords shouldn't be stored in documents
   UserModel({
@@ -19,7 +19,7 @@ class UserModel {
       'uid': uid,
       'email': email,
       'name': name,
-      'role': role.value, // Store enum value as string
+      'role': role, // Store enum value as string
     };
   }
 
@@ -28,7 +28,7 @@ class UserModel {
       uid: map['uid'] as String,
       email: map['email'] as String,
       name: map['name'] as String,
-      role: UserRoleExtension.fromString(map['role'] as String),
+      role: map['role'] as String,
     );
   }
 }

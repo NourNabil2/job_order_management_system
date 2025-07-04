@@ -10,6 +10,9 @@ class OrderModel {
   final String date;
   final String dateLine;
   final String orderStatus;
+  final List<String> attachmentLinks;
+  final List<String> attachmentOrderLinks;
+  final List<String> attachmentPO;
 
   OrderModel({
     required this.id,
@@ -21,6 +24,9 @@ class OrderModel {
     required this.date,
     required this.dateLine,
     required this.orderStatus,
+    required this.attachmentLinks,
+    required this.attachmentOrderLinks,
+    required this.attachmentPO,
   });
 }
 

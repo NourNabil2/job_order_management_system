@@ -18,7 +18,7 @@ class InteractionChart extends StatelessWidget {
   // Age-based values
   final int totalCollections;
   final int returns;
-  final int invoices;
+  final int pending;
 
   const InteractionChart({
     super.key,
@@ -29,7 +29,7 @@ class InteractionChart extends StatelessWidget {
     this.notDoneCount = 0,
     this.totalCollections = 0,
     this.returns = 0,
-    this.invoices = 0,
+    this.pending = 0,
   });
 
   @override
@@ -42,7 +42,7 @@ class InteractionChart extends StatelessWidget {
         : {
             "totalCollections": totalCollections.toDouble(),
             "returns": returns.toDouble(),
-            "invoices": invoices.toDouble(),
+            "pending": pending.toDouble(),
           };
 
     final Map<String, String> legendLabels = isOrderBased
@@ -53,15 +53,15 @@ class InteractionChart extends StatelessWidget {
         : {
             "totalCollections": 'اجمالي التحصيلات ($totalCollections)',
             "returns": 'اجمالي المرتجعات ($returns)',
-            "invoices": 'اجمالي الفواتير ($invoices)',
+            "pending": 'اجمالي قيد الانتظار ($pending)',
           };
 
     final List<Color> colorList = isOrderBased
         ? [ColorApp.primaryColor, ColorApp.mainLight]
         : const [
-            Color(0xffEA3354),
-            Color(0xff357AF6),
-            Color(0xff6B4B46),
+      Color(0xff8b8fff),
+      Color(0xfff63535),
+      Color(0xffffc900),
             Color(0xff5CC8BE),
             Color(0xffAF52DE),
           ];
@@ -413,19 +413,19 @@ class InteractionChart extends StatelessWidget {
                                      children: [
                                        InteractionItem(
                                          radius: SizeApp.s4,
-                                         color: Color(0xffEA3354),
+                                         color: Color(0xff333cea),
                                          title: StringApp.totalCollections,
                                          count: null,
                                        ),
                                        InteractionItem(
                                          radius: SizeApp.s4,
-                                         color: Color(0xff357AF6),
+                                         color: Color(0xfff63535),
                                          title: StringApp.returns,
                                          count: null,
                                        ),
                                        InteractionItem(
                                          radius: SizeApp.s4,
-                                         color: Color(0xff6B4B46),
+                                         color: Color(0xffffe151),
                                          title: StringApp.invoices,
                                          count: null,
                                        ),

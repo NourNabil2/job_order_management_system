@@ -8,6 +8,7 @@ class AssetsManager {
   static const addItemsIcon = "assets/icons/addItem.svg";
   static const addMember = "assets/icons/Add-member.svg";
   static const reviewIcon = "assets/icons/reviewIcon.svg";
+  static const settingIcon = "assets/icons/settingIcon.svg";
 
   static const backtIcon = 'assets/icons/Arrow - Left.svg';
   static const carIcon = 'assets/icons/car-black.svg';
@@ -43,6 +44,7 @@ class AssetsManager {
   static const productsIcon = 'assets/images/products.png';
   //image
   static const logoPNG = 'assets/images/App_logo.png';
+  static const backgroundImage = 'assets/images/bg_dashboard.jpg';
 
   static const verificationEmail = 'assets/icons/Verification_email.json';
   static const connectionIcon = 'assets/icons/connection_error.png';

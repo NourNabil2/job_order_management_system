@@ -39,9 +39,9 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
       });
     }
 
-    // Handle canceling the order
+    // Handle canceling the order_complete
     void handleCancelOrder() {
-      showCustomAlertDialog(
+      showCustomOptionsDialog(
         context: context,
         title: 'Cancel Order',
         content: 'Once canceled, it cannot be restored.',

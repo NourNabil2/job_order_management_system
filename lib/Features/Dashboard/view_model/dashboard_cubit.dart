@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:quality_management_system/Core/Serviecs/Firebase_Notification.dart';
 import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
 
 part 'dashboard_state.dart';
@@ -25,27 +26,37 @@ class DashboardCubit extends Cubit<DashboardState> {
       int completedOrders = 0;
       int pendingOrders = 0;
       int rejectedOrders = 0;
+      int in_progress = 0;
 
       DateTime? nearestDeadline;
       String? nearestOrderNumber;
 
+      final now = DateTime.now();
+
       for (final doc in orders) {
         final status = doc['orderStatus']?.toString().toLowerCase() ?? '';
 
-        if (status == 'complete' || status == 'delivered') {
+        if (status == 'completed' || status == 'delivered') {
           completedOrders++;
         } else if (status == 'pending') {
           pendingOrders++;
         } else if (status == 'rejected') {
           rejectedOrders++;
+        } else if (status == 'in_progress') {
+          in_progress++;
         }
+
 
         final dateLineTimestamp = doc['dateLine'] as Timestamp?;
         if (dateLineTimestamp != null) {
           final deadline = dateLineTimestamp.toDate();
-          if (nearestDeadline == null || deadline.isBefore(nearestDeadline)) {
-            nearestDeadline = deadline;
-            nearestOrderNumber = doc['orderNumber']?.toString() ?? '';
+
+          // ✅ شرط عدم اختيار موعد قديم
+          if (deadline.isAfter(now)) {
+            if (nearestDeadline == null || deadline.isBefore(nearestDeadline)) {
+              nearestDeadline = deadline;
+              nearestOrderNumber = doc['orderNumber']?.toString() ?? '';
+            }
           }
         }
       }
@@ -62,6 +73,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         completedOrders: completedOrders,
         pendingOrders: pendingOrders,
         rejectedOrders: rejectedOrders,
+        inProgress: in_progress,
         nearestDeadlineWithOrder: formattedDeadlineWithOrder,
       ));
     } catch (e) {

@@ -1,77 +1,420 @@
+import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:quality_management_system/Core/Utilts/Format_Time.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/model/data/OrderItem_model.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
-
+import 'package:quality_management_system/Core/Serviecs/Firebase_Notification.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/FileUpload_Widget.dart';
+import 'package:image/image.dart' as img;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:supabase_flutter/supabase_flutter.dart';
 part 'add_order_state.dart';
 
 class AddNewOrderCubit extends Cubit<AddNewOrderState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
   AddNewOrderCubit() : super(AddNewOrderInitial());
   static AddNewOrderCubit get(context) => BlocProvider.of(context);
 
   bool isLoading = false;
+  final SupabaseClient supabase = Supabase.instance.client;
 
-void changeLoading()
-{
-  isLoading = !isLoading;
-  emit(ChangeLoading());
-}
-  Future<void> addOrder({
-    required String orderNumber,
+  void changeLoading() {
+    isLoading = !isLoading;
+    emit(ChangeLoading());
+  }
+
+  Future<File> compressImage(File file) async {
+    // قراءة الملف وتحويله إلى صورة
+    final bytes = await file.readAsBytes();
+    final image = img.decodeImage(Uint8List.fromList(bytes));
+
+    // ضغط الصورة (مثلاً إلى 50% من الحجم الأصلي)
+    final compressedImage = img.encodeJpg(image!, quality: 50);
+
+    // حفظ الصورة المضغوطة إلى ملف جديد
+    final compressedFile = File('${file.parent.path}/compressed_${file.path}');
+    await compressedFile.writeAsBytes(compressedImage);
+
+    return compressedFile;
+  }
+
+  /// إنشاء رقم طلب جديد تلقائيًا بالتنسيق المطلوب: السنة/الرقم التسلسلي
+  Future<String> generateOrderNumber() async {
+    final int currentYear = DateTime.now().year;
+
+    try {
+      // البحث عن الطلبات الموجودة في السنة الحالية
+      final QuerySnapshot ordersSnapshot = await _firestore
+          .collection('orders')
+          .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime(currentYear, 1, 1)))
+          .where('createdAt', isLessThan: Timestamp.fromDate(DateTime(currentYear + 1, 1, 1)))
+          .get();
+
+      // حساب عدد الطلبات + 1 للحصول على الرقم الجديد
+      final int orderCount = ordersSnapshot.docs.length + 1;
+
+      // تنسيق الرقم بحيث يكون دائمًا 3 أرقام (مثال: 001, 012, 123)
+      final String formattedNumber = orderCount.toString().padLeft(3, '0');
+
+      // إرجاع الرقم بالتنسيق المطلوب: السنة/الرقم
+      return '$formattedNumber/$currentYear';
+    } catch (e) {
+      log('Error generating order_complete number: $e');
+      // في حالة حدوث خطأ، نرجع رقمًا افتراضيًا
+      return '001/$currentYear';
+    }
+  }
+
+  Future addOrder({
+    String? orderNumber,
     required String companyName,
     required String supplyNumber,
     required String attachmentType,
     required DateTime dateLine,
     required String orderStatus,
-    required List<OrderItem> items,
+    required List items,
+    required List<FileAttachment> attachments,
+    required List<FileAttachment> attachmentsOrder, // ✅ إضافة هذا
   }) async {
     emit(AddOrderLoading());
     changeLoading();
     try {
-      // إنشاء مرجع للطلب الرئيسي
       final orderRef = _firestore.collection('orders').doc();
-
-      // إنشاء مرجع لمجموعة البنود الفرعية
       final itemsRef = orderRef.collection('items');
 
-      // بيانات الطلب الأساسية
+      final String autoOrderNumber = orderNumber ?? await generateOrderNumber();
+
+      // ✅ رفع ملفات attachments
+      List<String> uploadedUrls = [];
+      for (final attachment in attachments) {
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
+        final filePath = 'orders/${orderRef.id}/$fileName';
+
+        if (kIsWeb) {
+          final bytes = await attachment.getBytes();
+          await supabase.storage.from('storage').uploadBinary(filePath, bytes);
+        } else {
+          await supabase.storage.from('storage').upload(filePath, attachment.fileObject);
+        }
+
+        final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
+        uploadedUrls.add(fileUrl);
+      }
+
+      // ✅ رفع ملفات attachmentsOrder
+      List<String> uploadedOrderUrls = [];
+      for (final attachment in attachmentsOrder) {
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
+        final filePath = 'orders/${orderRef.id}/order_docs/$fileName';
+
+        if (kIsWeb) {
+          final bytes = await attachment.getBytes();
+          await supabase.storage.from('storage').uploadBinary(filePath, bytes);
+        } else {
+          await supabase.storage.from('storage').upload(filePath, attachment.fileObject);
+        }
+
+        final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
+        uploadedOrderUrls.add(fileUrl);
+      }
+
+      // ✅ تجهيز بيانات الطلب مع روابط الملفات المرفوعة
       final orderData = {
         'id': orderRef.id,
-        'orderNumber': orderNumber,
+        'orderNumber': autoOrderNumber,
         'companyName': companyName,
         'supplyNumber': supplyNumber,
         'dateLine': Timestamp.fromDate(dateLine),
         'orderStatus': orderStatus,
         'itemCount': items.length,
+        'attachmentLinks': uploadedUrls,
+        'attachmentOrderLinks': uploadedOrderUrls, // ✅ إضافة روابط المرفقات الأخرى
         'attachmentType': attachmentType,
         'createdAt': Timestamp.now(),
         'updatedAt': Timestamp.now(),
       };
 
-      // تنفيذ العملية كمجموعة واحدة (Batch)
       final batch = _firestore.batch();
-
-      // إضافة الطلب الرئيسي
       batch.set(orderRef, orderData);
 
-      // إضافة جميع البنود
       for (final item in items) {
         final itemRef = itemsRef.doc(item.id);
         batch.set(itemRef, item.toMap());
       }
 
-      // تنفيذ العملية
       await batch.commit();
       changeLoading();
+      await NotificationHelper.sendNotificationToAllUsers(title: 'أمر توريد جديد', body: 'هناك أمر توريد جديد,\n اضغط لمعرفه المزيد', topic: 'all_users');
       emit(AddOrderSuccess(orderRef.id));
     } catch (e) {
+      log('Error adding order_complete: $e');
       changeLoading();
       emit(AddOrderError(e.toString()));
+    }
+  }
+
+
+
+  // Future updateOrder({
+  //   required String orderId,
+  //   required String orderNumber,
+  //   required String companyName,
+  //   required String supplyNumber,
+  //   required String attachmentType,
+  //   required String orderStatus,
+  //   required List<FileAttachment> newAttachments,
+  //   required List<FileAttachment> newAttachmentsOrder,
+  //   required List<String> existingAttachmentLinks,
+  //   required List<String> existingAttachmentOrderLinks,
+  // }) async {
+  //   emit(AddOrderLoading());
+  //   changeLoading();
+  //   try {
+  //     final orderRef = _firestore.collection('orders').doc(orderId);
+  //     final itemsRef = orderRef.collection('items');
+  //
+  //     // 1. Upload new attachments
+  //     List<String> updatedAttachmentUrls = List.from(existingAttachmentLinks);
+  //     for (final attachment in newAttachments) {
+  //       final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
+  //       final filePath = 'orders/$orderId/$fileName';
+  //
+  //       if (kIsWeb) {
+  //         final bytes = await attachment.getBytes();
+  //         await supabase.storage.from('storage').uploadBinary(filePath, bytes);
+  //       } else {
+  //         await supabase.storage.from('storage').upload(filePath, attachment.fileObject);
+  //       }
+  //
+  //       final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
+  //       updatedAttachmentUrls.add(fileUrl);
+  //     }
+  //
+  //     // 2. Upload new order attachments
+  //     List<String> updatedOrderAttachmentUrls = List.from(existingAttachmentOrderLinks);
+  //     for (final attachment in newAttachmentsOrder) {
+  //       final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
+  //       final filePath = 'orders/$orderId/order_docs/$fileName';
+  //
+  //       if (kIsWeb) {
+  //         final bytes = await attachment.getBytes();
+  //         await supabase.storage.from('storage').uploadBinary(filePath, bytes);
+  //       } else {
+  //         await supabase.storage.from('storage').upload(filePath, attachment.fileObject);
+  //       }
+  //
+  //       final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
+  //       updatedOrderAttachmentUrls.add(fileUrl);
+  //     }
+  //
+  //     // 3. Prepare updated order data
+  //     final updatedOrderData = {
+  //       'companyName': companyName,
+  //       'supplyNumber': supplyNumber,
+  //       'orderStatus': orderStatus,
+  //       'attachmentLinks': updatedAttachmentUrls,
+  //       'attachmentOrderLinks': updatedOrderAttachmentUrls,
+  //       'attachmentType': attachmentType,
+  //       'updatedAt': Timestamp.now(),
+  //     };
+  //
+  //     // 4. Update Firestore documents in batch
+  //     final batch = _firestore.batch();
+  //     batch.update(orderRef, updatedOrderData);
+  //
+  //     // Delete all existing items and add new ones
+  //     final existingItems = await itemsRef.get();
+  //     for (final doc in existingItems.docs) {
+  //       batch.delete(doc.reference);
+  //     }
+  //
+  //     await batch.commit();
+  //     changeLoading();
+  //
+  //     await NotificationHelper.sendNotificationToAllUsers(
+  //         title: 'تم تحديث أمر التوريد',
+  //         body: 'تم تحديث أمر التوريد رقم $orderNumber',
+  //         topic: 'all_users'
+  //     );
+  //
+  //     emit(AddOrderSuccess(orderId));
+  //   } catch (e) {
+  //     log('Error updating order: $e');
+  //     changeLoading();
+  //     emit(AddOrderError(e.toString()));
+  //   }
+  // }
+
+// Helper method to delete attachments (optional)
+
+
+  // Updated method to handle partial updates
+  Future<void> updateOrder(Map<String, dynamic> updatedFields) async {
+    try {
+      emit(AddOrderLoading());
+      changeLoading();
+
+      final String orderId = updatedFields['orderId'];
+      final docRef = _firestore.collection('orders').doc(orderId);
+      final itemsRef = docRef.collection('items');
+
+      // Get current document data
+      final docSnapshot = await docRef.get();
+      if (!docSnapshot.exists) {
+        throw Exception('Order not found!');
+      }
+
+      // Create update map with only the fields that need to be updated
+      final Map<String, dynamic> updateData = {};
+      final batch = _firestore.batch();
+
+      // Handle simple text fields
+      const textFields = [
+        'companyName',
+        'supplyNumber',
+        'attachmentType',
+        'orderStatus',
+      ];
+
+      for (final field in textFields) {
+        if (updatedFields.containsKey(field)) {
+          updateData[field] = updatedFields[field];
+        }
+      }
+
+      // Handle date fields
+      if (updatedFields.containsKey('date')) {
+        updateData['createdAt'] = Timestamp.fromDate(updatedFields['date']);
+      }
+
+      if (updatedFields.containsKey('dateLine')) {
+        updateData['dateLine'] = Timestamp.fromDate(updatedFields['dateLine']);
+      }
+
+      // Handle file uploads and links
+      if (updatedFields.containsKey('newAttachments')) {
+        final attachmentsRaw = updatedFields['newAttachments'];
+
+        // Only process files that are actually FileAttachment objects
+        final List<FileAttachment> newAttachments = attachmentsRaw
+            .where((e) => e is FileAttachment)
+            .cast<FileAttachment>()
+            .toList();
+
+        final List<String> existingLinks = List.from(updatedFields['existingAttachmentLinks'] ?? []);
+
+        // Only upload if there are valid FileAttachments
+        final List<String> uploadedUrls = newAttachments.isNotEmpty
+            ? await _uploadFilesToSupabase(
+          files: newAttachments,
+          path: 'orders/$orderId/attachments',
+        )
+            : [];
+
+        updateData['attachmentLinks'] = [...existingLinks, ...uploadedUrls];
+      }
+
+
+      if (updatedFields.containsKey('newAttachmentsOrder'))  {
+        final attachmentsRaw = updatedFields['newAttachmentsOrder'];
+
+        final List<FileAttachment> newOrderAttachments = attachmentsRaw
+            .where((e) => e is FileAttachment)
+            .cast<FileAttachment>()
+            .toList();
+
+        final List<String> existingOrderLinks = List.from(updatedFields['existingAttachmentOrderLinks'] ?? []);
+
+        final List<String> uploadedOrderUrls = newOrderAttachments.isNotEmpty
+            ? await _uploadFilesToSupabase(
+          files: newOrderAttachments,
+          path: 'orders/$orderId/order_docs',
+        )
+            : [];
+
+        updateData['attachmentOrderLinks'] = [...existingOrderLinks, ...uploadedOrderUrls];
+      }
+
+
+      // Handle items update
+      if (updatedFields.containsKey('items')) {
+        final updatedItems = updatedFields['items'];
+
+        // Clear existing items
+        final existingItems = await itemsRef.get();
+        for (final doc in existingItems.docs) {
+          batch.delete(doc.reference);
+        }
+
+        // Add new items
+        for (final item in updatedItems) {
+          final itemRef = itemsRef.doc(item.id);
+          batch.set(itemRef, item.toMap());
+        }
+
+        updateData['itemCount'] = updatedItems.length;
+      }
+
+      // Always update the timestamp
+      updateData['updatedAt'] = Timestamp.now();
+
+      // Commit updates
+      batch.update(docRef, updateData);
+      await batch.commit();
+
+      await NotificationHelper.sendNotificationToAllUsers(
+          title: 'تم تحديث أمر التوريد',
+          body: 'تم تحديث أمر التوريد رقم ${updatedFields['orderNumber']}',
+          topic: 'all_users'
+      );
+
+      emit(AddOrderSuccess(orderId));
+    } catch (e) {
+      log('Error updating order: $e');
+      emit(AddOrderError(e.toString()));
+    } finally {
+      changeLoading();
+    }
+  }
+
+  Future<List<String>> _uploadFilesToSupabase({
+    required List<FileAttachment> files,
+    required String path,
+  }) async {
+    final List<String> uploadedUrls = [];
+
+    for (final attachment in files) {
+      try {
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}_${attachment.fileName}';
+        final filePath = '$path/$fileName';
+
+        if (kIsWeb) {
+          final bytes = await attachment.getBytes();
+          await supabase.storage.from('storage').uploadBinary(filePath, bytes);
+        } else {
+          await supabase.storage.from('storage').upload(filePath, attachment.fileObject);
+        }
+
+        final fileUrl = supabase.storage.from('storage').getPublicUrl(filePath);
+        uploadedUrls.add(fileUrl);
+      } catch (e) {
+        log('Error uploading file ${attachment.fileName}: $e');
+        // Continue with other files if one fails
+      }
+    }
+
+    return uploadedUrls;
+  }
+
+
+  Future<void> _deleteAttachment(String fileUrl) async {
+    try {
+      final path = fileUrl.split('storage/v1/object/public/storage/')[1];
+      await supabase.storage.from('storage').remove([path]);
+    } catch (e) {
+      log('Error deleting attachment: $e');
     }
   }
 

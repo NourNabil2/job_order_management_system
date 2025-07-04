@@ -13,7 +13,7 @@ extension UserRoleExtension on UserRole {
       case UserRole.purchaseDepartment:
         return 'Purchase Department';
       case UserRole.workShop:
-        return 'Work Shop';
+        return 'workshop';
       case UserRole.collector:
         return 'Collector';
     }
@@ -25,7 +25,7 @@ extension UserRoleExtension on UserRole {
         return UserRole.admin;
       case 'Purchase Department':
         return UserRole.purchaseDepartment;
-      case 'Work Shop':
+      case 'workshop':
         return UserRole.workShop;
       case 'Collector':
         return UserRole.collector;

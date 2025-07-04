@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quality_management_system/Core/Utilts/Constants.dart';
 
 
-class CustomAlertDialog extends StatelessWidget {
+class CustomOptionsDialog extends StatelessWidget {
   final String title;
   final String content;
   final String confirmText;
@@ -10,7 +10,7 @@ class CustomAlertDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final VoidCallback? onCancel;
 
-  const CustomAlertDialog({
+  const CustomOptionsDialog({
     super.key,
     required this.title,
     required this.content,
@@ -56,7 +56,7 @@ class CustomAlertDialog extends StatelessWidget {
   }
 }
 
-void showCustomAlertDialog({
+void showCustomOptionsDialog({
   required BuildContext context,
   required String title,
   required String content,
@@ -68,7 +68,7 @@ void showCustomAlertDialog({
   showDialog(
     context: context,
     builder: (context) {
-      return CustomAlertDialog(
+      return CustomOptionsDialog(
         title: title,
         content: content,
         confirmText: confirmText,

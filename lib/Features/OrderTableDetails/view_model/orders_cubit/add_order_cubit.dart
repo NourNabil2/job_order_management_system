@@ -7,19 +7,20 @@ import 'package:quality_management_system/Features/OrderTableDetails/model/data/
 
 part 'add_order_state.dart';
 
-class AddOrderCubit extends Cubit<AddOrderState> {
+class OrdersCubit extends Cubit<AddOrderState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Stream<List<OrderModel>>? _ordersStream;
 
-  AddOrderCubit() : super(AddOrderInitial()) {
+  OrdersCubit() : super(AddOrderInitial()) {
     _setupOrdersStream();
   }
 
-  static AddOrderCubit get(context) => BlocProvider.of(context);
+  static OrdersCubit get(context) => BlocProvider.of(context);
+
   /// ---------------- functions -----------------///
-  void sortOrders<T>(
+  void sortOrders<T extends Comparable>(
       List<OrderModel> orders,
-      Comparable<T> Function(OrderModel order) getField,
+      T Function(OrderModel order) getField,
       bool ascending,
       ) {
     orders.sort((a, b) {
@@ -30,9 +31,8 @@ class AddOrderCubit extends Cubit<AddOrderState> {
           : Comparable.compare(bValue, aValue);
     });
 
-    emit(OrdersLoaded(List<OrderModel>.from(orders)));
+    emit(OrdersLoaded(List.from(orders)));
   }
-
 
   void _setupOrdersStream() {
     _ordersStream = _firestore
@@ -64,15 +64,15 @@ class AddOrderCubit extends Cubit<AddOrderState> {
       itemCount: (data['itemCount'] as num).toDouble(),
       date: DateFormatter.formatDate(createdAt),
       dateLine: DateFormatter.formatDate(dateLine),
+      attachmentLinks: List<String>.from(data['attachmentLinks'] ?? []),
+      attachmentPO: List<String>.from(data['attachmentPO'] ?? []),
+      attachmentOrderLinks: List<String>.from(data['attachmentOrderLinks'] ?? []),
       orderStatus: data['orderStatus'] ?? 'Pending',
     );
   }
 
-
-
-  Future<List<OrderItem>> getOrderItems(String orderId) async {
-    emit(OrderItemsLoading());
-
+  /// Fetch order items for a specific order
+  Future<List<OrderItem>> fetchOrderItems(String orderId) async {
     try {
       final querySnapshot = await _firestore
           .collection('orders')
@@ -83,35 +83,39 @@ class AddOrderCubit extends Cubit<AddOrderState> {
       final items = querySnapshot.docs.map((doc) {
         final data = doc.data();
         return OrderItem(
-          id: doc.id,
-          operationDescription: data['operationDescription'] ?? '',
-          status: data['status'] ?? '',
-          quantity: (data['quantity'] as num).toInt(),
-          materialType: data['materialType'] ?? '',
-          notes: data['notes'] ?? '',
-          attachments: List<String>.from(data['attachments'] ?? []),
+            id: doc.id,
+            operationDescription: data['operationDescription'] ?? '',
+            status: data['status'] ?? '',
+            quantity: (data['quantity'] as num).toInt(),
+            materialType: data['materialType'] ?? '',
+            notes: data['notes'] ?? '',
+            deliveryDate: data['deliveryDate'] ?? '',
+            attachments: List<String>.from(data['attachments'] ?? []),
+            unitPrice: 100
         );
       }).toList();
 
       emit(OrderItemsLoaded(items));
       return items;
     } catch (e) {
-      emit(OrderLoddedError('Failed to load order items: ${e.toString()}'));
-      throw Exception('Failed to load order items');
+      emit(OrderItemsError('Failed to fetch order items: $e'));
+      return [];
     }
   }
 
-  Future<void> updateItemStatus(String orderId, String itemId, String newStatus) async {
-    try {
-      await _firestore
-          .collection('orders')
-          .doc(orderId)
-          .collection('items')
-          .doc(itemId)
-          .update({'status': newStatus});
-    } catch (e) {
-      throw Exception('Failed to update item status');
-    }
+  /// Fetch order items stream for real-time updates
+  Stream<List<Map<String, dynamic>>> getOrderItemsStream(String orderId) {
+    return _firestore
+        .collection('orders')
+        .doc(orderId)
+        .collection('items')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+      final data = doc.data();
+      return {
+        'id': doc.id,
+        ...data,
+      };
+    }).toList());
   }
-
 }

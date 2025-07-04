@@ -4,7 +4,7 @@ import 'package:quality_management_system/Features/auth/domain/models/user_model
 import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<void> addMember(String name, email, password, UserRole role);
+  Future<void> addMember(String name, email, password, role);
   Future<User> signin(String email, password);
   Future<User> signup(String email, password);
   Future<List<UserModel>> fetchAllMembers();
@@ -16,7 +16,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl(this.firebaseAuth);
 
   @override
-  Future<void> addMember(String name, email, password, UserRole role) async {
+  Future<void> addMember(String name, email, password, role) async {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
     final result = users.doc(email).set({
@@ -25,7 +25,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       'activeAccount': false,
       'password': password,
       'email': email,
-      'role': role.value,
+      'role': role,
     });
 
     return result;

@@ -25,7 +25,7 @@ class StatusContainer extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: SizeApp.padding * 1.5,
+        horizontal: SizeApp.padding,
         vertical: SizeApp.padding / 2,
       ),
       decoration: BoxDecoration(
@@ -81,8 +81,8 @@ const Map<String, StatusStyle> defaultStatusStyles = {
     color: Colors.orange,
     icon: Icons.access_time,
   ),
-  'delivered': StatusStyle(
-    text: 'تم التوصيل',
+  'collected': StatusStyle(
+    text: 'تم التحصيل',
     color: Colors.green,
     icon: Icons.check_circle,
   ),

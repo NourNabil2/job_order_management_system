@@ -5,7 +5,11 @@ sealed class SigninState {}
 
 final class SigninInitial extends SigninState {}
 
-final class SigninSuccess extends SigninState {}
+class SigninSuccess extends SigninState {
+  final UserModel userData;
+
+  SigninSuccess({required this.userData});
+}
 
 final class SigninLoading extends SigninState {}
 

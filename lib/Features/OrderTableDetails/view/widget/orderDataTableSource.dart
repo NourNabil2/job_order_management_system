@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quality_management_system/Core/Network/local_db/share_preference.dart';
 import 'package:quality_management_system/Core/Widgets/Custom_dropMenu.dart';
 import 'package:quality_management_system/Core/Widgets/custom_containerStatus.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/screen/EditOrderScreen.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view/widget/FileUpload_Widget.dart';
+import 'package:quality_management_system/Features/Add_Edit_Order/view_model/add_order_cubit.dart';
 import 'package:quality_management_system/Features/OrderTableDetails/model/data/Order_model.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Screen.dart';
-import 'package:quality_management_system/Features/OrderTableDetails/view_model/add_order_cubit/add_order_cubit.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view/Screens/ItemDetails_Page/ItemDetails_Screen.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view_model/Item_details/item_details_cubit.dart';
+import 'package:quality_management_system/Features/OrderTableDetails/view_model/orders_cubit/add_order_cubit.dart';
 
 class OrderDataTableSource extends DataTableSource {
   final List<OrderModel> orders;
@@ -18,8 +23,8 @@ class OrderDataTableSource extends DataTableSource {
     final order = orders[index];
 
     return DataRow.byIndex(
-      color: WidgetStateProperty.resolveWith<Color?>((states) {
-        if (order.orderStatus == 'Delivered') return Colors.green[50];
+      color: WidgetStateProperty.resolveWith((states) {
+        if (order.orderStatus == 'completed') return Colors.green[50];
         return index % 2 == 0 ? Colors.grey[100] : Colors.white;
       }),
       index: index,
@@ -29,22 +34,23 @@ class OrderDataTableSource extends DataTableSource {
         DataCell(Text(order.supplyNumber)),
         DataCell(Text('${order.itemCount}')),
         DataCell(Text(order.attachmentType)),
-        DataCell(Text(order.date),),
-        DataCell(Text(order.dateLine),),
-        DataCell(StatusContainer(status: order.orderStatus,)),
+        DataCell(Text(order.date)),
+        DataCell(Text(order.dateLine)),
+        DataCell(StatusContainer(status: order.orderStatus)),
         DataCell(
           CustomPopupMenu(
-            items: const [
-              CustomPopupMenuItem(
+            items: [
+              const CustomPopupMenuItem(
                 value: 'view_details',
-                label: 'View Item Details',
+                label: 'عرض التفاصيل',
                 icon: Icons.remove_red_eye,
               ),
-              CustomPopupMenuItem(
-                value: 'create_invoice',
-                label: 'Create Invoice',
-                icon: Icons.receipt,
-              ),
+              if (CacheSaver.userRole == 'admin')
+                const CustomPopupMenuItem(
+                  value: 'edit_order',
+                  label: 'تعديل أمر التوريد',
+                  icon: Icons.edit,
+                )
             ],
             onSelected: (value) {
               if (value == 'view_details') {
@@ -52,7 +58,7 @@ class OrderDataTableSource extends DataTableSource {
                   context,
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
-                      create: (context) => AddOrderCubit(),
+                      create: (context) => ItemDetailsCubit(),
                       child: OrderItemsDetailsScreen(
                         order: order,
                         orderId: order.id,
@@ -60,19 +66,64 @@ class OrderDataTableSource extends DataTableSource {
                     ),
                   ),
                 );
-              } else if (value == 'create_invoice') {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Invoice created for ${order.orderNumber}'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+              } else if (value == 'edit_order') {
+                _navigateToEditOrder(order);
               }
             },
           ),
         ),
       ],
     );
+  }
+
+  void _navigateToEditOrder(OrderModel order) async {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      // Fetch order items
+      final ordersCubit = OrdersCubit.get(context);
+      final orderItems = await ordersCubit.fetchOrderItems(order.id);
+
+      // Close loading dialog
+      Navigator.pop(context);
+
+      // Navigate to edit screen with order items
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => AddNewOrderCubit(),
+            child: EditOrderScreen(
+              order: order,
+              orderItems: orderItems,
+            ),
+          ),
+        ),
+      ).then((success) {
+        if (success == true) {
+          // Refresh your order list if needed
+          // You can add any refresh logic here
+        }
+      });
+    } catch (e) {
+      // Close loading dialog
+      Navigator.pop(context);
+
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('فشل في تحميل بيانات الطلب: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override

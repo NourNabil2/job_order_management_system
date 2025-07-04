@@ -7,6 +7,7 @@ final class AddMemberInitial extends AddMemberState {}
 
 final class AddMemberLoading extends AddMemberState {}
 
+final class MemberUpdatedSuccessfully extends AddMemberState {}
 
 final class AddMemberSuccess extends AddMemberState {}
 final class AddMemberFailure extends AddMemberState {
@@ -26,4 +27,9 @@ class FetchMembersFailure extends AddMemberState {
   final String message;
 
   FetchMembersFailure({required this.message});
+}
+class UserDeletedFailure extends AddMemberState {
+  final String message;
+
+  UserDeletedFailure({required this.message});
 }

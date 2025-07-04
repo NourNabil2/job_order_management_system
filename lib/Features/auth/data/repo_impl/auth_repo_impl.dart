@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quality_management_system/Core/Utilts/extensions.dart';
 import 'package:quality_management_system/Core/components/failure.dart';
 import 'package:quality_management_system/Features/auth/data/auth_data_source/auth_remote_data_source.dart';
 import 'package:quality_management_system/Features/auth/domain/models/user_model.dart';
-import 'package:quality_management_system/Features/auth/domain/models/user_role.dart';
 import 'package:quality_management_system/Features/auth/domain/repo/auth_repo.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -13,13 +13,21 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, Unit>> signin(String email, password) async {
+  Future<Either<Failure, UserModel>> signin(String email, password) async {
     try {
-      await remoteDataSource.signin(email, password);
-      return right(unit);
+      final user = await remoteDataSource.signin(email, password);
+
+      // Fetch user data from Firestore
+      final doc = await FirebaseFirestore.instance.collection('Users').doc(email).get();
+      if (!doc.exists) {
+        return left(Failure(message: "User data not found in Firestore"));
+      }
+
+      final userModel = UserModel.fromMap(doc.data()!);
+      return right(userModel);
+
     } on FirebaseAuthException catch (e) {
-      return left(
-          Failure(message: StringExtensions(e.code).mapFirebaseError(e)));
+      return left(Failure(message: e.message ?? "Authentication failed"));
     } catch (e) {
       return left(Failure(message: "An unexpected error occurred"));
     }
@@ -40,7 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, Unit>> addMember(
-      String name, email, password, UserRole role) async {
+      String name, email, password, role) async {
     try {
       await remoteDataSource.addMember(name, email, password, role);
       return right(unit);

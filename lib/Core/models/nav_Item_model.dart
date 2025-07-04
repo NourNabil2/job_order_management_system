@@ -17,16 +17,62 @@ class NavItem {
 
 final List<NavItem> navItems = [
   NavItem(
-      label: '  Overview',
+      label: '  الرئيسية',
       assetPath: AssetsManager.menuIcon,
       screen: const MainScreen()),
   NavItem(
-      label: '  Add Orders',
+      label: '  أوامر التوريد',
       assetPath: AssetsManager.invoiceIcon,
       screen: const MainScreen()),
   NavItem(
-      label: '  Add Member',
+      label: '  أوامر التوريد المنتهيه',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: ' تم تحصيلها ',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: '  أوامر التوريد قيد العمل',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: '  الموظفين',
       assetPath: AssetsManager.addMember,
-      screen:  const AddMemberScreen()
+      screen:  const MainScreen()
       ),
+];
+
+final List<NavItem> navItemsForWorkers = [
+  NavItem(
+      label: '  الرئيسية',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: '  جميع أوامر التوريد',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: '  أومر التوريد الجديده',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: '  أوامر التوريد قيد العمل',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: '  أوامر التوريد المنتهيه',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+];
+
+final List<NavItem> navItemsForCollector = [
+  NavItem(
+      label: '  أوامر التوريد المنتهيه',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
+  NavItem(
+      label: ' تم تحصيلها ',
+      assetPath: AssetsManager.menuIcon,
+      screen: const MainScreen()),
 ];
